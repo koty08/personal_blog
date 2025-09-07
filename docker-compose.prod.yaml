@@ -1,0 +1,13 @@
+services:
+  app:
+    command: npm start
+
+  nginx:
+    image: nginx:stable-alpine
+    restart: always
+    depends_on:
+      - app
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
