@@ -9,10 +9,10 @@ datasource db {
 
 model Post{
   id  Int @id @default(autoincrement())
-  uuid String @unique 
+  uuid String @unique @default(uuid()) @db.Uuid
   title String
   content String
-  register_date DateTime
+  register_date DateTime @default(now())
   views Int
   category Category @relation(fields: [categoryId], references: [id])
   categoryId Int
