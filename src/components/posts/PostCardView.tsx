@@ -1,30 +1,24 @@
-import getImageFromContents from "@/lib/getImageFromContent";
-import { PostDataResponse } from "@/app/posts/[category]/page";
-import Image from "next/image";
+import { PostsWithCount } from "@/app/api/posts/inteface";
 import Link from "next/link";
 import { Card, CardContent, CardTitle } from "../ui/card";
+import PostImage from "../common/PostImage";
+import { filterMarkdownImages, getFirstImage } from "@/lib/markdownUtils";
 
-export default async function PostCardView({ data }: { data: PostDataResponse }) {
+export default async function PostCardView({ data }: { data: PostsWithCount }) {
   return (
     <div className="w-full flex flex-wrap gap-y-[20px] gap-x-[2%]">
       {data.posts.map((post) => {
-        const path = getImageFromContents(post.content);
+        const path = getFirstImage(post.content);
         return (
-          <Card key={post.uuid} className="py-4 w-[350px] hover:cursor-pointer hover:border-gray-500 transition-colors">
-            <Link href={`/post/${post.uuid}`}>
-              <div className="flex justify-center relative w-full h-[160px]">
-                {path ? (
-                  <Image fill src={path} alt="image" style={{ objectFit: "contain" }}></Image>
-                ) : (
-                  <Image fill src={"/no-image.png"} alt="image" style={{ objectFit: "contain" }}></Image>
-                )}
-              </div>
+          <Link key={post.uuid} href={`/post/${post.uuid}`}>
+            <Card className="py-4 w-[350px] hover:cursor-pointer transition-all hover:border-gray-300 hover:bg-(--accent)">
+              <PostImage path={path} alt={"thumbnail"} className="w-full h-[160px]" />
               <CardTitle className="mt-3 mb-2 px-4 truncate">{post.title}</CardTitle>
               <CardContent className="text-sm px-4">
-                <p className="line-clamp-2">{post.content}</p>
+                <p className="line-clamp-2">{filterMarkdownImages(post.content)}</p>
               </CardContent>
-            </Link>
-          </Card>
+            </Card>
+          </Link>
         );
       })}
     </div>

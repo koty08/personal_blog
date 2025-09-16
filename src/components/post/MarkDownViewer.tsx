@@ -5,6 +5,8 @@ import MDEditor from "@uiw/react-md-editor";
 import { useState } from "react";
 import ReactModal from "react-modal";
 
+const basePath = "/images/post/";
+
 export default function MarkDownViewer({ content }: { content: string }) {
   return <MDEditor.Markdown source={content} style={{ whiteSpace: "pre-wrap" }} components={{ img: CustomImage }}></MDEditor.Markdown>;
 }
@@ -20,6 +22,7 @@ const zoomValue: Record<number, string> = {
 const CustomImage = ({ ...props }) => {
   const [scale, setScale] = useState<number>(1);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const src = `${basePath}${props.src}`;
 
   const onImgWheel = (e: React.WheelEvent<HTMLImageElement>) => {
     // Zoom In
@@ -35,18 +38,18 @@ const CustomImage = ({ ...props }) => {
 
   return (
     <span>
-      <img className="hover:cursor-pointer" {...props} alt="image" onClick={() => setIsOpen(true)} />
+      <img {...props} src={src} alt="image" className="hover:cursor-pointer" onClick={() => setIsOpen(true)} />
       <ReactModal isOpen={isOpen} onRequestClose={() => setIsOpen(false)} style={modalStyles}>
         <div className="w-full h-full flex justify-center items-center" onClick={() => setIsOpen(false)}>
-          <img {...props} alt="image" className={`${zoomValue[scale]}`} onWheel={onImgWheel} />
+          <img {...props} src={src} alt="image" className={`${zoomValue[scale]}`} onWheel={onImgWheel} />
         </div>
       </ReactModal>
     </span>
   );
 };
 
-export const CustomDeleteImage = ({ ...props }) => {
-  return <img className="hover:cursor-pointer" {...props} alt="image" />;
+export const CustomPreviewImage = ({ ...props }) => {
+  return <img {...props} src={`${basePath}${props.src}`} alt="image" className="hover:cursor-pointer" />;
 };
 
 const modalStyles: ReactModal.Styles = {

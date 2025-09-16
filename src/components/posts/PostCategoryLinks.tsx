@@ -1,31 +1,35 @@
 "use client";
 
-import { Category } from "@prisma/client";
-import { LinkButton } from "../common/Button";
-import { useParams } from "next/navigation";
+import { CategoryWithPostCount } from "@/app/api/category/interface";
+import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 
-export default function PostCategoryLinks({ categorys }: { categorys: Category[] | null }) {
-  const params = useParams();
-  const category = decodeURI(params.category as string);
+export default function PostCategoryLinks({ categorys }: { categorys: CategoryWithPostCount[] | null }) {
+  const router = useRouter();
+  const allCategory = {
+    id: 0,
+    name: "전체보기",
+    count: categorys ? categorys.reduce((p, c) => p + c.count, 0) : 0,
+  };
 
   if (!categorys) return <></>;
 
+  const onButtonClicked = (name: string) => {
+    router.replace(name === "전체보기" ? "/posts" : `/posts?category=${encodeURI(name)}`);
+  };
+
   return (
-    <div className="w-fit flex flex-col gap-3">
-      <LinkButton
-        href={`/posts`}
-        text={"전체"}
-        className={`${category === "undefined" && "bg-green-200"}`}
-        additionalText={`${categorys.reduce((p, c) => p + 1, 0)}`}
-      />
-      {categorys.map((c) => (
-        <LinkButton
+    <div className="flex gap-3">
+      {[allCategory, ...categorys].map((c) => (
+        <Button
           key={c.id}
-          href={`/posts/${c.name}`}
-          text={c.name}
-          additionalText={`${c.name}`}
-          className={`${category === c.name && "bg-green-200"}`}
-        />
+          variant={"outline"}
+          onClick={onButtonClicked.bind(null, c.name)}
+          className="flex gap-1 items-center hover:cursor-pointer"
+        >
+          {c.name}
+          <p className="text-(--muted-foreground) text-sm">{c.count}</p>
+        </Button>
       ))}
     </div>
   );

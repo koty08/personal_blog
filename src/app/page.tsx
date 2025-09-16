@@ -1,11 +1,11 @@
 import PostCardView from "@/components/posts/PostCardView";
 import commonFetch from "../lib/commonFetch";
 import { notFound } from "next/navigation";
-import { PostDataResponse } from "./posts/[category]/page";
+import { PostsWithCount } from "./api/posts/inteface";
 import { Button } from "@/components/ui/button";
 
 export default async function Home() {
-  const data = await commonFetch<PostDataResponse>("/posts", undefined, { cache: "no-store" });
+  const data = await commonFetch<PostsWithCount>("/posts", undefined, { cache: "no-store" });
   if (!data) notFound();
 
   return (

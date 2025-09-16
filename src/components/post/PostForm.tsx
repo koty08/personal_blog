@@ -4,10 +4,9 @@ import { useRouter } from "next/navigation";
 import Button from "../common/Button";
 import useForm from "@/hooks/useForm";
 import commonFetch from "@/lib/commonFetch";
-import dynamic from "next/dynamic";
-import { CustomDeleteImage } from "./MarkDownViewer";
+import { CustomPreviewImage } from "./MarkDownViewer";
 import { Category, Post } from "@prisma/client";
-const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
+import MDEditor from "@uiw/react-md-editor";
 
 interface PostPayload {
   title: string;
@@ -85,7 +84,7 @@ export default function PostForm({ type, originalData, categorys }: PostFormProp
           previewOptions={{
             components: {
               img: (props) =>
-                CustomDeleteImage({
+                CustomPreviewImage({
                   ...props,
                   onClick: () => {
                     if (typeof props.src === "string") onImageDeleted(props.src);
