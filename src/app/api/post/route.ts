@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../prisma";
-import { v4 as uuidv4 } from "uuid";
 
 export async function GET(request: NextRequest) {
   const uuid = request.nextUrl.searchParams.get("uuid");
@@ -35,12 +34,7 @@ export async function POST(request: NextRequest) {
   const body = await request.json();
   try {
     await prisma.post.create({
-      data: {
-        ...body,
-        register_date: new Date().toISOString(),
-        views: 0,
-        uuid: uuidv4(),
-      },
+      data: body,
     });
     return NextResponse.json({ success: true });
   } catch (e) {
