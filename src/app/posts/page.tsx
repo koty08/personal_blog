@@ -11,6 +11,9 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { filterMarkdownImages, getFirstImage } from "@/lib/markdownUtils";
 import CustomPagination from "@/components/common/CustomPagination";
+import { Separator } from "@/components/ui/separator";
+
+const POST_PER_PAGE = 8;
 
 export default async function Posts({ searchParams }: { searchParams: { [key: string]: string | undefined } }) {
   const { order, page, category: rawCategory } = await searchParams;
@@ -34,10 +37,15 @@ export default async function Posts({ searchParams }: { searchParams: { [key: st
                 <PostImage path={path} alt={"thumbnail"} className="w-[260px] h-[160px]" />
                 <div className="flex flex-col flex-1 gap-4 min-w-xs">
                   <div className="flex flex-col gap-1.5">
-                    <div className="text-xl font-semibold tracking-tight truncate">{post.title}</div>
-                    <div className="flex gap-3 text-sm text-(--muted-foreground) items-center">
+                    <div className="flex gap-2 items-center">
                       <Badge variant={"default"}>{categorys?.find((c) => c.id === post.categoryId)?.name ?? "카테고리"}</Badge>
+                      <div className="flex-1 text-xl font-semibold tracking-tight truncate">{post.title}</div>
+                    </div>
+                    <div className="flex gap-3 text-sm text-(--muted-foreground) items-center">
                       <div>{`조회수: ${post.views}`}</div>
+                      <Separator orientation="vertical" />
+                      <div>{`${post.readTime}분`}</div>
+                      <Separator orientation="vertical" />
                       <div>{dayjs(post.register_date).format("YYYY-MM-DD")}</div>
                     </div>
                   </div>
@@ -47,7 +55,7 @@ export default async function Posts({ searchParams }: { searchParams: { [key: st
             </Link>
           );
         })}
-        <CustomPagination totalCount={50} itemPerPage={8} />
+        <CustomPagination totalCount={50} itemPerPage={POST_PER_PAGE} />
       </div>
     </div>
   );
