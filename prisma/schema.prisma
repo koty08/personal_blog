@@ -7,13 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post{
+model Post {
   id  Int @id @default(autoincrement())
   uuid String @unique @default(uuid()) @db.Uuid
   title String
   content String
   register_date DateTime @default(now())
-  views Int
+  updated_date DateTime @default(now())
+  views Int @default(0)
+  published Boolean @default(false)
+  readTime Int @default(10)
   category Category @relation(fields: [categoryId], references: [id])
   categoryId Int
 }
