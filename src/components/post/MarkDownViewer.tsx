@@ -2,13 +2,22 @@
 "use client";
 
 import MDEditor from "@uiw/react-md-editor";
-import { useState } from "react";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 import ReactModal from "react-modal";
 
 const basePath = "/images/post/";
 
 export default function MarkDownViewer({ content }: { content: string }) {
-  return <MDEditor.Markdown source={content} style={{ whiteSpace: "pre-wrap" }} components={{ img: CustomImage }}></MDEditor.Markdown>;
+  const { resolvedTheme } = useTheme();
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-color-mode", resolvedTheme === "dark" ? "dark" : "light");
+  });
+
+  return (
+    <MDEditor.Markdown source={content} components={{ img: CustomImage }} className="whitespace-pre-wrap bg-inherit!"></MDEditor.Markdown>
+  );
 }
 
 const zoomValue: Record<number, string> = {

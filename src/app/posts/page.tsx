@@ -44,7 +44,7 @@ export default async function Posts({ searchParams }: { searchParams: { [key: st
                     <div className="flex gap-3 text-sm text-(--muted-foreground) items-center">
                       <div>{`조회수: ${post.views}`}</div>
                       <Separator orientation="vertical" />
-                      <div>{`${post.readTime}분`}</div>
+                      <div>{`읽는 시간: ${post.readTime}분`}</div>
                       <Separator orientation="vertical" />
                       <div>{dayjs(post.register_date).format("YYYY-MM-DD")}</div>
                     </div>
@@ -55,7 +55,7 @@ export default async function Posts({ searchParams }: { searchParams: { [key: st
             </Link>
           );
         })}
-        <CustomPagination totalCount={50} itemPerPage={POST_PER_PAGE} />
+        <CustomPagination totalCount={data.count} itemPerPage={POST_PER_PAGE} />
       </div>
     </div>
   );

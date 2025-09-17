@@ -3,6 +3,12 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
+const postOrderList = [
+  { value: "latest", label: "최신순" },
+  { value: "views", label: "조회순" },
+  { value: "oldest", label: "과거순" },
+];
+
 export default function PostOrderButton() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -20,9 +26,11 @@ export default function PostOrderButton() {
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="latest">최신순</SelectItem>
-        <SelectItem value="views">조회순</SelectItem>
-        <SelectItem value="oldest">과거순</SelectItem>
+        {postOrderList.map((order) => (
+          <SelectItem key={order.value} value={order.value} className="transition-all hover:bg-(--accent) hover:cursor-pointer">
+            {order.label}
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );

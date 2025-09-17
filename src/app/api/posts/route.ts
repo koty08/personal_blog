@@ -6,6 +6,7 @@ export async function GET(request: NextRequest) {
   const order = request.nextUrl.searchParams.get("order");
   const page = Number(request.nextUrl.searchParams.get("page"));
   const category = request.nextUrl.searchParams.get("category");
+  const limit = Number(request.nextUrl.searchParams.get("limit")) || 8;
 
   let orderBy: Prisma.PostOrderByWithRelationInput;
   if (!order || order === "latest") orderBy = { register_date: "desc" };
@@ -14,8 +15,8 @@ export async function GET(request: NextRequest) {
   else orderBy = { register_date: "desc" };
 
   const posts = await prisma.post.findMany({
-    skip: page ? (page - 1) * 8 : 0,
-    take: 8,
+    skip: page ? (page - 1) * limit : 0,
+    take: limit,
     where: category
       ? {
           category: {
