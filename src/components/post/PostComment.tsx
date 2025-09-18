@@ -1,23 +1,25 @@
 "use client";
 
-export default function PostComment() {
-  return (
-    <section
-      className="[&>.utterances]:max-w-full"
-      ref={(element) => {
-        if (!element) {
-          return;
-        }
+import { useTheme } from "next-themes";
+import Giscus from "@giscus/react";
 
-        const scriptElement = document.createElement("script");
-        scriptElement.async = true;
-        scriptElement.setAttribute("src", "https://utteranc.es/client.js");
-        scriptElement.setAttribute("repo", "koty08/next13-study");
-        scriptElement.setAttribute("issue-term", "pathname");
-        scriptElement.setAttribute("theme", "github-light");
-        scriptElement.setAttribute("crossorigin", "anonymous");
-        element.replaceChildren(scriptElement);
-      }}
+export default function PostComment() {
+  const { resolvedTheme } = useTheme();
+
+  return (
+    <Giscus
+      id="comments"
+      repo="koty08/personal_blog"
+      repoId="1048253651"
+      category="General"
+      categoryId="DIC_kwDOF1L2fM4B-hVS"
+      mapping="pathname"
+      emitMetadata="0"
+      reactionsEnabled="0"
+      inputPosition="top"
+      theme={resolvedTheme === "dark" ? "dark" : "light"}
+      lang="ko"
+      loading="lazy"
     />
   );
 }
