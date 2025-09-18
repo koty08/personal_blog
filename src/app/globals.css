@@ -3,24 +3,36 @@
 
 @custom-variant dark (&:is(.dark *));
 
-body::-webkit-scrollbar {
-  width: 14px;
-}
-
-body::-webkit-scrollbar-thumb {
-  background: #acafb9;
-  background-clip: padding-box;
-  border: 3px solid transparent;
-  border-radius: 5px;
-}
-
-body::-webkit-scrollbar-track {
-  background-color: rgb(211, 211, 211);
-  border-radius: 5px;
-}
-
 html {
   scroll-behavior: smooth !important;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+  border: 3px solid #fff;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: #c4c4c4;
+  border: 3px solid #030712;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #fafafa;
 }
 
 @keyframes scale-1 {
