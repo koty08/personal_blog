@@ -12,7 +12,6 @@ export default function PostComment() {
       repo="koty08/personal_blog"
       repoId="1048253651"
       category="General"
-      categoryId="DIC_kwDOF1L2fM4B-hVS"
       mapping="pathname"
       emitMetadata="0"
       reactionsEnabled="0"
