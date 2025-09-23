@@ -8,8 +8,8 @@ export default async function CreatePost() {
   if (!categorys) notFound();
 
   return (
-    <div className="flex flex-col gap-20 items-center">
-      <p className="text-xl font-bold">게시글 생성</p>
+    <div className="flex flex-col gap-15 items-center">
+      <p className="text-2xl font-bold">게시글 생성</p>
       <PostForm type="CREATE" categorys={categorys} />
     </div>
   );

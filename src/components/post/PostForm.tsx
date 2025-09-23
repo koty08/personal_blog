@@ -1,17 +1,26 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Button from "../common/Button";
 import useForm from "@/hooks/useForm";
 import commonFetch from "@/lib/commonFetch";
 import { CustomPreviewImage } from "./MarkDownViewer";
 import { Category, Post } from "@prisma/client";
 import MDEditor from "@uiw/react-md-editor";
+import { Card, CardContent, CardFooter } from "../ui/card";
+import { Input } from "../ui/input";
+import LabelWrapper from "../ui/LabelWrapper";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { useTheme } from "next-themes";
+import { useEffect } from "react";
+import { Checkbox } from "../ui/checkbox";
+import { Button } from "../ui/button";
 
 interface PostPayload {
   title: string;
+  uuid: string;
   content: string;
   categoryId: number;
+  readTime: number;
 }
 
 interface PostFormProps {
@@ -23,13 +32,15 @@ interface PostFormProps {
 
 export default function PostForm({ type, originalData, categorys }: PostFormProps) {
   const router = useRouter();
-  const { values, errors, isLoading, handleChange, handleSubmit, mdEditorChange } = useForm<PostPayload>({
+  const { values, errors, isLoading, handleChange, handleChangeWithVal, handleSubmit, mdEditorChange } = useForm<PostPayload>({
     initialVal: originalData
       ? originalData
       : {
           title: "",
+          uuid: "",
           content: "",
           categoryId: 1,
+          readTime: 5,
         },
     onSubmit: async (values) => {
       const res = await commonFetch<{ success: boolean }>("/post", undefined, {
@@ -43,6 +54,11 @@ export default function PostForm({ type, originalData, categorys }: PostFormProp
     },
     validator: PostValidator,
   });
+  const { resolvedTheme } = useTheme();
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-color-mode", resolvedTheme === "dark" ? "dark" : "light");
+  }, [resolvedTheme]);
 
   const onPasted = async (event: React.ClipboardEvent) => {
     const file = event.clipboardData.files.item(0);
@@ -71,80 +87,86 @@ export default function PostForm({ type, originalData, categorys }: PostFormProp
   };
 
   return (
-    <div className="w-full border p-5 flex flex-col gap-2">
-      <DefaultInput label="제목" name="title" value={values.title} handleChange={handleChange} error={errors?.title} />
-      <div className="block">
-        <span className="block font-bold text-slate-700">내용</span>
-        <MDEditor
-          value={values.content}
-          className="w-full mt-1 px-2 py-1 border border-teal-400 shadow-sm rounded resize-none"
-          height={600}
-          onChange={(val) => mdEditorChange(val)}
-          onPaste={onPasted}
-          previewOptions={{
-            components: {
-              img: (props) =>
-                CustomPreviewImage({
-                  ...props,
-                  onClick: () => {
-                    if (typeof props.src === "string") onImageDeleted(props.src);
-                  },
-                }),
-            },
-          }}
-        />
-        <p className="text-red-600 font-bold text-sm">{errors?.content}</p>
-      </div>
-      <div className="block">
-        <span className="block font-bold text-slate-700">카테고리</span>
-        <select name="categoryId" value={values.categoryId} onChange={handleChange} className="mt-1 border border-teal-400">
-          {categorys.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="flex mt-2 gap-2 justify-end">
-        <Button text={type === "CREATE" ? "생성" : "수정"} onClick={handleSubmit} className="w-fit" disabled={isLoading} />
-        <Button text="뒤로가기" onClick={() => router.back()} className="w-fit" />
-      </div>
-    </div>
-  );
-}
-
-function DefaultInput({
-  label,
-  name,
-  value,
-  handleChange,
-  error,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  error: string | undefined;
-}) {
-  return (
-    <label className="block">
-      <span className="block font-bold text-slate-700">{label}</span>
-      <input
-        name={name}
-        value={value}
-        className="w-1/3 mt-1 px-2 py-1 appearance-none border border-teal-400 shadow-sm rounded focus:outline-none focus:border-teal-500"
-        onChange={handleChange}
-      />
-      <p className="text-red-600 font-bold text-sm">{error}</p>
-    </label>
+    <Card className="w-full">
+      <CardContent className="flex flex-col gap-4">
+        <LabelWrapper label="제목" orientation="vertical">
+          <Input name="title" type="text" placeholder="제목을 입력해주세요." value={values.title} onChange={handleChange} />
+        </LabelWrapper>
+        <LabelWrapper label="UUID" orientation="vertical">
+          <Input
+            name="uuid"
+            type="text"
+            placeholder="경로로 사용할 UUID를 입력해주세요. (영어, -로만 구성)"
+            value={values.uuid}
+            onChange={handleChange}
+          />
+        </LabelWrapper>
+        <LabelWrapper label="내용" orientation="vertical">
+          <MDEditor
+            value={values.content}
+            className="w-full rounded resize-none"
+            height={700}
+            textareaProps={{
+              placeholder: "내용을 입력해주세요.",
+            }}
+            onChange={(val) => mdEditorChange(val)}
+            onPaste={onPasted}
+            previewOptions={{
+              components: {
+                img: (props) =>
+                  CustomPreviewImage({
+                    ...props,
+                    onClick: () => {
+                      if (typeof props.src === "string") onImageDeleted(props.src);
+                    },
+                  }),
+              },
+            }}
+          />
+          <p className="text-red-600 font-bold text-sm">{errors?.content}</p>
+        </LabelWrapper>
+        <div className="flex flex-wrap gap-4 items-center">
+          <LabelWrapper label="카테고리" orientation="horizontal">
+            <Select onValueChange={(value) => handleChangeWithVal({ name: "categoryId", value })}>
+              <SelectTrigger className="transition-all hover:bg-(--accent) hover:cursor-pointer">
+                <SelectValue placeholder={"카테고리 선택"} />
+              </SelectTrigger>
+              <SelectContent>
+                {categorys.map((c) => (
+                  <SelectItem key={c.id} value={c.id.toString()} className="transition-all hover:bg-(--accent) hover:cursor-pointer">
+                    {c.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </LabelWrapper>
+          <LabelWrapper label="읽는 시간" orientation="horizontal">
+            <Input name="readTime" type="number" className="w-[60px]" value={values.readTime} onChange={handleChange} />
+          </LabelWrapper>
+          <LabelWrapper label="임시글" orientation="horizontal">
+            <Checkbox id="published" className="size-5 cursor-pointer" />
+          </LabelWrapper>
+        </div>
+      </CardContent>
+      <CardFooter className="flex gap-2 justify-end">
+        <Button onClick={handleSubmit} className="hover:cursor-pointer" disabled={isLoading}>
+          {type === "CREATE" ? "생성" : "수정"}
+        </Button>
+        <Button onClick={() => router.back()} variant="secondary" className="hover:cursor-pointer">
+          취소
+        </Button>
+      </CardFooter>
+    </Card>
   );
 }
 
 function PostValidator({ title, content }: PostPayload) {
   const errors: Record<keyof PostPayload, string> = {
     title: "",
+    uuid: "",
     content: "",
     categoryId: "",
+    readTime: "",
   };
 
   if (!title) {

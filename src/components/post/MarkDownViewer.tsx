@@ -13,7 +13,7 @@ export default function MarkDownViewer({ content }: { content: string }) {
 
   useEffect(() => {
     document.documentElement.setAttribute("data-color-mode", resolvedTheme === "dark" ? "dark" : "light");
-  });
+  }, [resolvedTheme]);
 
   return (
     <MDEditor.Markdown source={content} components={{ img: CustomImage }} className="whitespace-pre-wrap bg-inherit!"></MDEditor.Markdown>

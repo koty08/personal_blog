@@ -17,7 +17,11 @@ export default function useForm<T>({ initialVal, onSubmit, validator }: useFormP
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-    setValues({ ...values, [name]: name === "categoryId" ? Number(value) : value });
+    setValues({ ...values, [name]: value });
+  };
+
+  const handleChangeWithVal = ({ name, value }: { name: keyof T; value: string }) => {
+    setValues({ ...values, [name]: value });
   };
 
   const handleSubmit = async () => {
@@ -36,6 +40,7 @@ export default function useForm<T>({ initialVal, onSubmit, validator }: useFormP
     errors,
     isLoading,
     handleChange,
+    handleChangeWithVal,
     handleSubmit,
     mdEditorChange,
   };
