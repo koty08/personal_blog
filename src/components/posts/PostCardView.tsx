@@ -1,13 +1,22 @@
-import { PostsWithCount } from "@/app/api/posts/inteface";
+"use client";
+
 import Link from "next/link";
 import { Card, CardContent, CardTitle } from "../ui/card";
 import PostImage from "../common/PostImage";
 import { removeMDFromContent, getFirstImage } from "@/lib/markdownUtils";
+import { useQuery } from "@tanstack/react-query";
+import { PostsWithCount } from "@/app/api/posts/inteface";
+import commonFetch from "@/lib/commonFetch";
 
-export default async function PostCardView({ data }: { data: PostsWithCount }) {
+export default function PostCardView() {
+  const { data } = useQuery({
+    queryKey: ["posts"],
+    queryFn: () => commonFetch<PostsWithCount>("/posts", undefined, { cache: "no-store" }),
+  });
+
   return (
     <div className="w-full flex flex-wrap gap-y-[20px] gap-x-[2%]">
-      {data.posts.map((post) => {
+      {data?.posts.map((post) => {
         const path = getFirstImage(post.content);
         return (
           <Link key={post.uuid} href={`/post/${post.uuid}`}>
