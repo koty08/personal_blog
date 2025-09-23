@@ -1,3 +1,5 @@
+import removeMd from "remove-markdown";
+
 const markdownImageRegex = /!\[.*?\]\s*\(.*?\)/g;
 
 export const getFirstImage = (content: string) => {
@@ -7,7 +9,6 @@ export const getFirstImage = (content: string) => {
   return path;
 };
 
-export const filterMarkdownImages = (content: string) => {
-  const filteredText = content.replace(markdownImageRegex, "");
-  return filteredText;
+export const removeMDFromContent = (content: string) => {
+  return removeMd(content);
 };

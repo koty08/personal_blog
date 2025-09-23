@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 import PostImage from "@/components/common/PostImage";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { filterMarkdownImages, getFirstImage } from "@/lib/markdownUtils";
+import { removeMDFromContent, getFirstImage } from "@/lib/markdownUtils";
 import CustomPagination from "@/components/common/CustomPagination";
 import { Separator } from "@/components/ui/separator";
 
@@ -49,7 +49,7 @@ export default async function Posts({ searchParams }: { searchParams: { [key: st
                       <div>{dayjs(post.register_date).format("YYYY-MM-DD")}</div>
                     </div>
                   </div>
-                  <p className="leading-7 line-clamp-3">{filterMarkdownImages(post.content)}</p>
+                  <p className="leading-7 line-clamp-3">{removeMDFromContent(post.content)}</p>
                 </div>
               </Card>
             </Link>

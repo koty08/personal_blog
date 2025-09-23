@@ -2,7 +2,7 @@ import { PostsWithCount } from "@/app/api/posts/inteface";
 import Link from "next/link";
 import { Card, CardContent, CardTitle } from "../ui/card";
 import PostImage from "../common/PostImage";
-import { filterMarkdownImages, getFirstImage } from "@/lib/markdownUtils";
+import { removeMDFromContent, getFirstImage } from "@/lib/markdownUtils";
 
 export default async function PostCardView({ data }: { data: PostsWithCount }) {
   return (
@@ -15,7 +15,7 @@ export default async function PostCardView({ data }: { data: PostsWithCount }) {
               <PostImage path={path} alt={"thumbnail"} className="w-full h-[160px]" />
               <CardTitle className="mt-3 mb-2 px-4 truncate">{post.title}</CardTitle>
               <CardContent className="text-sm px-4">
-                <p className="line-clamp-2">{filterMarkdownImages(post.content)}</p>
+                <p className="line-clamp-2">{removeMDFromContent(post.content)}</p>
               </CardContent>
             </Card>
           </Link>
