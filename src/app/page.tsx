@@ -1,17 +1,20 @@
-import PostCardView from "@/components/posts/PostCardView";
-import commonFetch from "../lib/commonFetch";
-import { PostsWithCount } from "./api/posts/inteface";
+import PostCardView from "@/components/posts/PostsCardView";
 import { Button } from "@/components/ui/button";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { postsOptions } from "@/services/posts/options";
+import { SearchParams } from "@/lib/serverInterface";
+import { PostsOrderType } from "@/services/posts/interface";
 
-export default async function Home() {
+export default async function Main({ searchParams }: { searchParams: SearchParams }) {
+  const { order } = await searchParams;
   const queryClient = getQueryClient();
 
-  void queryClient.prefetchQuery({
-    queryKey: ["posts"],
-    queryFn: () => commonFetch<PostsWithCount>("/posts", undefined, { cache: "no-store" }),
-  });
+  await queryClient.prefetchQuery(
+    postsOptions({
+      order: order as PostsOrderType,
+    })
+  );
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

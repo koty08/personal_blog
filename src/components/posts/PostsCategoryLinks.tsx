@@ -1,11 +1,14 @@
 "use client";
 
-import { CategoryWithPostCount } from "@/app/api/category/interface";
+import { categoryOptions } from "@/services/category/options";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 
-export default function PostCategoryLinks({ categorys }: { categorys: CategoryWithPostCount[] | null }) {
+export default function PostCategoryLinks() {
   const router = useRouter();
+  const { data: categorys } = useQuery(categoryOptions);
+
   const allCategory = {
     id: 0,
     name: "전체보기",

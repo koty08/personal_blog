@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { Post } from "@prisma/client";
 import dayjs from "dayjs";
 import { Separator } from "@/components/ui/separator";
-import { CategoryWithPostCount } from "@/app/api/category/interface";
+import { CategoryWithPostCount } from "@/services/category/interface";
 import { Badge } from "@/components/ui/badge";
 import PostComment from "@/components/post/PostComment";
 import PostAdminContents from "@/components/post/PostAdminContents";

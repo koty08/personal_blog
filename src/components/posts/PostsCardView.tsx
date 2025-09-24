@@ -5,14 +5,13 @@ import { Card, CardContent, CardTitle } from "../ui/card";
 import PostImage from "../common/PostImage";
 import { removeMDFromContent, getFirstImage } from "@/lib/markdownUtils";
 import { useQuery } from "@tanstack/react-query";
-import { PostsWithCount } from "@/app/api/posts/inteface";
-import commonFetch from "@/lib/commonFetch";
+import { postsOptions } from "@/services/posts/options";
+import { useSearchParams } from "next/navigation";
+import { PostsOrderType } from "@/services/posts/interface";
 
 export default function PostCardView() {
-  const { data } = useQuery({
-    queryKey: ["posts"],
-    queryFn: () => commonFetch<PostsWithCount>("/posts", undefined, { cache: "no-store" }),
-  });
+  const searchParams = useSearchParams();
+  const { data } = useQuery(postsOptions({ order: (searchParams.get("order") as PostsOrderType) ?? undefined }));
 
   return (
     <div className="w-full flex flex-wrap gap-y-[20px] gap-x-[2%]">
