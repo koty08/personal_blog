@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko" data-locator-target="vscode" suppressHydrationWarning>
+    <html lang="ko" data-locator-target="vscode" suppressHydrationWarning data-scroll-behavior="smooth">
       <body className={open_sans.className}>
         <QCProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
