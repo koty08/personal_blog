@@ -26,6 +26,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.18",
+    "es-hangul": "^2.3.6",
     "es-toolkit": "^1.39.10",
     "lucide-react": "^0.542.0",
     "next": "15.5.2",
