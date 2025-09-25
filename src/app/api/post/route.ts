@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../prisma";
+import { Prisma } from "@prisma/client";
 
 export async function GET(request: NextRequest) {
   const uuid = request.nextUrl.searchParams.get("uuid");
@@ -34,12 +35,17 @@ export async function POST(request: NextRequest) {
   const body = await request.json();
   try {
     await prisma.post.create({
-      data: body,
+      data: {
+        ...body,
+        categoryId: Number(body.categoryId),
+      },
     });
     return NextResponse.json({ success: true });
   } catch (e) {
-    console.log(e);
-    return NextResponse.json({ success: false });
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === "P2002") return NextResponse.json({ success: false }, { status: 409 });
+    }
+    return NextResponse.json({ success: false }, { status: 500 });
   }
 }
 

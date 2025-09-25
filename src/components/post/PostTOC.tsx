@@ -1,7 +1,9 @@
 "use client";
 
+import { postOptions } from "@/services/post/options";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface Heading {
@@ -16,7 +18,8 @@ const MarginByHeading: Record<string, string> = {
 };
 
 export default function PostTOC() {
-  const pathname = usePathname();
+  const { uuid } = useParams<{ uuid: string }>();
+  const { isFetched } = useQuery(postOptions({ uuid }));
   const [headings, setHeadings] = useState<Heading[]>([]);
 
   useEffect(() => {
@@ -27,12 +30,12 @@ export default function PostTOC() {
       if (!headings.find((e) => e.type === "h2")) setHeadings(headings.map((e) => ({ ...e, type: e.type === "h3" ? "h2" : "h1" })));
       else setHeadings(headings.map((e) => ({ ...e, type: "h1" })));
     } else setHeadings(headings);
-  }, []);
+  }, [isFetched]);
 
   return (
     <div className={"sticky top-[60px] h-fit border-l-4 flex flex-col gap-1"}>
       {headings.map((heading) => (
-        <Link key={heading.id} href={`${pathname}#${heading.id}`} className={`${MarginByHeading[heading.type]} hover:underline`}>
+        <Link key={heading.id} href={{ hash: heading.id }} className={`${MarginByHeading[heading.type]} hover:underline`}>
           {heading.id.replace("-", " ")}
         </Link>
       ))}

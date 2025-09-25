@@ -2,10 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import useForm from "@/hooks/useForm";
-import commonFetch from "@/lib/commonFetch";
 import { CustomPreviewImage } from "./MarkDownViewer";
-import { Category, Post } from "@prisma/client";
-import MDEditor from "@uiw/react-md-editor";
+import { Post } from "@prisma/client";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Input } from "../ui/input";
 import LabelWrapper from "../ui/LabelWrapper";
@@ -14,47 +12,63 @@ import { useTheme } from "next-themes";
 import { useEffect } from "react";
 import { Checkbox } from "../ui/checkbox";
 import { Button } from "../ui/button";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { categoryOptions } from "@/services/category/options";
+import { PostCreatePayload } from "@/services/post/interface";
+import { josa } from "es-hangul";
+import { postCreateOptions } from "@/services/post/options";
+import dynamic from "next/dynamic";
+import { fileDeleteOptions, fileUploadOptions } from "@/services/file/option";
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
-interface PostPayload {
-  title: string;
-  uuid: string;
-  content: string;
-  categoryId: number;
-  readTime: number;
-}
+const fieldLabel: Record<keyof PostCreatePayload, string> = {
+  title: "제목",
+  uuid: "UUID",
+  content: "내용",
+  categoryId: "카테고리",
+  readTime: "읽는 시간",
+  published: "임시글",
+};
 
 interface PostFormProps {
   type: "CREATE" | "UPDATE";
-  post_id?: string;
   originalData?: Post;
-  categorys: Category[];
 }
 
-export default function PostForm({ type, originalData, categorys }: PostFormProps) {
+export default function PostForm({ type, originalData }: PostFormProps) {
   const router = useRouter();
-  const { values, errors, isLoading, handleChange, handleChangeWithVal, handleSubmit, mdEditorChange } = useForm<PostPayload>({
+  const { resolvedTheme } = useTheme();
+
+  const { data: categorys } = useQuery(categoryOptions);
+  const postCreate = useMutation(postCreateOptions);
+  const fileUpload = useMutation(fileUploadOptions);
+  const fileDelete = useMutation(fileDeleteOptions);
+
+  const { values, isLoading, handleChange, handleChangeWithVal, handleSubmit } = useForm<PostCreatePayload>({
     initialVal: originalData
       ? originalData
       : {
-          title: "",
           uuid: "",
+          title: "",
           content: "",
-          categoryId: 1,
+          categoryId: 0,
           readTime: 5,
+          published: false,
         },
-    onSubmit: async (values) => {
-      const res = await commonFetch<{ success: boolean }>("/post", undefined, {
-        method: type === "CREATE" ? "POST" : "PUT",
-        body: JSON.stringify(values),
-      });
-      if (res && res.success) {
-        router.push("/posts");
-        router.refresh();
-      }
+    onSubmit: async (payload) => {
+      console.log(payload);
+      if (type === "CREATE")
+        await postCreate.mutate(payload, {
+          onSuccess: () => {
+            router.push("/posts");
+          },
+          onError: (err) => {
+            console.log(err);
+          },
+        });
     },
-    validator: PostValidator,
+    validator: postValidator,
   });
-  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     document.documentElement.setAttribute("data-color-mode", resolvedTheme === "dark" ? "dark" : "light");
@@ -63,36 +77,32 @@ export default function PostForm({ type, originalData, categorys }: PostFormProp
   const onPasted = async (event: React.ClipboardEvent) => {
     const file = event.clipboardData.files.item(0);
     if (file) {
-      const res = await commonFetch<{ success: boolean; filename: string }>("/file", undefined, {
-        method: "POST",
-        body: file,
+      fileUpload.mutate(file, {
+        onSuccess: (res) => {
+          handleChangeWithVal({ name: "content", value: values.content + `![](/${res.filename})` });
+        },
       });
-      if (res && res.success) {
-        mdEditorChange(values.content + `![](/${res.filename})`);
-      }
     }
   };
 
-  const onImageDeleted = async (src: string | undefined) => {
-    const res = await commonFetch<{ success: boolean }>(
-      "/file",
-      { path: src },
+  const onImageDeleted = async (path: string) => {
+    fileDelete.mutate(
+      { path },
       {
-        method: "DELETE",
+        onSuccess: () => {
+          handleChangeWithVal({ name: "content", value: values.content.replace(`![](${path})`, "") });
+        },
       }
     );
-    if (res && res.success) {
-      mdEditorChange(values.content.replace(`![](${src})`, ""));
-    }
   };
 
   return (
     <Card className="w-full">
       <CardContent className="flex flex-col gap-4">
-        <LabelWrapper label="제목" orientation="vertical">
+        <LabelWrapper label={fieldLabel.title} orientation="vertical">
           <Input name="title" type="text" placeholder="제목을 입력해주세요." value={values.title} onChange={handleChange} />
         </LabelWrapper>
-        <LabelWrapper label="UUID" orientation="vertical">
+        <LabelWrapper label={fieldLabel.uuid} orientation="vertical">
           <Input
             name="uuid"
             type="text"
@@ -101,7 +111,7 @@ export default function PostForm({ type, originalData, categorys }: PostFormProp
             onChange={handleChange}
           />
         </LabelWrapper>
-        <LabelWrapper label="내용" orientation="vertical">
+        <LabelWrapper label={fieldLabel.content} orientation="vertical">
           <MDEditor
             value={values.content}
             className="w-full rounded resize-none"
@@ -109,7 +119,7 @@ export default function PostForm({ type, originalData, categorys }: PostFormProp
             textareaProps={{
               placeholder: "내용을 입력해주세요.",
             }}
-            onChange={(val) => mdEditorChange(val)}
+            onChange={(val) => handleChangeWithVal({ name: "content", value: val ?? "" })}
             onPaste={onPasted}
             previewOptions={{
               components: {
@@ -123,16 +133,15 @@ export default function PostForm({ type, originalData, categorys }: PostFormProp
               },
             }}
           />
-          <p className="text-red-600 font-bold text-sm">{errors?.content}</p>
         </LabelWrapper>
         <div className="flex flex-wrap gap-4 items-center">
-          <LabelWrapper label="카테고리" orientation="horizontal">
+          <LabelWrapper label={fieldLabel.categoryId} orientation="horizontal">
             <Select onValueChange={(value) => handleChangeWithVal({ name: "categoryId", value })}>
               <SelectTrigger className="transition-all hover:bg-(--accent) hover:cursor-pointer">
                 <SelectValue placeholder={"카테고리 선택"} />
               </SelectTrigger>
               <SelectContent>
-                {categorys.map((c) => (
+                {categorys?.map((c) => (
                   <SelectItem key={c.id} value={c.id.toString()} className="transition-all hover:bg-(--accent) hover:cursor-pointer">
                     {c.name}
                   </SelectItem>
@@ -140,10 +149,10 @@ export default function PostForm({ type, originalData, categorys }: PostFormProp
               </SelectContent>
             </Select>
           </LabelWrapper>
-          <LabelWrapper label="읽는 시간" orientation="horizontal">
+          <LabelWrapper label={fieldLabel.readTime} orientation="horizontal">
             <Input name="readTime" type="number" className="w-[60px]" value={values.readTime} onChange={handleChange} />
           </LabelWrapper>
-          <LabelWrapper label="임시글" orientation="horizontal">
+          <LabelWrapper label={fieldLabel.published} orientation="horizontal">
             <Checkbox id="published" className="size-5 cursor-pointer" />
           </LabelWrapper>
         </div>
@@ -160,22 +169,11 @@ export default function PostForm({ type, originalData, categorys }: PostFormProp
   );
 }
 
-function PostValidator({ title, content }: PostPayload) {
-  const errors: Record<keyof PostPayload, string> = {
-    title: "",
-    uuid: "",
-    content: "",
-    categoryId: "",
-    readTime: "",
-  };
+function postValidator(form: PostCreatePayload) {
+  const validList: (keyof PostCreatePayload)[] = ["title", "uuid", "content", "categoryId", "readTime"];
+  const emptyField = validList.find((e) => !form[e]);
+  if (emptyField) return `${josa(fieldLabel[emptyField], "을/를")} 입력해주세요.`;
+  else if (!form.uuid.match(/^[a-zA-Z0-9-]+$/)) return "올바른 UUID 형식이 아닙니다.";
 
-  if (!title) {
-    errors.title = "제목을 입력해주세요!";
-  }
-
-  if (!content) {
-    errors.content = "내용을 입력해주세요!";
-  }
-
-  return errors;
+  return "";
 }

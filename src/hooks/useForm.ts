@@ -1,19 +1,15 @@
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface useFormProps<T> {
   initialVal: T;
   onSubmit: (datas: T) => Promise<void>;
-  validator: (datas: T) => Record<keyof T, string>;
+  validator: (datas: T) => string;
 }
 
 export default function useForm<T>({ initialVal, onSubmit, validator }: useFormProps<T>) {
   const [values, setValues] = useState<T>(initialVal);
-  const [errors, setErrors] = useState<Record<keyof T, string>>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const mdEditorChange = (val: string | undefined) => {
-    setValues({ ...values, content: val });
-  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
@@ -27,21 +23,19 @@ export default function useForm<T>({ initialVal, onSubmit, validator }: useFormP
   const handleSubmit = async () => {
     setIsLoading(true);
     const validResult = validator(values);
-    setErrors(validResult);
-    // 에러가 발견되지 않으면 onSubmit
-    if (Object.values(validResult).filter((e) => e !== "").length == 0) {
-      await onSubmit(values);
-    }
+    if (!validResult.length) await onSubmit(values);
+    else
+      toast(validResult, {
+        position: "bottom-center",
+      });
     setIsLoading(false);
   };
 
   return {
     values,
-    errors,
     isLoading,
     handleChange,
     handleChangeWithVal,
     handleSubmit,
-    mdEditorChange,
   };
 }

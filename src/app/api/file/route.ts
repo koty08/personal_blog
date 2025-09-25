@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
   try {
     const file = await (await request.blob()).arrayBuffer();
     await fs.writeFile(`${basePath}/${filename}`, Buffer.from(file));
-    return NextResponse.json({ success: true, filename: filename });
+    return NextResponse.json({ filename: filename });
   } catch {
     return NextResponse.json({ success: false });
   }

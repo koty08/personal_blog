@@ -1,16 +1,19 @@
-import commonFetch from "@/lib/commonFetch";
 import PostForm from "@/components/post/PostForm";
-import { notFound } from "next/navigation";
-import { Category } from "@prisma/client";
+import { getQueryClient } from "@/lib/getQueryClient";
+import { categoryOptions } from "@/services/category/options";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 export default async function CreatePost() {
-  const categorys = await commonFetch<Category[]>("/category", undefined, { cache: "no-store" });
-  if (!categorys) notFound();
+  const queryClient = getQueryClient();
+
+  await queryClient.prefetchQuery(categoryOptions);
 
   return (
-    <div className="flex flex-col gap-15 items-center">
-      <p className="text-2xl font-bold">게시글 생성</p>
-      <PostForm type="CREATE" categorys={categorys} />
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <div className="flex flex-col gap-15 items-center">
+        <p className="text-2xl font-bold">게시글 생성</p>
+        <PostForm type="CREATE" />
+      </div>
+    </HydrationBoundary>
   );
 }

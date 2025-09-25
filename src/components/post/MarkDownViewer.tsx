@@ -1,14 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { postOptions } from "@/services/post/options";
+import { useQuery } from "@tanstack/react-query";
 import MDEditor from "@uiw/react-md-editor";
 import { useTheme } from "next-themes";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ReactModal from "react-modal";
 
 const basePath = "/images/post/";
 
-export default function MarkDownViewer({ content }: { content: string }) {
+export default function MarkDownViewer() {
+  const { uuid } = useParams<{ uuid: string }>();
+  const { data } = useQuery(postOptions({ uuid }));
   const { resolvedTheme } = useTheme();
 
   useEffect(() => {
@@ -16,7 +21,13 @@ export default function MarkDownViewer({ content }: { content: string }) {
   }, [resolvedTheme]);
 
   return (
-    <MDEditor.Markdown source={content} components={{ img: CustomImage }} className="whitespace-pre-wrap bg-inherit!"></MDEditor.Markdown>
+    data && (
+      <MDEditor.Markdown
+        source={data.content}
+        components={{ img: CustomImage }}
+        className="whitespace-pre-wrap bg-inherit!"
+      ></MDEditor.Markdown>
+    )
   );
 }
 

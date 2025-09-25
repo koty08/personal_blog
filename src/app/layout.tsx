@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import { ThemeProvider } from "@/components/common/ThemeProvider";
 import QCProvider from "@/lib/QCProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 const open_sans = Noto_Sans_KR({ subsets: ["latin"] });
 
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               {children}
             </div>
             <Footer />
+            <Toaster />
           </ThemeProvider>
         </QCProvider>
       </body>
