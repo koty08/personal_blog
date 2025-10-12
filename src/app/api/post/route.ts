@@ -61,11 +61,18 @@ export async function PUT(request: NextRequest) {
       where: {
         uuid,
       },
-      data: body,
+      data: {
+        ...body,
+        categoryId: Number(body.categoryId),
+        updated_date: new Date(),
+      },
     });
     return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json({ success: false });
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === "P2002") return NextResponse.json({ success: false }, { status: 409 });
+    }
+    return NextResponse.json({ success: false }, { status: 500 });
   }
 }
 
@@ -83,6 +90,6 @@ export async function DELETE(request: NextRequest) {
     });
     return NextResponse.json({ success: true });
   } catch {
-    return NextResponse.json({ success: false });
+    return NextResponse.json({ success: false }, { status: 500 });
   }
 }

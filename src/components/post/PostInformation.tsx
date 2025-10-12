@@ -28,7 +28,7 @@ export default function PostInformation() {
         </div>
         <div className="flex gap-2 items-center text-sm text-slate-400">
           <p>{dayjs(data.register_date).format("YYYY년 MM월 DD일")}</p>
-          {dayjs(data.register_date).diff(data.updated_date, "day") > 1 && (
+          {dayjs(data.updated_date).diff(data.register_date, "day") > 1 && (
             <>
               <Separator orientation="vertical" />
               <p>{`최근 수정: ${dayjs(data.updated_date).format("YYYY년 MM월 DD일")}`}</p>

@@ -13,11 +13,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import commonFetch from "@/lib/commonFetch";
+import { useMutation } from "@tanstack/react-query";
+import { postDeleteOptions } from "@/services/post/options";
+import { toast } from "sonner";
 
 export default function PostAdminContents() {
   const router = useRouter();
   const pathname = usePathname();
+  const postDelete = useMutation(postDeleteOptions);
 
   const onUpdate = () => {
     router.push(`${pathname}/update`);
@@ -25,10 +28,20 @@ export default function PostAdminContents() {
 
   const onDelete = async () => {
     const uuid = pathname.split("/").pop();
-    const res = await commonFetch<{ success: boolean }>(`/post`, { uuid }, { method: "DELETE" });
-    if (res && res.success) {
-      router.push("/posts");
-    }
+    if (uuid)
+      postDelete.mutate(
+        { uuid },
+        {
+          onSuccess: () => {
+            router.push("/posts");
+          },
+          onError: () => {
+            toast("게시글 삭제중 오류가 발생했습니다.", {
+              position: "bottom-center",
+            });
+          },
+        }
+      );
   };
 
   return (

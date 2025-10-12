@@ -24,16 +24,17 @@ export async function POST(request: NextRequest) {
     });
     return NextResponse.json({ success: true });
   } catch {
-    return NextResponse.json({ success: false });
+    return NextResponse.json({ success: false }, { status: 500 });
   }
 }
 
 export async function PUT(request: NextRequest) {
-  const id = request.nextUrl.searchParams.get("id");
+  const body = await request.json();
+  const id = body.id;
   if (!id) {
     return NextResponse.json({}, { status: 404 });
   }
-  const body = await request.json();
+
   try {
     await prisma.category.update({
       where: {
@@ -43,17 +44,18 @@ export async function PUT(request: NextRequest) {
     });
     return NextResponse.json({ success: true });
   } catch {
-    return NextResponse.json({ success: false });
+    return NextResponse.json({ success: false }, { status: 500 });
   }
 }
 
 export async function DELETE(request: NextRequest) {
-  const id = request.nextUrl.searchParams.get("id");
+  const body = await request.json();
+  const id = body.id;
   if (!id) {
     return NextResponse.json({}, { status: 404 });
   }
   try {
-    // 카테고리 삭제전 해당 카테고리에 있는 Post들 전부 미분류로
+    // 카테고리 삭제전 해당 카테고리에 있는 Post들 전부 1번 카테고리로
     await prisma.post.updateMany({
       where: {
         categoryId: Number(id),
@@ -69,6 +71,6 @@ export async function DELETE(request: NextRequest) {
     });
     return NextResponse.json({ success: true });
   } catch {
-    return NextResponse.json({ success: false });
+    return NextResponse.json({ success: false }, { status: 500 });
   }
 }

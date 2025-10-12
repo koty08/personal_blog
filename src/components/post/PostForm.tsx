@@ -16,9 +16,11 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { categoryOptions } from "@/services/category/options";
 import { PostCreatePayload } from "@/services/post/interface";
 import { josa } from "es-hangul";
-import { postCreateOptions } from "@/services/post/options";
+import { postCreateOptions, postUpdateOptions } from "@/services/post/options";
 import dynamic from "next/dynamic";
 import { fileDeleteOptions, fileUploadOptions } from "@/services/file/option";
+import { toast } from "sonner";
+import PostCategorys from "./PostCategorys";
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 const fieldLabel: Record<keyof PostCreatePayload, string> = {
@@ -41,6 +43,7 @@ export default function PostForm({ type, originalData }: PostFormProps) {
 
   const { data: categorys } = useQuery(categoryOptions);
   const postCreate = useMutation(postCreateOptions);
+  const postUpdate = useMutation(postUpdateOptions);
   const fileUpload = useMutation(fileUploadOptions);
   const fileDelete = useMutation(fileDeleteOptions);
 
@@ -56,14 +59,26 @@ export default function PostForm({ type, originalData }: PostFormProps) {
           published: false,
         },
     onSubmit: async (payload) => {
-      console.log(payload);
       if (type === "CREATE")
-        await postCreate.mutate(payload, {
+        postCreate.mutate(payload, {
           onSuccess: () => {
             router.push("/posts");
           },
-          onError: (err) => {
-            console.log(err);
+          onError: () => {
+            toast("게시글 생성 중 오류가 발생했습니다.", {
+              position: "bottom-center",
+            });
+          },
+        });
+      else if (type === "UPDATE")
+        postUpdate.mutate(payload, {
+          onSuccess: () => {
+            router.push(`/post/${values.uuid}`);
+          },
+          onError: () => {
+            toast("게시글 수정 중 오류가 발생했습니다.", {
+              position: "bottom-center",
+            });
           },
         });
     },
@@ -148,12 +163,13 @@ export default function PostForm({ type, originalData }: PostFormProps) {
                 ))}
               </SelectContent>
             </Select>
+            <PostCategorys />
           </LabelWrapper>
           <LabelWrapper label={fieldLabel.readTime} orientation="horizontal">
             <Input name="readTime" type="number" className="w-[60px]" value={values.readTime} onChange={handleChange} />
           </LabelWrapper>
           <LabelWrapper label={fieldLabel.published} orientation="horizontal">
-            <Checkbox id="published" className="size-5 cursor-pointer" />
+            <Checkbox id="published" className="size-5 cursor-pointer mt-0.5" />
           </LabelWrapper>
         </div>
       </CardContent>

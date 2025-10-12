@@ -10,8 +10,9 @@ export default function PostComment() {
     <Giscus
       id="comments"
       repo="koty08/personal_blog"
-      repoId="1048253651"
+      repoId="R_kgDOPnsU0w"
       category="General"
+      categoryId="DIC_kwDOPnsU084CwiAS"
       mapping="pathname"
       emitMetadata="0"
       reactionsEnabled="0"
