@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../prisma";
 import { Prisma } from "@prisma/client";
+import { getAllImages } from "@/lib/markdownUtils";
+import fs from "fs/promises";
 
 export async function GET(request: NextRequest) {
   const uid = request.nextUrl.searchParams.get("uid");
@@ -34,11 +36,23 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const body = await request.json();
   try {
-    await prisma.post.create({
-      data: {
-        ...body,
-        categoryId: Number(body.categoryId),
-      },
+    await prisma.$transaction(async (tx) => {
+      const newPost = await tx.post.create({
+        data: {
+          ...body,
+          categoryId: Number(body.categoryId),
+        },
+      });
+
+      const images = getAllImages(body.content);
+      if (images.length > 0) {
+        await tx.postImage.createMany({
+          data: images.map((path) => ({
+            path,
+            postId: newPost.id,
+          })),
+        });
+      }
     });
     return NextResponse.json({ success: true });
   } catch (e) {
@@ -57,16 +71,38 @@ export async function PUT(request: NextRequest) {
   }
 
   try {
-    await prisma.post.update({
-      where: {
-        uid,
-      },
-      data: {
-        ...body,
-        categoryId: Number(body.categoryId),
-        updated_date: new Date(),
-      },
-    });
+    const existingPost = await prisma.post.findUnique({ where: { uid }, include: { images: true } });
+    if (!existingPost) {
+      return NextResponse.json({ success: false }, { status: 404 });
+    }
+
+    const existingImagePaths = existingPost.images.map((image) => image.path);
+    const newImagePaths = getAllImages(body.content);
+
+    const imagesToAdd = newImagePaths.filter((path) => !existingImagePaths.includes(path));
+    const imagesToDelete = existingImagePaths.filter((path) => !newImagePaths.includes(path));
+
+    await prisma.$transaction([
+      prisma.post.update({
+        where: { uid },
+        data: {
+          ...body,
+          categoryId: Number(body.categoryId),
+          updated_date: new Date(),
+        },
+      }),
+      ...(imagesToDelete.length > 0
+        ? [prisma.postImage.deleteMany({ where: { path: { in: imagesToDelete }, postId: existingPost.id } })]
+        : []),
+      ...(imagesToAdd.length > 0
+        ? [
+            prisma.postImage.createMany({
+              data: imagesToAdd.map((path) => ({ path, postId: existingPost.id })),
+            }),
+          ]
+        : []),
+    ]);
+
     return NextResponse.json({ success: true });
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
@@ -76,6 +112,8 @@ export async function PUT(request: NextRequest) {
   }
 }
 
+const basePath = "./public/images/post";
+
 export async function DELETE(request: NextRequest) {
   const uid = request.nextUrl.searchParams.get("uid");
   if (!uid) {
@@ -83,10 +121,22 @@ export async function DELETE(request: NextRequest) {
   }
 
   try {
-    await prisma.post.delete({
-      where: {
-        uid,
-      },
+    const existingPost = await prisma.post.findUnique({ where: { uid }, include: { images: true } });
+    if (!existingPost) {
+      return NextResponse.json({ success: false }, { status: 404 });
+    }
+
+    const existingImagePaths = existingPost.images.map((image) => image.path);
+    await prisma.$transaction([
+      prisma.postImage.deleteMany({ where: { path: { in: existingImagePaths }, postId: existingPost.id } }),
+      prisma.post.delete({
+        where: {
+          uid,
+        },
+      }),
+    ]);
+    existingImagePaths.forEach(async (path) => {
+      await fs.rm(`${basePath}${path}`);
     });
     return NextResponse.json({ success: true });
   } catch {

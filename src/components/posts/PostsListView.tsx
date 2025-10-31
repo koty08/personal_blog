@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import dayjs from "dayjs";
-import PostImage from "@/components/common/PostImage";
+import PostThumbail from "@/components/common/PostThumbnail";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { removeMDFromContent, getFirstImage } from "@/lib/markdownUtils";
@@ -35,7 +35,7 @@ export default function PostsListView() {
         return (
           <Link key={post.uid} href={`/post/${post.uid}`}>
             <Card className="flex flex-row gap-5 flex-wrap p-4 justify-center transition-all hover:bg-(--accent) hover:border-gray-300">
-              <PostImage path={path} alt={"thumbnail"} className="w-[260px] h-[160px]" />
+              <PostThumbail path={path} alt={"thumbnail"} className="w-[260px] h-[160px]" />
               <div className="flex flex-col flex-1 gap-4 min-w-xs">
                 <div className="flex flex-col gap-1.5">
                   <div className="flex gap-2 items-center">
