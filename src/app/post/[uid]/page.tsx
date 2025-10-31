@@ -24,7 +24,7 @@ export default async function PostPage({ params }: { params: Params }) {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="mt-[64px] flex justify-center gap-5 relative">
-        <div className="w-2/3 flex flex-col gap-9">
+        <div className="w-full flex flex-col gap-9 md:w-[768px]">
           <PostInformation />
           <div className="mt-[30px]">
             <MarkDownViewer />
@@ -32,7 +32,9 @@ export default async function PostPage({ params }: { params: Params }) {
           <PostAdminContents />
           <PostComment />
         </div>
-        <PostTOC />
+        <div className="hidden lg:block">
+          <PostTOC />
+        </div>
       </div>
     </HydrationBoundary>
   );
