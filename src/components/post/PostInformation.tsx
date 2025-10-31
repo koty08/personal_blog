@@ -9,8 +9,8 @@ import { useParams } from "next/navigation";
 import { categoryOptions } from "@/services/category/options";
 
 export default function PostInformation() {
-  const { uuid } = useParams<{ uuid: string }>();
-  const { data } = useQuery(postOptions({ uuid }));
+  const { uid } = useParams<{ uid: string }>();
+  const { data } = useQuery(postOptions({ uid }));
   const { data: categorys } = useQuery(categoryOptions);
 
   if (!data) return <></>;

@@ -12,8 +12,8 @@ import ReactModal from "react-modal";
 const basePath = "/images/post/";
 
 export default function MarkDownViewer() {
-  const { uuid } = useParams<{ uuid: string }>();
-  const { data } = useQuery(postOptions({ uuid }));
+  const { uid } = useParams<{ uid: string }>();
+  const { data } = useQuery(postOptions({ uid }));
   const { resolvedTheme } = useTheme();
 
   useEffect(() => {

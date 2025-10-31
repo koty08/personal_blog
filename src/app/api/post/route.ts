@@ -3,15 +3,15 @@ import prisma from "../prisma";
 import { Prisma } from "@prisma/client";
 
 export async function GET(request: NextRequest) {
-  const uuid = request.nextUrl.searchParams.get("uuid");
-  if (!uuid) {
+  const uid = request.nextUrl.searchParams.get("uid");
+  if (!uid) {
     return NextResponse.json({}, { status: 404 });
   }
 
   try {
     const post = await prisma.post.update({
       where: {
-        uuid,
+        uid,
       },
       data: {
         views: {
@@ -51,15 +51,15 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   const body = await request.json();
-  const uuid = body.uuid;
-  if (!uuid) {
+  const uid = body.uid;
+  if (!uid) {
     return NextResponse.json({}, { status: 404 });
   }
 
   try {
     await prisma.post.update({
       where: {
-        uuid,
+        uid,
       },
       data: {
         ...body,
@@ -77,15 +77,15 @@ export async function PUT(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  const uuid = request.nextUrl.searchParams.get("uuid");
-  if (!uuid) {
+  const uid = request.nextUrl.searchParams.get("uid");
+  if (!uid) {
     return NextResponse.json({}, { status: 404 });
   }
 
   try {
     await prisma.post.delete({
       where: {
-        uuid,
+        uid,
       },
     });
     return NextResponse.json({ success: true });

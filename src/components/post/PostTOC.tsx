@@ -18,8 +18,8 @@ const MarginByHeading: Record<string, string> = {
 };
 
 export default function PostTOC() {
-  const { uuid } = useParams<{ uuid: string }>();
-  const { isFetched } = useQuery(postOptions({ uuid }));
+  const { uid } = useParams<{ uid: string }>();
+  const { isFetched } = useQuery(postOptions({ uid }));
   const [headings, setHeadings] = useState<Heading[]>([]);
 
   useEffect(() => {

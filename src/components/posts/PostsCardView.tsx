@@ -18,7 +18,7 @@ export default function PostCardView() {
       {data?.posts.map((post) => {
         const path = getFirstImage(post.content);
         return (
-          <Link key={post.uuid} href={`/post/${post.uuid}`}>
+          <Link key={post.uid} href={`/post/${post.uid}`}>
             <Card className="py-4 w-[350px] hover:cursor-pointer transition-all hover:border-gray-300 hover:bg-(--accent)">
               <PostImage path={path} alt={"thumbnail"} className="w-full h-[160px]" />
               <CardTitle className="mt-3 mb-2 px-4 truncate">{post.title}</CardTitle>

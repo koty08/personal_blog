@@ -1,7 +1,7 @@
 import { Post } from "@prisma/client";
 
 export interface PostPayload {
-  uuid: string;
+  uid: string;
 }
 
 export type PostCreatePayload = Omit<Post, "id" | "register_date" | "updated_date" | "views">;

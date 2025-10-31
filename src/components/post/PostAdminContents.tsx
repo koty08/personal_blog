@@ -27,10 +27,10 @@ export default function PostAdminContents() {
   };
 
   const onDelete = async () => {
-    const uuid = pathname.split("/").pop();
-    if (uuid)
+    const uid = pathname.split("/").pop();
+    if (uid)
       postDelete.mutate(
-        { uuid },
+        { uid },
         {
           onSuccess: () => {
             router.push("/posts");

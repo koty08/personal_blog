@@ -11,14 +11,14 @@ import { notFound } from "next/navigation";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 export default async function PostPage({ params }: { params: Params }) {
-  const { uuid } = await params;
-  if (!uuid) notFound();
+  const { uid } = await params;
+  if (!uid) notFound();
   const queryClient = getQueryClient();
 
-  await queryClient.prefetchQuery(postOptions({ uuid }));
+  await queryClient.prefetchQuery(postOptions({ uid }));
   await queryClient.prefetchQuery(categoryOptions);
 
-  const data = queryClient.getQueryData(postOptions({ uuid }).queryKey);
+  const data = queryClient.getQueryData(postOptions({ uid }).queryKey);
   if (!data) notFound();
 
   return (

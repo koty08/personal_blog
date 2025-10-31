@@ -33,7 +33,7 @@ export default function PostsListView() {
       {data?.posts.map((post) => {
         const path = getFirstImage(post.content);
         return (
-          <Link key={post.uuid} href={`/post/${post.uuid}`}>
+          <Link key={post.uid} href={`/post/${post.uid}`}>
             <Card className="flex flex-row gap-5 flex-wrap p-4 justify-center transition-all hover:bg-(--accent) hover:border-gray-300">
               <PostImage path={path} alt={"thumbnail"} className="w-[260px] h-[160px]" />
               <div className="flex flex-col flex-1 gap-4 min-w-xs">

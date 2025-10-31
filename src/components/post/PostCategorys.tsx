@@ -26,12 +26,12 @@ export default function PostCategorys() {
   const queryClient = useQueryClient();
   const { data: categories, isLoading } = useQuery(categoryOptions);
 
-  const [newCategoryName, setNewCategoryName] = useState("");
+  const [newCategory, setNewCategory] = useState("");
   const [editingCategory, setEditingCategory] = useState<{ id: number; name: string } | null>(null);
 
   const onSuccess = () => {
     queryClient.invalidateQueries({ queryKey: categoryOptions.queryKey });
-    setNewCategoryName("");
+    setNewCategory("");
     setEditingCategory(null);
   };
 
@@ -63,8 +63,8 @@ export default function PostCategorys() {
   });
 
   const handleAddCategory = () => {
-    if (newCategoryName.trim()) {
-      categoryCreate.mutate({ name: newCategoryName.trim() });
+    if (newCategory.trim()) {
+      categoryCreate.mutate({ name: newCategory.trim() });
     }
   };
 
@@ -87,7 +87,7 @@ export default function PostCategorys() {
           </div>
           <Separator />
           <div className="flex gap-2">
-            <Input value={newCategoryName} onChange={(e) => setNewCategoryName(e.target.value)} placeholder="새 카테고리 이름" />
+            <Input value={newCategory} onChange={(e) => setNewCategory(e.target.value)} placeholder="새 카테고리 이름" />
             <Button onClick={handleAddCategory} disabled={categoryCreate.isPending}>
               추가
             </Button>

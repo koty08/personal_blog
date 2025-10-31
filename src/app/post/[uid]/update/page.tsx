@@ -7,14 +7,14 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Params } from "@/lib/serverInterface";
 
 export default async function UpdatePost({ params }: { params: Params }) {
-  const { uuid } = await params;
-  if (!uuid) notFound();
+  const { uid } = await params;
+  if (!uid) notFound();
   const queryClient = getQueryClient();
 
-  await queryClient.prefetchQuery(postOptions({ uuid }));
+  await queryClient.prefetchQuery(postOptions({ uid }));
   await queryClient.prefetchQuery(categoryOptions);
 
-  const post = queryClient.getQueryData(postOptions({ uuid }).queryKey);
+  const post = queryClient.getQueryData(postOptions({ uid }).queryKey);
   if (!post) notFound();
 
   return (

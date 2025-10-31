@@ -25,7 +25,7 @@ const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 const fieldLabel: Record<keyof PostCreatePayload, string> = {
   title: "제목",
-  uuid: "UUID",
+  uid: "UID",
   content: "내용",
   categoryId: "카테고리",
   readTime: "읽는 시간",
@@ -51,7 +51,7 @@ export default function PostForm({ type, originalData }: PostFormProps) {
     initialVal: originalData
       ? originalData
       : {
-          uuid: "",
+          uid: "",
           title: "",
           content: "",
           categoryId: 0,
@@ -73,7 +73,7 @@ export default function PostForm({ type, originalData }: PostFormProps) {
       else if (type === "UPDATE")
         postUpdate.mutate(payload, {
           onSuccess: () => {
-            router.push(`/post/${values.uuid}`);
+            router.push(`/post/${values.uid}`);
           },
           onError: () => {
             toast("게시글 수정 중 오류가 발생했습니다.", {
@@ -117,12 +117,12 @@ export default function PostForm({ type, originalData }: PostFormProps) {
         <LabelWrapper label={fieldLabel.title} orientation="vertical">
           <Input name="title" type="text" placeholder="제목을 입력해주세요." value={values.title} onChange={handleChange} />
         </LabelWrapper>
-        <LabelWrapper label={fieldLabel.uuid} orientation="vertical">
+        <LabelWrapper label={fieldLabel.uid} orientation="vertical">
           <Input
-            name="uuid"
+            name="uid"
             type="text"
-            placeholder="경로로 사용할 UUID를 입력해주세요. (영어, -로만 구성)"
-            value={values.uuid}
+            placeholder="경로로 사용할 UID를 입력해주세요. (영어, -로만 구성)"
+            value={values.uid}
             onChange={handleChange}
           />
         </LabelWrapper>
@@ -186,10 +186,10 @@ export default function PostForm({ type, originalData }: PostFormProps) {
 }
 
 function postValidator(form: PostCreatePayload) {
-  const validList: (keyof PostCreatePayload)[] = ["title", "uuid", "content", "categoryId", "readTime"];
+  const validList: (keyof PostCreatePayload)[] = ["title", "uid", "content", "categoryId", "readTime"];
   const emptyField = validList.find((e) => !form[e]);
   if (emptyField) return `${josa(fieldLabel[emptyField], "을/를")} 입력해주세요.`;
-  else if (!form.uuid.match(/^[a-zA-Z0-9-]+$/)) return "올바른 UUID 형식이 아닙니다.";
+  else if (!form.uid.match(/^[a-zA-Z0-9-]+$/)) return "올바른 uid 형식이 아닙니다.";
 
   return "";
 }
