@@ -1,6 +1,11 @@
+version: "3.8"
+
 services:
   app:
-    command: npm start
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    command: npm run start
 
   nginx:
     image: nginx:stable-alpine

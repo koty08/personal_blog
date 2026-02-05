@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../prisma";
-import { Prisma } from "@prisma/client";
 import { getAllImages } from "@/lib/markdownUtils";
 import fs from "fs/promises";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 
 export async function GET(request: NextRequest) {
   const uid = request.nextUrl.searchParams.get("uid");
@@ -55,8 +55,9 @@ export async function POST(request: NextRequest) {
       }
     });
     return NextResponse.json({ success: true });
-  } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+  } catch (error) {
+    const e = error as Error;
+    if (e instanceof PrismaClientKnownRequestError) {
       if (e.code === "P2002") return NextResponse.json({ success: false }, { status: 409 });
     }
     return NextResponse.json({ success: false }, { status: 500 });
@@ -102,10 +103,9 @@ export async function PUT(request: NextRequest) {
           ]
         : []),
     ]);
-
     return NextResponse.json({ success: true });
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+    if (e instanceof PrismaClientKnownRequestError) {
       if (e.code === "P2002") return NextResponse.json({ success: false }, { status: 409 });
     }
     return NextResponse.json({ success: false }, { status: 500 });

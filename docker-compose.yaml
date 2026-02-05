@@ -12,7 +12,8 @@ services:
       - db_data:/var/lib/postgresql/data
 
   app:
-    build: .
+    build:
+      context: .
     restart: always
     depends_on:
       - db
