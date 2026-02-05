@@ -11,20 +11,32 @@ import { PostsOrderType } from "@/services/posts/interface";
 
 export default function PostCardView() {
   const searchParams = useSearchParams();
-  const { data } = useQuery(postsOptions({ order: (searchParams.get("order") as PostsOrderType) ?? undefined }));
+  const { data } = useQuery(
+    postsOptions({
+      order: (searchParams.get("order") as PostsOrderType) ?? undefined,
+    })
+  );
 
   return (
-    <div className="w-full flex flex-wrap gap-y-[20px] gap-x-[2%]">
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {data?.posts.map((post) => {
         const path = getFirstImage(post.content);
         return (
-          <Link key={post.uid} href={`/post/${post.uid}`}>
-            <Card className="py-4 w-[350px] hover:cursor-pointer transition-all hover:border-gray-300 hover:bg-(--accent)">
-              <PostThumbnail path={path} alt={"thumbnail"} className="w-full h-[160px]" />
-              <CardTitle className="mt-3 mb-2 px-4 truncate">{post.title}</CardTitle>
-              <CardContent className="text-sm px-4">
-                <p className="line-clamp-2">{removeMDFromContent(post.content)}</p>
-              </CardContent>
+          <Link key={post.uid} href={`/post/${post.uid}`} className="group">
+            <Card className="h-full overflow-hidden transition-all hover:-translate-y-1 hover:shadow-md">
+              <div className="bg-muted aspect-video w-full overflow-hidden">
+                <PostThumbnail
+                  path={path}
+                  alt={post.title}
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+              <div className="flex flex-col gap-2 p-4">
+                <CardTitle className="line-clamp-1 text-lg">{post.title}</CardTitle>
+                <CardContent className="text-muted-foreground p-0 text-sm">
+                  <p className="line-clamp-2">{removeMDFromContent(post.content)}</p>
+                </CardContent>
+              </div>
             </Card>
           </Link>
         );
