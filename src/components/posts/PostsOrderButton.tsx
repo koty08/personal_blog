@@ -20,14 +20,16 @@ export default function PostOrderButton() {
     router.push(`${pathname}?${params}`);
   };
 
+  const currentOrder = searchParams.get("order") || "latest";
+
   return (
-    <Select onValueChange={onSelectChange} defaultValue="latest">
-      <SelectTrigger className="w-[120px] transition-all hover:bg-(--accent) hover:cursor-pointer">
+    <Select onValueChange={onSelectChange} defaultValue={currentOrder}>
+      <SelectTrigger className="border-border/50 bg-background/50 hover:bg-accent w-32.5 rounded-full backdrop-blur-sm transition-all hover:cursor-pointer">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
         {postOrderList.map((order) => (
-          <SelectItem key={order.value} value={order.value} className="transition-all hover:bg-(--accent) hover:cursor-pointer">
+          <SelectItem key={order.value} value={order.value} className="cursor-pointer">
             {order.label}
           </SelectItem>
         ))}

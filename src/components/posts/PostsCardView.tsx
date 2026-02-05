@@ -23,8 +23,8 @@ export default function PostCardView() {
         const path = getFirstImage(post.content);
         return (
           <Link key={post.uid} href={`/post/${post.uid}`} className="group">
-            <Card className="h-full overflow-hidden transition-all hover:-translate-y-1 hover:shadow-md">
-              <div className="bg-muted aspect-video w-full overflow-hidden">
+            <Card className="hover:bg-accent h-full overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-md">
+              <div className="aspect-video w-full overflow-hidden">
                 <PostThumbnail
                   path={path}
                   alt={post.title}
