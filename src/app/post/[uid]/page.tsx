@@ -23,10 +23,10 @@ export default async function PostPage({ params }: { params: Params }) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="mt-[64px] flex justify-center gap-5 relative">
-        <div className="w-full flex flex-col gap-9 md:w-[768px]">
+      <div className="relative mt-16 flex justify-center gap-5">
+        <div className="flex w-full flex-col gap-9 md:w-3xl">
           <PostInformation />
-          <div className="mt-[30px]">
+          <div className="mt-7.5">
             <MarkDownViewer />
           </div>
           <PostAdminContents />

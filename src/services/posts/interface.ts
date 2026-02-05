@@ -1,4 +1,4 @@
-import { Post } from "@prisma/client";
+import { Post } from "@my-prisma/client";
 
 export type PostsOrderType = "latest" | "views" | "oldest";
 

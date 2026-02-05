@@ -1,4 +1,4 @@
-import { Category } from "@prisma/client";
+import { Category } from "@my-prisma/client";
 
 export interface CategoryWithPostCount extends Category {
   count: number;

@@ -1,24 +1,34 @@
 import { axiosInstance } from "@/lib/axiosInstance";
 import { mutationOptions, queryOptions } from "@tanstack/react-query";
-import { CategoryCreatePayload, CategoryDeletePayload, CategoryWithPostCount } from "./interface";
-import { Category } from "@prisma/client";
+import {
+  CategoryCreatePayload,
+  CategoryDeletePayload,
+  CategoryWithPostCount,
+} from "./interface";
+import { Category } from "@my-prisma/client";
 
 export const categoryOptions = queryOptions({
   queryKey: ["category"],
-  queryFn: () => axiosInstance.get<undefined, CategoryWithPostCount[]>("/category"),
+  queryFn: () =>
+    axiosInstance.get<undefined, CategoryWithPostCount[]>("/category"),
 });
 
 export const categoryCreateOptions = mutationOptions({
   mutationKey: ["category", "create"],
-  mutationFn: (payload: CategoryCreatePayload) => axiosInstance.post<CategoryCreatePayload, undefined>("/category", payload),
+  mutationFn: (payload: CategoryCreatePayload) =>
+    axiosInstance.post<CategoryCreatePayload, undefined>("/category", payload),
 });
 
 export const categoryUpdateOptions = mutationOptions({
   mutationKey: ["category", "update"],
-  mutationFn: (payload: Category) => axiosInstance.put<Category, undefined>("/category", payload),
+  mutationFn: (payload: Category) =>
+    axiosInstance.put<Category, undefined>("/category", payload),
 });
 
 export const categoryDeleteOptions = mutationOptions({
   mutationKey: ["category", "delete"],
-  mutationFn: (payload: CategoryDeletePayload) => axiosInstance.delete<CategoryDeletePayload, undefined>("/category", { data: payload }),
+  mutationFn: (payload: CategoryDeletePayload) =>
+    axiosInstance.delete<CategoryDeletePayload, undefined>("/category", {
+      data: payload,
+    }),
 });
