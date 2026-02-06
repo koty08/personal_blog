@@ -13,6 +13,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Separator } from "@/components/ui/separator";
 import { useMutation } from "@tanstack/react-query";
 import { postDeleteOptions } from "@/services/post/options";
 import { toast } from "sonner";
@@ -45,25 +46,30 @@ export default function PostAdminContents() {
   };
 
   return (
-    <div className="flex gap-2 justify-end">
-      <Button className="hover:cursor-pointer" onClick={onUpdate}>
-        수정
-      </Button>
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <Button className="hover:cursor-pointer">삭제</Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>정말 삭제하시겠습니까?</AlertDialogTitle>
-            <AlertDialogDescription>삭제된 글은 복구할 수 없습니다.</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>취소</AlertDialogCancel>
-            <AlertDialogAction onClick={onDelete}>삭제</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+    <div className="flex flex-col gap-4">
+      <Separator />
+      <div className="flex justify-end gap-2">
+        <Button className="hover:cursor-pointer" onClick={onUpdate}>
+          수정
+        </Button>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="destructive" className="hover:cursor-pointer">
+              삭제
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>정말 삭제하시겠습니까?</AlertDialogTitle>
+              <AlertDialogDescription>삭제된 글은 복구할 수 없습니다.</AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>취소</AlertDialogCancel>
+              <AlertDialogAction onClick={onDelete}>삭제</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
     </div>
   );
 }

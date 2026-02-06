@@ -20,13 +20,13 @@ export default function PostInformation() {
       <h1 id="title" className="text-4xl font-bold">
         {data.title}
       </h1>
-      <div className="flex gap-2 flex-col">
-        <div className="flex gap-2 items-center text-(--primary)">
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center gap-2">
           <Badge variant={"default"}>{categorys?.find((c) => c.id === data.categoryId)?.name ?? "카테고리"}</Badge>
           <p>{`조회수: ${data.views}`}</p>
           <p>{`읽는 시간: ${data.readTime}분`}</p>
         </div>
-        <div className="flex gap-2 items-center text-sm text-slate-400">
+        <div className="flex items-center gap-2 text-sm text-slate-400">
           <p>{dayjs(data.register_date).format("YYYY년 MM월 DD일")}</p>
           {dayjs(data.updated_date).diff(data.register_date, "day") > 1 && (
             <>
