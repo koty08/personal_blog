@@ -1,5 +1,5 @@
 import PostCategoryLinks from "@/components/posts/PostsCategoryLinks";
-import PostOrderButton from "@/components/posts/PostsOrderButton";
+import PostOrderSelect from "@/components/posts/PostOrderSelect";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { postsOptions } from "@/services/posts/options";
 import { PostsOrderType } from "@/services/posts/interface";
@@ -25,9 +25,9 @@ export default async function Posts({ searchParams }: { searchParams: SearchPara
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="flex flex-col gap-8 py-5">
-        <div className="flex items-center gap-3 justify-between">
+        <div className="flex items-center justify-between gap-3">
           <PostCategoryLinks />
-          <PostOrderButton />
+          <PostOrderSelect />
         </div>
         <PostsListView />
       </div>

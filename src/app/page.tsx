@@ -1,10 +1,11 @@
 import PostCardView from "@/components/posts/PostsCardView";
-import { Button } from "@/components/ui/button";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { postsOptions } from "@/services/posts/options";
 import { SearchParams } from "@/lib/serverInterface";
 import { PostsOrderType } from "@/services/posts/interface";
+import { labelByOrder } from "@/consts/posts";
+import MainOrderGroup from "@/components/posts/MainOrderGroup";
 
 export default async function Main({ searchParams }: { searchParams: SearchParams }) {
   const { order } = await searchParams;
@@ -25,26 +26,8 @@ export default async function Main({ searchParams }: { searchParams: SearchParam
         </div>
         <div className="space-y-8">
           <div className="flex flex-col items-center justify-between gap-4 border-b pb-4 sm:flex-row">
-            <h2 className="text-2xl font-semibold tracking-tight">All Posts</h2>
-            <div className="bg-muted/50 flex items-center gap-1 rounded-lg p-1">
-              <Button variant="ghost" size="sm" className="h-8 rounded-md px-3 text-xs font-medium">
-                최신순
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-muted-foreground hover:text-foreground h-8 rounded-md px-3 text-xs font-medium"
-              >
-                인기순
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-muted-foreground hover:text-foreground h-8 rounded-md px-3 text-xs font-medium"
-              >
-                최신 수정순
-              </Button>
-            </div>
+            <h2 className="text-2xl font-semibold tracking-tight">{`${labelByOrder[order ?? "latest"]} 게시물`}</h2>
+            <MainOrderGroup />
           </div>
           <PostCardView />
         </div>

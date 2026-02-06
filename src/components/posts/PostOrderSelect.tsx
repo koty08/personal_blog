@@ -2,14 +2,16 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { omit } from "es-toolkit";
+import { labelByOrder } from "@/consts/posts";
 
 const postOrderList = [
   { value: "latest", label: "최신순" },
-  { value: "views", label: "조회순" },
+  { value: "views", label: "인기순" },
   { value: "oldest", label: "과거순" },
 ];
 
-export default function PostOrderButton() {
+export default function PostOrderSelect() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -28,9 +30,9 @@ export default function PostOrderButton() {
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
-        {postOrderList.map((order) => (
-          <SelectItem key={order.value} value={order.value} className="cursor-pointer">
-            {order.label}
+        {Object.entries(omit(labelByOrder, ["updated"])).map(([key, label]) => (
+          <SelectItem key={key} value={key} className="cursor-pointer">
+            {label}
           </SelectItem>
         ))}
       </SelectContent>

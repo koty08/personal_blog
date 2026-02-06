@@ -1,6 +1,6 @@
 import { Post } from "@my-prisma/client";
 
-export type PostsOrderType = "latest" | "views" | "oldest";
+export type PostsOrderType = "latest" | "views" | "oldest" | "updated";
 
 export interface PostsPayload {
   order?: PostsOrderType;
