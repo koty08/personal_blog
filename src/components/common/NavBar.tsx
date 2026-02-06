@@ -5,9 +5,10 @@ import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuL
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useTheme } from "next-themes";
 import { Button } from "../ui/button";
+import { Moon, Sun } from "lucide-react";
 
 const links = [
-  { name: "전체 게시글", href: "/posts" },
+  { name: "분류 전체보기", href: "/posts" },
   { name: "About Koty", href: "/about" },
 ];
 
@@ -15,15 +16,15 @@ export default function NavBar() {
   const { resolvedTheme, setTheme } = useTheme();
 
   return (
-    <div className="flex mx-5 mt-2 mb-4 justify-between items-center">
-      <Link href={"/"} className="flex gap-x-2 items-center text-lg font-bold">
+    <header className="mx-5 mt-2 mb-4 flex items-center justify-between">
+      <Link href={"/"} className="flex items-center gap-x-2 text-lg font-bold">
         <Avatar>
           <AvatarImage src="https://avatars.githubusercontent.com/u/43947871?s=40&v=4" />
           <AvatarFallback>K</AvatarFallback>
         </Avatar>
         {"Koty's Blog"}
       </Link>
-      <div className="flex gap-4 items-center">
+      <div className="flex items-center gap-4">
         <NavigationMenu>
           <NavigationMenuList>
             {links.map((link) => (
@@ -35,10 +36,14 @@ export default function NavBar() {
             ))}
           </NavigationMenuList>
         </NavigationMenu>
-        <Button variant="default" onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}>
-          {"변경"}
+        <Button
+          variant="outline"
+          className="hover:cursor-pointer has-[>svg]:px-2.5"
+          onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}
+        >
+          {resolvedTheme === "light" ? <Moon /> : <Sun />}
         </Button>
       </div>
-    </div>
+    </header>
   );
 }
