@@ -1,6 +1,6 @@
-import NavBar from "@/components/common/NavBar";
-import Footer from "@/components/common/Footer";
 import "./globals.css";
+import Header from "@/components/common/Header";
+import Footer from "@/components/common/Footer";
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import { ThemeProvider } from "@/components/common/ThemeProvider";
@@ -20,8 +20,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={open_sans.className}>
         <QCProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            <NavBar />
-            <div id="main" className="px-5 min-h-[85vh]">
+            <Header />
+            <div id="main" className="min-h-[85vh] px-5">
               {children}
             </div>
             <Footer />

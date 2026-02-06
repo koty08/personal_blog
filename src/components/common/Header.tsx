@@ -12,7 +12,7 @@ const links = [
   { name: "About Koty", href: "/about" },
 ];
 
-export default function NavBar() {
+export default function Header() {
   const { resolvedTheme, setTheme } = useTheme();
 
   return (
@@ -29,7 +29,7 @@ export default function NavBar() {
           <NavigationMenuList>
             {links.map((link) => (
               <NavigationMenuItem key={link.name}>
-                <NavigationMenuLink asChild>
+                <NavigationMenuLink asChild className="rounded-lg">
                   <Link href={link.href}>{link.name}</Link>
                 </NavigationMenuLink>
               </NavigationMenuItem>
