@@ -24,7 +24,7 @@ export default function PostCategoryLinks() {
   };
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex max-h-18 flex-wrap gap-2 overflow-hidden">
       {[allCategory, ...categorys].map((c) => {
         const isSelected = c.name === "전체보기" ? !currentCategory : currentCategory === c.name;
         return (
@@ -33,12 +33,12 @@ export default function PostCategoryLinks() {
             variant={isSelected ? "default" : "secondary"}
             size="sm"
             onClick={() => onButtonClicked(c.name)}
-            className={`rounded-full transition-all hover:cursor-pointer ${
-              isSelected ? "font-semibold" : "text-muted-foreground hover:text-foreground bg-muted/50"
+            className={`rounded-lg transition-all hover:cursor-pointer ${
+              isSelected ? "font-semibold" : "text-muted-foreground hover:text-foreground bg-secondary/40"
             }`}
           >
             {c.name}
-            <span className="ml-1.5 text-xs opacity-60">{c.count}</span>
+            <span className="ml-1.5 text-xs opacity-80">{c.count}</span>
           </Button>
         );
       })}

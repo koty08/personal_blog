@@ -26,13 +26,13 @@ export default function PostOrderSelect() {
 
   return (
     <Select onValueChange={onSelectChange} defaultValue={currentOrder}>
-      <SelectTrigger className="border-border/50 bg-background/50 hover:bg-accent w-32.5 rounded-full backdrop-blur-sm transition-all hover:cursor-pointer">
+      <SelectTrigger className="border-border/50 bg-background/50 hover:bg-accent w-32.5 rounded-sm backdrop-blur-sm transition-all hover:cursor-pointer">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
         {Object.entries(omit(labelByOrder, ["updated"])).map(([key, label]) => (
           <SelectItem key={key} value={key} className="cursor-pointer">
-            {label}
+            {`${label}순`}
           </SelectItem>
         ))}
       </SelectContent>
