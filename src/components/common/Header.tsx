@@ -6,6 +6,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useTheme } from "next-themes";
 import { Button } from "../ui/button";
 import { Moon, Sun } from "lucide-react";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 const links = [
   { name: "분류 전체보기", href: "/posts" },
@@ -13,7 +15,13 @@ const links = [
 ];
 
 export default function Header() {
+  const pathname = usePathname();
   const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <header className="mx-5 mt-2 mb-4 flex items-center justify-between">
@@ -36,13 +44,15 @@ export default function Header() {
             ))}
           </NavigationMenuList>
         </NavigationMenu>
-        <Button
-          variant="outline"
-          className="hover:cursor-pointer has-[>svg]:px-2.5"
-          onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}
-        >
-          {resolvedTheme === "light" ? <Moon /> : <Sun />}
-        </Button>
+        {mounted && (
+          <Button
+            variant="outline"
+            className="hover:cursor-pointer has-[>svg]:px-2.5"
+            onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}
+          >
+            {resolvedTheme === "light" ? <Moon /> : <Sun />}
+          </Button>
+        )}
       </div>
     </header>
   );
