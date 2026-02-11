@@ -2,18 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import useForm from "@/hooks/useForm";
-import { CustomPreviewImage } from "./MarkDownViewer";
+import { CustomPreviewImage } from "../post/MarkDownViewer";
 import { Post } from "@my-prisma/client";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Input } from "../ui/input";
 import LabelWrapper from "../ui/LabelWrapper";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { useTheme } from "next-themes";
 import { useEffect } from "react";
 import { Checkbox } from "../ui/checkbox";
@@ -26,7 +20,7 @@ import { postCreateOptions, postUpdateOptions } from "@/services/post/options";
 import dynamic from "next/dynamic";
 import { fileDeleteOptions, fileUploadOptions } from "@/services/file/option";
 import { toast } from "sonner";
-import PostCategorys from "./PostCategorys";
+import PostCategorys from "../post/PostCategorys";
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 const fieldLabel: Record<keyof PostCreatePayload, string> = {
@@ -43,7 +37,7 @@ interface PostFormProps {
   originalData?: Post;
 }
 
-export default function PostForm({ type, originalData }: PostFormProps) {
+export default function AdminPostForm({ type, originalData }: PostFormProps) {
   const router = useRouter();
   const { resolvedTheme } = useTheme();
 
@@ -53,50 +47,46 @@ export default function PostForm({ type, originalData }: PostFormProps) {
   const fileUpload = useMutation(fileUploadOptions);
   const fileDelete = useMutation(fileDeleteOptions);
 
-  const { values, isLoading, handleChange, handleChangeWithVal, handleSubmit } =
-    useForm<PostCreatePayload>({
-      initialVal: originalData
-        ? originalData
-        : {
-            uid: "",
-            title: "",
-            content: "",
-            categoryId: 0,
-            readTime: 5,
-            published: false,
+  const { values, isLoading, handleChange, handleChangeWithVal, handleSubmit } = useForm<PostCreatePayload>({
+    initialVal: originalData
+      ? originalData
+      : {
+          uid: "",
+          title: "",
+          content: "",
+          categoryId: 0,
+          readTime: 5,
+          published: false,
+        },
+    onSubmit: async (payload) => {
+      if (type === "CREATE")
+        postCreate.mutate(payload, {
+          onSuccess: () => {
+            router.push("/posts");
           },
-      onSubmit: async (payload) => {
-        if (type === "CREATE")
-          postCreate.mutate(payload, {
-            onSuccess: () => {
-              router.push("/posts");
-            },
-            onError: () => {
-              toast("게시글 생성 중 오류가 발생했습니다.", {
-                position: "bottom-center",
-              });
-            },
-          });
-        else if (type === "UPDATE")
-          postUpdate.mutate(payload, {
-            onSuccess: () => {
-              router.push(`/post/${values.uid}`);
-            },
-            onError: () => {
-              toast("게시글 수정 중 오류가 발생했습니다.", {
-                position: "bottom-center",
-              });
-            },
-          });
-      },
-      validator: postValidator,
-    });
+          onError: () => {
+            toast("게시글 생성 중 오류가 발생했습니다.", {
+              position: "bottom-center",
+            });
+          },
+        });
+      else if (type === "UPDATE")
+        postUpdate.mutate(payload, {
+          onSuccess: () => {
+            router.push(`/post/${values.uid}`);
+          },
+          onError: () => {
+            toast("게시글 수정 중 오류가 발생했습니다.", {
+              position: "bottom-center",
+            });
+          },
+        });
+    },
+    validator: postValidator,
+  });
 
   useEffect(() => {
-    document.documentElement.setAttribute(
-      "data-color-mode",
-      resolvedTheme === "dark" ? "dark" : "light"
-    );
+    document.documentElement.setAttribute("data-color-mode", resolvedTheme === "dark" ? "dark" : "light");
   }, [resolvedTheme]);
 
   const onPasted = async (event: React.ClipboardEvent) => {
@@ -131,13 +121,7 @@ export default function PostForm({ type, originalData }: PostFormProps) {
     <Card className="w-full">
       <CardContent className="flex flex-col gap-4">
         <LabelWrapper label={fieldLabel.title} orientation="vertical">
-          <Input
-            name="title"
-            type="text"
-            placeholder="제목을 입력해주세요."
-            value={values.title}
-            onChange={handleChange}
-          />
+          <Input name="title" type="text" placeholder="제목을 입력해주세요." value={values.title} onChange={handleChange} />
         </LabelWrapper>
         <LabelWrapper label={fieldLabel.uid} orientation="vertical">
           <Input
@@ -156,9 +140,7 @@ export default function PostForm({ type, originalData }: PostFormProps) {
             textareaProps={{
               placeholder: "내용을 입력해주세요.",
             }}
-            onChange={(val) =>
-              handleChangeWithVal({ name: "content", value: val ?? "" })
-            }
+            onChange={(val) => handleChangeWithVal({ name: "content", value: val ?? "" })}
             onPaste={onPasted}
             previewOptions={{
               components: {
@@ -166,8 +148,7 @@ export default function PostForm({ type, originalData }: PostFormProps) {
                   CustomPreviewImage({
                     ...props,
                     onClick: () => {
-                      if (typeof props.src === "string")
-                        onImageDeleted(props.src);
+                      if (typeof props.src === "string") onImageDeleted(props.src);
                     },
                   }),
               },
@@ -176,21 +157,13 @@ export default function PostForm({ type, originalData }: PostFormProps) {
         </LabelWrapper>
         <div className="flex flex-wrap items-center gap-4">
           <LabelWrapper label={fieldLabel.categoryId} orientation="horizontal">
-            <Select
-              onValueChange={(value) =>
-                handleChangeWithVal({ name: "categoryId", value })
-              }
-            >
-              <SelectTrigger className="transition-all hover:cursor-pointer hover:bg-(--accent)">
+            <Select onValueChange={(value) => handleChangeWithVal({ name: "categoryId", value })}>
+              <SelectTrigger className="hover:bg-accent transition-all hover:cursor-pointer">
                 <SelectValue placeholder={"카테고리 선택"} />
               </SelectTrigger>
               <SelectContent>
                 {categorys?.map((c) => (
-                  <SelectItem
-                    key={c.id}
-                    value={c.id.toString()}
-                    className="transition-all hover:cursor-pointer hover:bg-(--accent)"
-                  >
+                  <SelectItem key={c.id} value={c.id.toString()} className="hover:bg-accent transition-all hover:cursor-pointer">
                     {c.name}
                   </SelectItem>
                 ))}
@@ -199,13 +172,7 @@ export default function PostForm({ type, originalData }: PostFormProps) {
             <PostCategorys />
           </LabelWrapper>
           <LabelWrapper label={fieldLabel.readTime} orientation="horizontal">
-            <Input
-              name="readTime"
-              type="number"
-              className="w-[60px]"
-              value={values.readTime}
-              onChange={handleChange}
-            />
+            <Input name="readTime" type="number" className="w-15" value={values.readTime} onChange={handleChange} />
           </LabelWrapper>
           <LabelWrapper label={fieldLabel.published} orientation="horizontal">
             <Checkbox id="published" className="mt-0.5 size-5 cursor-pointer" />
@@ -213,18 +180,10 @@ export default function PostForm({ type, originalData }: PostFormProps) {
         </div>
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
-        <Button
-          onClick={handleSubmit}
-          className="hover:cursor-pointer"
-          disabled={isLoading}
-        >
+        <Button onClick={handleSubmit} className="hover:cursor-pointer" disabled={isLoading}>
           {type === "CREATE" ? "생성" : "수정"}
         </Button>
-        <Button
-          onClick={() => router.back()}
-          variant="secondary"
-          className="hover:cursor-pointer"
-        >
+        <Button onClick={() => router.back()} variant="secondary" className="hover:cursor-pointer">
           취소
         </Button>
       </CardFooter>
@@ -233,18 +192,10 @@ export default function PostForm({ type, originalData }: PostFormProps) {
 }
 
 function postValidator(form: PostCreatePayload) {
-  const validList: (keyof PostCreatePayload)[] = [
-    "title",
-    "uid",
-    "content",
-    "categoryId",
-    "readTime",
-  ];
+  const validList: (keyof PostCreatePayload)[] = ["title", "uid", "content", "categoryId", "readTime"];
   const emptyField = validList.find((e) => !form[e]);
-  if (emptyField)
-    return `${josa(fieldLabel[emptyField], "을/를")} 입력해주세요.`;
-  else if (!form.uid.match(/^[a-zA-Z0-9-]+$/))
-    return "올바른 uid 형식이 아닙니다.";
+  if (emptyField) return `${josa(fieldLabel[emptyField], "을/를")} 입력해주세요.`;
+  else if (!form.uid.match(/^[a-zA-Z0-9-]+$/)) return "올바른 uid 형식이 아닙니다.";
 
   return "";
 }
