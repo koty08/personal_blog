@@ -1,12 +1,16 @@
-import PostForm from "@/components/post/PostForm";
+import AdminPostForm from "@/components/admin/AdminPostForm";
 import { notFound } from "next/navigation";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { categoryOptions } from "@/services/category/options";
 import { postOptions } from "@/services/post/options";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Params } from "@/lib/serverInterface";
+import { checkIsKoty } from "@/lib/auth";
 
 export default async function UpdatePost({ params }: { params: Params }) {
+  const isKoty = await checkIsKoty();
+  if (!isKoty) notFound();
+
   const { uid } = await params;
   if (!uid) notFound();
   const queryClient = getQueryClient();
@@ -19,9 +23,9 @@ export default async function UpdatePost({ params }: { params: Params }) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="flex flex-col gap-15 items-center">
+      <div className="flex flex-col items-center gap-15">
         <p className="text-2xl font-bold">게시글 수정</p>
-        <PostForm type="UPDATE" originalData={post} />
+        <AdminPostForm type="UPDATE" originalData={post} />
       </div>
     </HydrationBoundary>
   );

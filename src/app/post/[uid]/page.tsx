@@ -1,6 +1,6 @@
 import PostTOC from "@/components/post/PostTOC";
 import PostComment from "@/components/post/PostComment";
-import PostAdminContents from "@/components/post/PostAdminContents";
+import PostAdminContents from "@/components/admin/PostAdminContents";
 import PostInformation from "@/components/post/PostInformation";
 import MarkDownViewer from "@/components/post/MarkDownViewer";
 import { categoryOptions } from "@/services/category/options";
@@ -9,6 +9,7 @@ import { Params } from "@/lib/serverInterface";
 import { postOptions } from "@/services/post/options";
 import { notFound } from "next/navigation";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { checkIsKoty } from "@/lib/auth";
 
 export default async function PostPage({ params }: { params: Params }) {
   const { uid } = await params;
@@ -21,6 +22,8 @@ export default async function PostPage({ params }: { params: Params }) {
   const data = queryClient.getQueryData(postOptions({ uid }).queryKey);
   if (!data) notFound();
 
+  const isKoty = await checkIsKoty();
+
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="container mx-auto mt-16 px-4">
@@ -29,7 +32,7 @@ export default async function PostPage({ params }: { params: Params }) {
             <div className="flex flex-col gap-12">
               <PostInformation />
               <MarkDownViewer />
-              <PostAdminContents />
+              {isKoty && <PostAdminContents />}
               <PostComment />
             </div>
           </main>
