@@ -10,3 +10,19 @@ services:
     ports:
       - "3000:3000"
     command: npm run dev
+
+  studio:
+    build:
+      context: .
+      target: development
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "5555:5555"
+    command: npx prisma studio --port 5555 --browser none
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      HOST: 0.0.0.0
+    depends_on:
+      - db
