@@ -20,6 +20,7 @@ model Post {
   category Category @relation(fields: [categoryId], references: [id])
   categoryId Int
   images PostImage[]
+  comments Comment[]
 }
 
 model Category {
@@ -35,6 +36,20 @@ model PostImage {
   postId Int
 }
 
+model Comment {
+  id Int @id @default(autoincrement())
+  content String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parentId Int?
+  parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies  Comment[] @relation("CommentReplies")
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -46,6 +61,7 @@ model User {
   
   sessions      Session[]
   accounts      Account[]
+  comments      Comment[]
 }
 
 model Session {
