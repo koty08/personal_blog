@@ -41,8 +41,8 @@ model Comment {
   content String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId Int
+  post Post @relation(fields: [postUid], references: [uid], onDelete: Cascade)
+  postUid String
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   parentId Int?

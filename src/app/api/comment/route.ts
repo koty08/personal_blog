@@ -9,13 +9,13 @@ export async function POST(request: Request) {
   if (!session?.user) return apiError.needLogin;
 
   const body = await request.json();
-  const { postId, content, parentId } = body;
-  if (!postId || !content) return apiError.missingParams;
+  const { postUid, content, parentId } = body;
+  if (!postUid || !content) return apiError.missingParams;
 
   try {
     const comment = await prisma.comment.create({
       data: {
-        postId: postId,
+        postUid: postUid,
         userId: session.user.id,
         content,
         parentId: parentId ?? null,

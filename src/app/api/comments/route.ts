@@ -11,7 +11,7 @@ export async function GET(request: Request) {
   try {
     const comments = await prisma.comment.findMany({
       where: {
-        postId: Number(uid),
+        postUid: uid,
       },
       include: {
         user: true,
