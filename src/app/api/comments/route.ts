@@ -1,0 +1,25 @@
+import { NextResponse } from "next/server";
+import prisma from "../prisma";
+import { apiError } from "@/consts/apiError";
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const uid = searchParams.get("uid");
+
+  if (!uid) return apiError.missingParams;
+
+  try {
+    const comments = await prisma.comment.findMany({
+      where: {
+        postId: Number(uid),
+      },
+      include: {
+        user: true,
+      },
+    });
+    return NextResponse.json(comments);
+  } catch (error) {
+    console.error(error);
+    return apiError.internalServerError("댓글 조회");
+  }
+}
