@@ -9,7 +9,7 @@ import { Params } from "@/lib/serverInterface";
 import { postOptions } from "@/services/post/options";
 import { notFound } from "next/navigation";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { checkIsKoty } from "@/lib/auth";
+import { checkIsKoty } from "@/lib/auth-server";
 
 export default async function PostPage({ params }: { params: Params }) {
   const { uid } = await params;

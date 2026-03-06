@@ -1,7 +1,6 @@
 import prisma from "@/app/api/prisma";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { headers } from "next/headers";
 
 export const auth = betterAuth({
   baseURL: `${process.env.NEXT_PUBLIC_BASE_URL}`,
@@ -13,16 +12,3 @@ export const auth = betterAuth({
     },
   },
 });
-
-export const checkIsKoty = async () => {
-  "use server";
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session) return false;
-  else {
-    console.log(`${process.env.ADMIN_KOTY_EMAIL}`);
-    return session.user.email === `${process.env.ADMIN_KOTY_EMAIL}` ? true : false;
-  }
-};

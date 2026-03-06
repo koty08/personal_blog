@@ -1,5 +1,5 @@
 import AdminPostForm from "@/components/admin/AdminPostForm";
-import { checkIsKoty } from "@/lib/auth";
+import { checkIsKoty } from "@/lib/auth-server";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { categoryOptions } from "@/services/category/options";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";

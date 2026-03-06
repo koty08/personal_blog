@@ -5,7 +5,7 @@ import { categoryOptions } from "@/services/category/options";
 import { postOptions } from "@/services/post/options";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Params } from "@/lib/serverInterface";
-import { checkIsKoty } from "@/lib/auth";
+import { checkIsKoty } from "@/lib/auth-server";
 
 export default async function UpdatePost({ params }: { params: Params }) {
   const isKoty = await checkIsKoty();
