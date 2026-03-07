@@ -16,6 +16,9 @@ export async function GET(request: Request) {
       include: {
         user: true,
       },
+      orderBy: {
+        createdAt: "asc",
+      },
     });
     return NextResponse.json(comments);
   } catch (error) {
