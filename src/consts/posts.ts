@@ -4,3 +4,8 @@ export const labelByOrder: Record<string, string> = {
   updated: "최신 수정",
   oldest: "과거",
 };
+
+export const imagePath = {
+  server: "./public/images/post",
+  client: "/images/post",
+};

@@ -1,76 +1,104 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../prisma";
+import { apiError } from "@/consts/apiError";
+import { checkIsKotyWrapper } from "@/lib/auth-server";
 
 export async function GET() {
-  const categorys = await prisma.category.findMany({
-    include: {
-      _count: true,
-    },
-  });
-  return NextResponse.json(
-    categorys.map((e) => ({
-      id: e.id,
-      name: e.name,
-      count: e._count.posts,
-    }))
-  );
+  try {
+    const categories = await prisma.category.findMany({
+      include: {
+        _count: true,
+      },
+    });
+    return NextResponse.json(
+      categories.map((e) => ({
+        id: e.id,
+        name: e.name,
+        count: e._count.posts,
+      }))
+    );
+  } catch (error) {
+    console.error(error);
+    return apiError.internalServerError("카테고리 조회");
+  }
 }
 
-export async function POST(request: NextRequest) {
+export const POST = checkIsKotyWrapper(async (request: NextRequest) => {
   const body = await request.json();
+  if (!body.name) return apiError.missingParams;
+
   try {
-    await prisma.category.create({
+    const checkDuplicated = await prisma.category.findUnique({ where: { name: body.name } });
+    if (checkDuplicated) return apiError.conflict(`이름: ${body.name}의 카테고리`);
+
+    const category = await prisma.category.create({
       data: body,
     });
-    return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json({ success: false }, { status: 500 });
+    return NextResponse.json(category);
+  } catch (error) {
+    console.error(error);
+    return apiError.internalServerError("카테고리 생성");
   }
-}
+});
 
-export async function PUT(request: NextRequest) {
+export const PUT = checkIsKotyWrapper(async (request: NextRequest) => {
   const body = await request.json();
-  const id = body.id;
-  if (!id) {
-    return NextResponse.json({}, { status: 404 });
-  }
+  const { id, name } = body;
+  if (!id || !name) return apiError.missingParams;
 
   try {
-    await prisma.category.update({
+    const existingCategory = await prisma.category.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (!existingCategory) return apiError.notFound(`ID: ${id}의 카테고리`);
+
+    const category = await prisma.category.update({
       where: {
         id: Number(id),
       },
       data: body,
     });
-    return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json({ success: false }, { status: 500 });
+    return NextResponse.json(category);
+  } catch (error) {
+    console.error(error);
+    return apiError.internalServerError("카테고리 수정");
   }
-}
+});
 
-export async function DELETE(request: NextRequest) {
+export const DELETE = checkIsKotyWrapper(async (request: NextRequest) => {
   const body = await request.json();
-  const id = body.id;
-  if (!id) {
-    return NextResponse.json({}, { status: 404 });
-  }
+  const { id } = body;
+  if (!id) return apiError.missingParams;
+
   try {
-    // 카테고리 삭제전 해당 카테고리에 있는 Post들 전부 1번 카테고리로
-    await prisma.post.updateMany({
-      where: {
-        categoryId: Number(id),
-      },
-      data: {
-        categoryId: 1,
-      },
-    });
-    await prisma.category.delete({
+    const existingCategory = await prisma.category.findUnique({
       where: {
         id: Number(id),
       },
     });
-    return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json({ success: false }, { status: 500 });
+    if (!existingCategory) return apiError.notFound(`ID: ${id}의 카테고리`);
+
+    await prisma.$transaction([
+      // 카테고리 삭제전 해당 카테고리에 있는 Post들 전부 1번 카테고리로
+      prisma.post.updateMany({
+        where: {
+          categoryId: Number(id),
+        },
+        data: {
+          categoryId: 1,
+        },
+      }),
+      prisma.category.delete({
+        where: {
+          id: Number(id),
+        },
+      }),
+    ]);
+    return NextResponse.json({}, { status: 204 });
+  } catch (error) {
+    console.error(error);
+    return apiError.internalServerError("카테고리 삭제");
   }
-}
+});

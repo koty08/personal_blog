@@ -1,31 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs/promises";
+import { imagePath } from "@/consts/posts";
+import { apiError } from "@/consts/apiError";
+import { checkIsKotyWrapper } from "@/lib/auth-server";
 
-const basePath = "./public/images/post";
-
-export async function POST(request: NextRequest) {
+export const POST = checkIsKotyWrapper(async (request: NextRequest) => {
   const filename = `image-${Date.now()}.png`;
 
   try {
-    const file = await (await request.blob()).arrayBuffer();
-    await fs.writeFile(`${basePath}/${filename}`, Buffer.from(file));
+    const blob = await request.blob();
+    const file = await blob.arrayBuffer();
+    await fs.writeFile(`${imagePath.server}/${filename}`, Buffer.from(file));
     return NextResponse.json({ filename: filename });
-  } catch {
-    return NextResponse.json({ success: false });
+  } catch (error) {
+    return apiError.internalServerError("이미지 업로드");
   }
-}
+});
 
-export async function DELETE(request: NextRequest) {
+export const DELETE = checkIsKotyWrapper(async (request: NextRequest) => {
   const path = request.nextUrl.searchParams.get("path");
-  if (path) {
-    try {
-      const fullPath = `${basePath}${path}`;
-      await fs.rm(fullPath);
-      return NextResponse.json({ success: true });
-    } catch {
-      return NextResponse.json({ success: false });
-    }
-  } else {
-    return NextResponse.json({ success: false });
+  if (!path) return apiError.missingParams;
+
+  try {
+    const fullPath = `${imagePath.server}${path}`;
+    await fs.rm(fullPath);
+    return NextResponse.json({}, { status: 204 });
+  } catch (error) {
+    console.error(error);
+    return apiError.internalServerError("이미지 삭제");
   }
-}
+});

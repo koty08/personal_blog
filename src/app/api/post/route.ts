@@ -2,15 +2,18 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "../prisma";
 import { getAllImages } from "@/lib/markdownUtils";
 import fs from "fs/promises";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
+import { apiError } from "@/consts/apiError";
+import { checkIsKotyWrapper } from "@/lib/auth-server";
+import { imagePath } from "@/consts/posts";
 
 export async function GET(request: NextRequest) {
   const uid = request.nextUrl.searchParams.get("uid");
-  if (!uid) {
-    return NextResponse.json({}, { status: 404 });
-  }
+  if (!uid) return apiError.missingParams;
 
   try {
+    const existingPost = await prisma.post.findUnique({ where: { uid } });
+    if (!existingPost) return apiError.notFound(`UID: ${uid}의 게시글`);
+
     const post = await prisma.post.update({
       where: {
         uid,
@@ -21,61 +24,56 @@ export async function GET(request: NextRequest) {
         },
       },
     });
-    console.log(post);
 
-    if (post !== null) {
-      return NextResponse.json(post);
-    } else {
-      return NextResponse.json(null, { status: 500 });
-    }
-  } catch {
-    return NextResponse.json(null, { status: 500 });
+    return NextResponse.json(post);
+  } catch (error) {
+    console.log(error);
+    return apiError.internalServerError("게시글 조회");
   }
 }
 
-export async function POST(request: NextRequest) {
+export const POST = checkIsKotyWrapper(async (request: NextRequest) => {
   const body = await request.json();
+  if (!checkPostKeys(body)) return apiError.missingParams;
+  const uid = body.uid;
+
   try {
-    await prisma.$transaction(async (tx) => {
-      const newPost = await tx.post.create({
+    const checkDuplicated = await prisma.post.findUnique({ where: { uid } });
+    if (checkDuplicated) return apiError.conflict(`UID: ${uid}의 게시글`);
+
+    const newPost = await prisma.$transaction(async (tx) => {
+      const post = await tx.post.create({
         data: {
           ...body,
           categoryId: Number(body.categoryId),
         },
       });
-
       const images = getAllImages(body.content);
       if (images.length > 0) {
         await tx.postImage.createMany({
           data: images.map((path) => ({
             path,
-            postId: newPost.id,
+            postId: post.id,
           })),
         });
       }
+      return post;
     });
-    return NextResponse.json({ success: true });
+    return NextResponse.json(newPost);
   } catch (error) {
-    const e = error as Error;
-    if (e instanceof PrismaClientKnownRequestError) {
-      if (e.code === "P2002") return NextResponse.json({ success: false }, { status: 409 });
-    }
-    return NextResponse.json({ success: false }, { status: 500 });
+    console.log(error);
+    return apiError.internalServerError("게시글 생성");
   }
-}
+});
 
-export async function PUT(request: NextRequest) {
+export const PUT = checkIsKotyWrapper(async (request: NextRequest) => {
   const body = await request.json();
+  if (!checkPostKeys(body)) return apiError.missingParams;
   const uid = body.uid;
-  if (!uid) {
-    return NextResponse.json({}, { status: 404 });
-  }
 
   try {
     const existingPost = await prisma.post.findUnique({ where: { uid }, include: { images: true } });
-    if (!existingPost) {
-      return NextResponse.json({ success: false }, { status: 404 });
-    }
+    if (!existingPost) return apiError.notFound(`UID: ${uid}의 게시글`);
 
     const existingImagePaths = existingPost.images.map((image) => image.path);
     const newImagePaths = getAllImages(body.content);
@@ -83,48 +81,39 @@ export async function PUT(request: NextRequest) {
     const imagesToAdd = newImagePaths.filter((path) => !existingImagePaths.includes(path));
     const imagesToDelete = existingImagePaths.filter((path) => !newImagePaths.includes(path));
 
-    await prisma.$transaction([
-      prisma.post.update({
+    const newPost = await prisma.$transaction(async (tx) => {
+      const post = await prisma.post.update({
         where: { uid },
         data: {
           ...body,
           categoryId: Number(body.categoryId),
           updated_date: new Date(),
         },
-      }),
-      ...(imagesToDelete.length > 0
-        ? [prisma.postImage.deleteMany({ where: { path: { in: imagesToDelete }, postId: existingPost.id } })]
-        : []),
-      ...(imagesToAdd.length > 0
-        ? [
-            prisma.postImage.createMany({
-              data: imagesToAdd.map((path) => ({ path, postId: existingPost.id })),
-            }),
-          ]
-        : []),
-    ]);
-    return NextResponse.json({ success: true });
-  } catch (e) {
-    if (e instanceof PrismaClientKnownRequestError) {
-      if (e.code === "P2002") return NextResponse.json({ success: false }, { status: 409 });
-    }
-    return NextResponse.json({ success: false }, { status: 500 });
+      });
+
+      if (imagesToDelete.length) await prisma.postImage.deleteMany({ where: { path: { in: imagesToDelete }, postId: existingPost.id } });
+      if (imagesToAdd.length)
+        await prisma.postImage.createMany({
+          data: imagesToAdd.map((path) => ({ path, postId: existingPost.id })),
+        });
+
+      return post;
+    });
+
+    return NextResponse.json(newPost);
+  } catch (error) {
+    console.log(error);
+    return apiError.internalServerError("게시글 수정");
   }
-}
+});
 
-const basePath = "./public/images/post";
-
-export async function DELETE(request: NextRequest) {
+export const DELETE = checkIsKotyWrapper(async (request: NextRequest) => {
   const uid = request.nextUrl.searchParams.get("uid");
-  if (!uid) {
-    return NextResponse.json({}, { status: 404 });
-  }
+  if (!uid) return apiError.missingParams;
 
   try {
     const existingPost = await prisma.post.findUnique({ where: { uid }, include: { images: true } });
-    if (!existingPost) {
-      return NextResponse.json({ success: false }, { status: 404 });
-    }
+    if (!existingPost) return apiError.notFound(`UID: ${uid}의 게시글`);
 
     const existingImagePaths = existingPost.images.map((image) => image.path);
     await prisma.$transaction([
@@ -136,10 +125,18 @@ export async function DELETE(request: NextRequest) {
       }),
     ]);
     existingImagePaths.forEach(async (path) => {
-      await fs.rm(`${basePath}${path}`);
+      await fs.rm(`${imagePath.server}${path}`);
     });
-    return NextResponse.json({ success: true });
+    return NextResponse.json({}, { status: 204 });
   } catch {
-    return NextResponse.json({ success: false }, { status: 500 });
+    return apiError.internalServerError("게시글 삭제");
   }
-}
+});
+
+const checkPostKeys = (body: any) => {
+  const keys = ["uid", "title", "content", "categoryId", "readTime", "published"];
+  return keys.every((key) => {
+    if (!body[key]) return false;
+    return true;
+  });
+};

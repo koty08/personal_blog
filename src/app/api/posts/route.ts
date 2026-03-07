@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../prisma";
 import { Prisma } from "@my-prisma/client";
+import { apiError } from "@/consts/apiError";
 
 export async function GET(request: NextRequest) {
-  const order = request.nextUrl.searchParams.get("order");
-  const category = request.nextUrl.searchParams.get("category");
-  const page = Number(request.nextUrl.searchParams.get("page") || 1);
-  const limit = Number(request.nextUrl.searchParams.get("limit") || 8);
+  const { searchParams } = request.nextUrl;
+  const order = searchParams.get("order");
+  const category = searchParams.get("category");
+  const page = Number(searchParams.get("page") || 1);
+  const limit = Number(searchParams.get("limit") || 8);
 
   let orderBy: Prisma.PostOrderByWithRelationInput | Prisma.PostOrderByWithRelationInput[];
 
@@ -44,10 +46,8 @@ export async function GET(request: NextRequest) {
       count: posts.length,
       posts: posts,
     });
-  } catch {
-    return NextResponse.json({
-      count: 0,
-      posts: [],
-    });
+  } catch (error) {
+    console.log(error);
+    return apiError.internalServerError("게시글 목록 조회");
   }
 }
