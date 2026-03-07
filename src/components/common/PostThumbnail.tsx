@@ -1,5 +1,6 @@
 "use client";
 
+import { imagePath } from "@/consts/posts";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -9,11 +10,10 @@ interface PostThumbnailProps {
   className?: string;
 }
 
-const basePath = "/images/post";
 const fallbackPath = "/images/common/no-image.png";
 
 export default function PostThumbnail({ path, alt, className }: PostThumbnailProps) {
-  const [src, setSrc] = useState(path ? basePath + path : fallbackPath);
+  const [src, setSrc] = useState(path ? imagePath.client + path : fallbackPath);
 
   const onError = () => {
     setSrc(fallbackPath);

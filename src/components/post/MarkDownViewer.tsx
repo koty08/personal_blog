@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { imagePath } from "@/consts/posts";
 import { postOptions } from "@/services/post/options";
 import { useQuery } from "@tanstack/react-query";
 import MDEditor from "@uiw/react-md-editor";
@@ -8,8 +9,6 @@ import { useTheme } from "next-themes";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ReactModal from "react-modal";
-
-const basePath = "/images/post/";
 
 export default function MarkDownViewer() {
   const { uid } = useParams<{ uid: string }>();
@@ -25,7 +24,7 @@ export default function MarkDownViewer() {
       <MDEditor.Markdown
         source={data.content}
         components={{ img: CustomImage }}
-        className="whitespace-pre-wrap bg-inherit!"
+        className="bg-inherit! whitespace-pre-wrap"
       ></MDEditor.Markdown>
     )
   );
@@ -42,7 +41,7 @@ const zoomValue: Record<number, string> = {
 const CustomImage = ({ ...props }) => {
   const [scale, setScale] = useState<number>(1);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const src = `${basePath}${props.src}`;
+  const src = `${imagePath.client}${props.src}`;
 
   const onImgWheel = (e: React.WheelEvent<HTMLImageElement>) => {
     // Zoom In
@@ -60,7 +59,7 @@ const CustomImage = ({ ...props }) => {
     <span>
       <img {...props} src={src} alt="image" className="hover:cursor-pointer" onClick={() => setIsOpen(true)} />
       <ReactModal isOpen={isOpen} onRequestClose={() => setIsOpen(false)} style={modalStyles}>
-        <div className="w-full h-full flex justify-center items-center" onClick={() => setIsOpen(false)}>
+        <div className="flex h-full w-full items-center justify-center" onClick={() => setIsOpen(false)}>
           <img {...props} src={src} alt="image" className={`${zoomValue[scale]}`} onWheel={onImgWheel} />
         </div>
       </ReactModal>
@@ -69,7 +68,7 @@ const CustomImage = ({ ...props }) => {
 };
 
 export const CustomPreviewImage = ({ ...props }) => {
-  return <img {...props} src={`${basePath}${props.src}`} alt="image" className="hover:cursor-pointer" />;
+  return <img {...props} src={`${imagePath.client}${props.src}`} alt="image" className="hover:cursor-pointer" />;
 };
 
 const modalStyles: ReactModal.Styles = {
