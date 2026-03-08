@@ -136,7 +136,7 @@ export const DELETE = checkIsKotyWrapper(async (request: NextRequest) => {
 const checkPostKeys = (body: any) => {
   const keys = ["uid", "title", "content", "categoryId", "readTime", "published"];
   return keys.every((key) => {
-    if (!body[key]) return false;
+    if (typeof body[key] !== "boolean" && !body[key]) return false;
     return true;
   });
 };
