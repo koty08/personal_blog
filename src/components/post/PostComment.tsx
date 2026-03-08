@@ -9,7 +9,7 @@ import { commentCreateOptions, commentsOptions } from "@/services/comment/option
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { LoginButton, LogoutButton } from "../admin/AuthButtons";
+import { LoginButton } from "../admin/AuthButtons";
 import PostCommentItem from "./PostCommentItem";
 import { CornerDownRight } from "lucide-react";
 
@@ -79,10 +79,7 @@ export default function PostComment() {
   return (
     <div className="flex flex-col gap-6 pt-6">
       <Separator />
-      <div className="flex justify-between">
-        <h3 className="text-xl font-bold">댓글 ({comments?.length})</h3>
-        {session?.user && <LogoutButton />}
-      </div>
+      <h3 className="text-xl font-bold">댓글 ({comments?.length})</h3>
       {session?.user ? (
         <div className="flex flex-col gap-2">
           <Textarea
