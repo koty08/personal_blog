@@ -21,6 +21,7 @@ import dynamic from "next/dynamic";
 import { fileDeleteOptions, fileUploadOptions } from "@/services/file/option";
 import { toast } from "sonner";
 import PostCategorys from "../post/PostCategorys";
+import { postDefaultValue } from "@/consts/posts";
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 const fieldLabel: Record<keyof PostCreatePayload, string> = {
@@ -29,7 +30,7 @@ const fieldLabel: Record<keyof PostCreatePayload, string> = {
   content: "내용",
   categoryId: "카테고리",
   readTime: "읽는 시간",
-  published: "임시글",
+  published: "게시 여부",
 };
 
 interface PostFormProps {
@@ -48,16 +49,7 @@ export default function AdminPostForm({ type, originalData }: PostFormProps) {
   const fileDelete = useMutation(fileDeleteOptions);
 
   const { values, isLoading, handleChange, handleChangeWithVal, handleSubmit } = useForm<PostCreatePayload>({
-    initialVal: originalData
-      ? originalData
-      : {
-          uid: "",
-          title: "",
-          content: "",
-          categoryId: 0,
-          readTime: 5,
-          published: false,
-        },
+    initialVal: originalData ? originalData : postDefaultValue,
     onSubmit: async (payload) => {
       if (type === "CREATE")
         postCreate.mutate(payload, {

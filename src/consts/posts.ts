@@ -1,3 +1,12 @@
+export const postDefaultValue = {
+  uid: "",
+  title: "",
+  content: "",
+  categoryId: 0,
+  readTime: 5,
+  published: true,
+};
+
 export const labelByOrder: Record<string, string> = {
   latest: "최신",
   views: "인기",
