@@ -9,10 +9,10 @@ import { removeMDFromContent, getFirstImage } from "@/lib/markdownUtils";
 import CustomPagination from "@/components/common/CustomPagination";
 import { Separator } from "@/components/ui/separator";
 import { useQuery } from "@tanstack/react-query";
-import { postsOptions } from "@/services/posts/options";
+import { postsOptions } from "@/services/post/options";
 import { categoryOptions } from "@/services/category/options";
 import { useSearchParams } from "next/navigation";
-import { PostsOrderType } from "@/services/posts/interface";
+import { PostsOrderType } from "@/services/post/interface";
 
 const POST_PER_PAGE = 8;
 

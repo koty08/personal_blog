@@ -1,9 +1,9 @@
 import PostCardView from "@/components/posts/PostsCardView";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { postsOptions } from "@/services/posts/options";
+import { postsOptions } from "@/services/post/options";
 import { SearchParams } from "@/lib/serverInterface";
-import { PostsOrderType } from "@/services/posts/interface";
+import { PostsOrderType } from "@/services/post/interface";
 import { labelByOrder } from "@/consts/posts";
 import MainOrderGroup from "@/components/posts/MainOrderGroup";
 

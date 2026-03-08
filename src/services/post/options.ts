@@ -1,5 +1,5 @@
 import { mutationOptions, queryOptions } from "@tanstack/react-query";
-import { PostCreatePayload, PostPayload } from "./interface";
+import { PostCreatePayload, PostPayload, PostsPayload, PostsWithCount } from "./interface";
 import { axiosInstance } from "@/lib/axiosInstance";
 import { Post } from "@my-prisma/client";
 
@@ -7,6 +7,12 @@ export const postOptions = (payload: PostPayload) =>
   queryOptions({
     queryKey: ["post", payload],
     queryFn: () => axiosInstance.get<PostPayload, Post>("/post", { params: payload }),
+  });
+
+export const postsOptions = (payload: PostsPayload = {}) =>
+  queryOptions({
+    queryKey: ["posts", payload],
+    queryFn: () => axiosInstance.get<PostsPayload, PostsWithCount>("/posts", { params: payload }),
   });
 
 export const postCreateOptions = mutationOptions({

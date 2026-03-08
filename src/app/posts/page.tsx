@@ -1,8 +1,8 @@
 import PostCategoryLinks from "@/components/posts/PostsCategoryLinks";
 import PostOrderSelect from "@/components/posts/PostOrderSelect";
 import { getQueryClient } from "@/lib/getQueryClient";
-import { postsOptions } from "@/services/posts/options";
-import { PostsOrderType } from "@/services/posts/interface";
+import { postsOptions } from "@/services/post/options";
+import { PostsOrderType } from "@/services/post/interface";
 import { categoryOptions } from "@/services/category/options";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import PostsListView from "@/components/posts/PostsListView";
