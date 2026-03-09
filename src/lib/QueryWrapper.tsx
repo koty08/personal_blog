@@ -5,6 +5,7 @@ import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import { QueryErrorResetBoundary } from "@tanstack/react-query";
 import { cn } from "./utils";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface QueryWrapperProps {
   children: ReactNode;
@@ -53,7 +54,7 @@ const QueryWrapper = ({
 export default QueryWrapper;
 
 const LoadingFallback = ({ className }: { className?: string }) => {
-  return <div className={cn("bg-lightGray my-3 flex w-full animate-pulse", className)}></div>;
+  return <Skeleton className={cn("flex w-full", className)}></Skeleton>;
 };
 
 const ErrorFallback = ({ resetErrorBoundary, className }: FallbackProps & { className?: string }) => {
