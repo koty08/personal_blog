@@ -6,12 +6,15 @@ import { SearchParams } from "@/lib/serverInterface";
 import { PostsOrderType } from "@/services/post/interface";
 import { labelByOrder } from "@/consts/posts";
 import MainOrderGroup from "@/components/posts/MainOrderGroup";
+import QueryWrapper from "@/lib/QueryWrapper";
+import { categoryOptions } from "@/services/category/options";
 
 export default async function Main({ searchParams }: { searchParams: SearchParams }) {
   const { order } = await searchParams;
   const queryClient = getQueryClient();
 
-  await queryClient.prefetchQuery(
+  void queryClient.prefetchQuery(categoryOptions);
+  void queryClient.prefetchQuery(
     postsOptions({
       order: order as PostsOrderType,
     })
@@ -29,7 +32,9 @@ export default async function Main({ searchParams }: { searchParams: SearchParam
             <h2 className="text-2xl font-semibold tracking-tight">{`${labelByOrder[order ?? "latest"]} 게시물`}</h2>
             <MainOrderGroup />
           </div>
-          <PostCardView />
+          <QueryWrapper loadingStyle="h-192" errorStyle="h-32">
+            <PostCardView />
+          </QueryWrapper>
         </div>
       </section>
     </HydrationBoundary>

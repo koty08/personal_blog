@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Card, CardContent, CardTitle } from "../ui/card";
 import PostThumbnail from "../common/PostThumbnail";
 import { removeMDFromContent, getFirstImage } from "@/lib/markdownUtils";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { postsOptions } from "@/services/post/options";
 import { useSearchParams } from "next/navigation";
 import { PostsOrderType } from "@/services/post/interface";
@@ -15,16 +15,16 @@ import dayjs from "dayjs";
 export default function PostCardView() {
   const searchParams = useSearchParams();
 
-  const { data } = useQuery(
+  const { data } = useSuspenseQuery(
     postsOptions({
       order: (searchParams.get("order") as PostsOrderType) ?? undefined,
     })
   );
-  const { data: categorys } = useQuery(categoryOptions);
+  const { data: categorys } = useSuspenseQuery(categoryOptions);
 
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {data?.posts.map((post) => {
+      {data.posts.map((post) => {
         const path = getFirstImage(post.content);
         return (
           <Link key={post.uid} href={`/post/${post.uid}`} className="group">
@@ -39,7 +39,7 @@ export default function PostCardView() {
               <div className="flex flex-col gap-2 p-4">
                 <div className="text-secondary-foreground flex flex-wrap justify-between gap-2">
                   <Badge variant="secondary" className="font-normal">
-                    {categorys?.find((c) => c.id === post.categoryId)?.name ?? "카테고리"}
+                    {categorys.find((c) => c.id === post.categoryId)?.name ?? "카테고리"}
                   </Badge>
                   {dayjs(post.register_date).format("YYYY-MM-DD")}
                 </div>
