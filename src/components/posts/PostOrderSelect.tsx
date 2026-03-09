@@ -5,12 +5,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { omit } from "es-toolkit";
 import { labelByOrder } from "@/consts/posts";
 
-const postOrderList = [
-  { value: "latest", label: "최신순" },
-  { value: "views", label: "인기순" },
-  { value: "oldest", label: "과거순" },
-];
-
 export default function PostOrderSelect() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
