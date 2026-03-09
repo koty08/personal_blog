@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import dayjs from "dayjs";
-import PostThumbnail from "@/components/common/PostThumbnail";
+import PostThumbnail from "@/components/post/PostThumbnail";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { removeMDFromContent, getFirstImage } from "@/lib/markdownUtils";

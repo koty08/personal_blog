@@ -3,8 +3,8 @@ import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
-import { ThemeProvider } from "@/components/common/ThemeProvider";
-import QCProvider from "@/lib/QCProvider";
+import { ThemeProvider } from "@/provider/ThemeProvider";
+import QCProvider from "@/provider/QCProvider";
 import { Toaster } from "@/components/ui/sonner";
 
 const open_sans = Noto_Sans_KR({ subsets: ["latin"] });

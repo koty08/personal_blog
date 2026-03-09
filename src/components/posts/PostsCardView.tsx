@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Card, CardContent, CardTitle } from "../ui/card";
-import PostThumbnail from "../common/PostThumbnail";
+import PostThumbnail from "../post/PostThumbnail";
 import { removeMDFromContent, getFirstImage } from "@/lib/markdownUtils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { postsOptions } from "@/services/post/options";
