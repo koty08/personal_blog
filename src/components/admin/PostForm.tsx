@@ -38,7 +38,7 @@ interface PostFormProps {
   originalData?: Post;
 }
 
-export default function AdminPostForm({ type, originalData }: PostFormProps) {
+export default function PostForm({ type, originalData }: PostFormProps) {
   const router = useRouter();
   const { resolvedTheme } = useTheme();
 

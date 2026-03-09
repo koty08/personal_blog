@@ -1,4 +1,4 @@
-import AdminPostForm from "@/components/admin/AdminPostForm";
+import PostForm from "@/components/admin/PostForm";
 import { checkIsKoty } from "@/lib/auth-server";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { categoryOptions } from "@/services/category/options";
@@ -17,7 +17,7 @@ export default async function CreatePost() {
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="flex flex-col items-center gap-15">
         <p className="text-2xl font-bold">게시글 생성</p>
-        <AdminPostForm type="CREATE" />
+        <PostForm type="CREATE" />
       </div>
     </HydrationBoundary>
   );

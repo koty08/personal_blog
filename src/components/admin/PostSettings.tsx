@@ -13,12 +13,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Separator } from "@/components/ui/separator";
 import { useMutation } from "@tanstack/react-query";
 import { postDeleteOptions } from "@/services/post/options";
 import { toast } from "sonner";
 
-export default function PostAdminContents() {
+export default function PostSettings() {
   const router = useRouter();
   const pathname = usePathname();
   const postDelete = useMutation(postDeleteOptions);

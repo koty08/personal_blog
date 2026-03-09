@@ -1,4 +1,4 @@
-import AdminPostForm from "@/components/admin/AdminPostForm";
+import PostForm from "@/components/admin/PostForm";
 import { notFound } from "next/navigation";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { categoryOptions } from "@/services/category/options";
@@ -25,7 +25,7 @@ export default async function UpdatePost({ params }: { params: Params }) {
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="flex flex-col items-center gap-15">
         <p className="text-2xl font-bold">게시글 수정</p>
-        <AdminPostForm type="UPDATE" originalData={post} />
+        <PostForm type="UPDATE" originalData={post} />
       </div>
     </HydrationBoundary>
   );

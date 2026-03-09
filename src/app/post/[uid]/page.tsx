@@ -1,6 +1,6 @@
 import PostTOC from "@/components/post/PostTOC";
 import PostComment from "@/components/post/PostComment";
-import PostAdminContents from "@/components/admin/PostAdminContents";
+import PostSettings from "@/components/admin/PostSettings";
 import PostInformation from "@/components/post/PostInformation";
 import MarkDownViewer from "@/components/post/MarkDownViewer";
 import { categoryOptions } from "@/services/category/options";
@@ -32,7 +32,7 @@ export default async function PostPage({ params }: { params: Params }) {
             <div className="flex flex-col gap-12">
               <PostInformation />
               <MarkDownViewer />
-              {isKoty && <PostAdminContents />}
+              {isKoty && <PostSettings />}
               <PostComment />
             </div>
           </main>
