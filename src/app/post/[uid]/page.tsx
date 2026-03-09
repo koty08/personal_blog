@@ -26,22 +26,20 @@ export default async function PostPage({ params }: { params: Params }) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="container mx-auto mt-16 px-4">
-        <div className="grid grid-cols-12 gap-x-8">
-          <main className="col-span-12 lg:col-span-10">
-            <div className="flex flex-col gap-12">
-              <PostInformation />
-              <MarkDownViewer />
-              {isKoty && <PostSettings />}
-              <PostComment />
-            </div>
-          </main>
-          <aside className="hidden lg:col-span-2 lg:block">
-            <div className="sticky top-24">
-              <PostTOC />
-            </div>
-          </aside>
-        </div>
+      <div className="grid grid-cols-12 gap-x-8 px-5">
+        <main className="col-span-12 lg:col-span-10">
+          <div className="flex flex-col gap-12">
+            <PostInformation />
+            <MarkDownViewer />
+            {isKoty && <PostSettings />}
+            <PostComment />
+          </div>
+        </main>
+        <aside className="hidden lg:col-span-2 lg:block">
+          <div className="sticky top-24">
+            <PostTOC />
+          </div>
+        </aside>
       </div>
     </HydrationBoundary>
   );

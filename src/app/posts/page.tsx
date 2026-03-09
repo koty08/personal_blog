@@ -24,7 +24,7 @@ export default async function Posts({ searchParams }: { searchParams: SearchPara
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="flex flex-col gap-8 py-5">
+      <div className="flex flex-col gap-8">
         <div className="flex items-center justify-between gap-3">
           <PostCategoryLinks />
           <PostOrderSelect />

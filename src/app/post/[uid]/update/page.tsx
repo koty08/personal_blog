@@ -23,7 +23,7 @@ export default async function UpdatePost({ params }: { params: Params }) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="flex flex-col items-center gap-15">
+      <div className="flex flex-col items-center gap-15 py-4">
         <p className="text-2xl font-bold">게시글 수정</p>
         <PostForm type="UPDATE" originalData={post} />
       </div>

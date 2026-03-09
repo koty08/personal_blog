@@ -15,7 +15,7 @@ export default async function CreatePost() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="flex flex-col items-center gap-15">
+      <div className="flex flex-col items-center gap-15 py-4">
         <p className="text-2xl font-bold">게시글 생성</p>
         <PostForm type="CREATE" />
       </div>

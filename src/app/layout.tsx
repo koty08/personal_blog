@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <QCProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <Header />
-            <div id="main" className="min-h-[85vh] px-5">
+            <div id="main" className="container mx-auto min-h-[85vh] max-w-5xl space-y-12 py-5 md:py-10">
               {children}
             </div>
             <Footer />
