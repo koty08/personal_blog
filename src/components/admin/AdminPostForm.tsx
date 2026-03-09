@@ -20,7 +20,7 @@ import { postCreateOptions, postUpdateOptions } from "@/services/post/options";
 import dynamic from "next/dynamic";
 import { fileDeleteOptions, fileUploadOptions } from "@/services/file/option";
 import { toast } from "sonner";
-import PostCategorys from "../post/PostCategorys";
+import CategoryManage from "./CategoryManage";
 import { postDefaultValue } from "@/consts/posts";
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
@@ -161,7 +161,7 @@ export default function AdminPostForm({ type, originalData }: PostFormProps) {
                 ))}
               </SelectContent>
             </Select>
-            <PostCategorys />
+            <CategoryManage />
           </LabelWrapper>
           <LabelWrapper label={fieldLabel.readTime} orientation="horizontal">
             <Input name="readTime" type="number" className="w-15" value={values.readTime} onChange={handleChange} />
