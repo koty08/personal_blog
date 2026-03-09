@@ -7,29 +7,34 @@ import { categoryOptions } from "@/services/category/options";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import PostsListView from "@/components/posts/PostsListView";
 import { SearchParams } from "@/lib/serverInterface";
+import QueryWrapper from "@/lib/QueryWrapper";
 
 export default async function Posts({ searchParams }: { searchParams: SearchParams }) {
   const { order, page, category: rawCategory } = await searchParams;
   const category = rawCategory ? decodeURI(rawCategory) : undefined;
   const queryClient = getQueryClient();
 
-  await queryClient.prefetchQuery(
+  void queryClient.prefetchQuery(categoryOptions);
+  void queryClient.prefetchQuery(
     postsOptions({
       order: order as PostsOrderType,
       page: Number(page || 1),
       category,
     })
   );
-  await queryClient.prefetchQuery(categoryOptions);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="flex flex-col gap-8">
         <div className="flex items-center justify-between gap-3">
-          <PostCategoryLinks />
-          <PostOrderSelect />
+          <QueryWrapper loadingStyle="h-9" errorStyle="h-9">
+            <PostCategoryLinks />
+            <PostOrderSelect />
+          </QueryWrapper>
         </div>
-        <PostsListView />
+        <QueryWrapper loadingStyle="h-160" errorStyle="h-32">
+          <PostsListView />
+        </QueryWrapper>
       </div>
     </HydrationBoundary>
   );

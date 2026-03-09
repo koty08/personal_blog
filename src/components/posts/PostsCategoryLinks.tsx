@@ -3,21 +3,19 @@
 import { categoryOptions } from "@/services/category/options";
 import { Button } from "../ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 export default function PostCategoryLinks() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentCategory = searchParams.get("category");
-  const { data: categories } = useQuery(categoryOptions);
+  const { data: categories } = useSuspenseQuery(categoryOptions);
 
   const allCategory = {
     id: 0,
     name: "전체보기",
     count: categories ? categories.reduce((p, c) => p + c.count, 0) : 0,
   };
-
-  if (!categories) return <></>;
 
   const onButtonClicked = (name: string) => {
     router.push(name === "전체보기" ? "/posts" : `/posts?category=${encodeURIComponent(name)}`);

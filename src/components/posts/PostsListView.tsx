@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { removeMDFromContent, getFirstImage } from "@/lib/markdownUtils";
 import CustomPagination from "@/components/common/CustomPagination";
 import { Separator } from "@/components/ui/separator";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { postsOptions } from "@/services/post/options";
 import { categoryOptions } from "@/services/category/options";
 import { useSearchParams } from "next/navigation";
@@ -19,18 +19,18 @@ const POST_PER_PAGE = 8;
 export default function PostsListView() {
   const searchParams = useSearchParams();
 
-  const { data } = useQuery(
+  const { data } = useSuspenseQuery(
     postsOptions({
       order: (searchParams.get("order") as PostsOrderType) ?? undefined,
       page: Number(searchParams.get("page") || 1),
       category: searchParams.get("category") ?? undefined,
     })
   );
-  const { data: categories } = useQuery(categoryOptions);
+  const { data: categories } = useSuspenseQuery(categoryOptions);
 
   return (
     <div className="flex flex-col gap-6">
-      {data?.posts.map((post) => {
+      {data.posts.map((post) => {
         const path = getFirstImage(post.content);
         return (
           <Link key={post.uid} href={`/post/${post.uid}`} className="group">
@@ -46,7 +46,7 @@ export default function PostsListView() {
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center justify-between">
                     <Badge variant="secondary" className="font-normal">
-                      {categories?.find((c) => c.id === post.categoryId)?.name ?? "카테고리"}
+                      {categories.find((c) => c.id === post.categoryId)?.name ?? "카테고리"}
                     </Badge>
                     <span className="text-muted-foreground text-sm">{dayjs(post.register_date).format("YYYY-MM-DD")}</span>
                   </div>
@@ -63,7 +63,7 @@ export default function PostsListView() {
           </Link>
         );
       })}
-      {data && <CustomPagination totalCount={data.count} itemPerPage={POST_PER_PAGE} />}
+      <CustomPagination totalCount={data.count} itemPerPage={POST_PER_PAGE} />
     </div>
   );
 }
