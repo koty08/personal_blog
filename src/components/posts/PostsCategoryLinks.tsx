@@ -9,15 +9,15 @@ export default function PostCategoryLinks() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentCategory = searchParams.get("category");
-  const { data: categorys } = useQuery(categoryOptions);
+  const { data: categories } = useQuery(categoryOptions);
 
   const allCategory = {
     id: 0,
     name: "전체보기",
-    count: categorys ? categorys.reduce((p, c) => p + c.count, 0) : 0,
+    count: categories ? categories.reduce((p, c) => p + c.count, 0) : 0,
   };
 
-  if (!categorys) return <></>;
+  if (!categories) return <></>;
 
   const onButtonClicked = (name: string) => {
     router.push(name === "전체보기" ? "/posts" : `/posts?category=${encodeURIComponent(name)}`);
@@ -25,7 +25,7 @@ export default function PostCategoryLinks() {
 
   return (
     <div className="flex max-h-18 flex-wrap gap-2 overflow-hidden">
-      {[allCategory, ...categorys].map((c) => {
+      {[allCategory, ...categories].map((c) => {
         const isSelected = c.name === "전체보기" ? !currentCategory : currentCategory === c.name;
         return (
           <Button

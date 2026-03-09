@@ -20,7 +20,7 @@ export default function PostCardView() {
       order: (searchParams.get("order") as PostsOrderType) ?? undefined,
     })
   );
-  const { data: categorys } = useSuspenseQuery(categoryOptions);
+  const { data: categories } = useSuspenseQuery(categoryOptions);
 
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -39,7 +39,7 @@ export default function PostCardView() {
               <div className="flex flex-col gap-2 p-4">
                 <div className="text-secondary-foreground flex flex-wrap justify-between gap-2">
                   <Badge variant="secondary" className="font-normal">
-                    {categorys.find((c) => c.id === post.categoryId)?.name ?? "카테고리"}
+                    {categories.find((c) => c.id === post.categoryId)?.name ?? "카테고리"}
                   </Badge>
                   {dayjs(post.register_date).format("YYYY-MM-DD")}
                 </div>

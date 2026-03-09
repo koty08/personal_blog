@@ -26,7 +26,7 @@ export default function PostsListView() {
       category: searchParams.get("category") ?? undefined,
     })
   );
-  const { data: categorys } = useQuery(categoryOptions);
+  const { data: categories } = useQuery(categoryOptions);
 
   return (
     <div className="flex flex-col gap-6">
@@ -46,7 +46,7 @@ export default function PostsListView() {
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center justify-between">
                     <Badge variant="secondary" className="font-normal">
-                      {categorys?.find((c) => c.id === post.categoryId)?.name ?? "카테고리"}
+                      {categories?.find((c) => c.id === post.categoryId)?.name ?? "카테고리"}
                     </Badge>
                     <span className="text-muted-foreground text-sm">{dayjs(post.register_date).format("YYYY-MM-DD")}</span>
                   </div>

@@ -42,7 +42,7 @@ export default function AdminPostForm({ type, originalData }: PostFormProps) {
   const router = useRouter();
   const { resolvedTheme } = useTheme();
 
-  const { data: categorys } = useQuery(categoryOptions);
+  const { data: categories } = useQuery(categoryOptions);
   const postCreate = useMutation(postCreateOptions);
   const postUpdate = useMutation(postUpdateOptions);
   const fileUpload = useMutation(fileUploadOptions);
@@ -154,7 +154,7 @@ export default function AdminPostForm({ type, originalData }: PostFormProps) {
                 <SelectValue placeholder={"카테고리 선택"} />
               </SelectTrigger>
               <SelectContent>
-                {categorys?.map((c) => (
+                {categories?.map((c) => (
                   <SelectItem key={c.id} value={c.id.toString()} className="hover:bg-accent transition-all hover:cursor-pointer">
                     {c.name}
                   </SelectItem>

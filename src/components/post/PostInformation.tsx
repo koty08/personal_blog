@@ -11,7 +11,7 @@ import { categoryOptions } from "@/services/category/options";
 export default function PostInformation() {
   const { uid } = useParams<{ uid: string }>();
   const { data } = useQuery(postOptions({ uid }));
-  const { data: categorys } = useQuery(categoryOptions);
+  const { data: categories } = useQuery(categoryOptions);
 
   if (!data) return <></>;
 
@@ -22,7 +22,7 @@ export default function PostInformation() {
       </h1>
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
-          <Badge variant={"default"}>{categorys?.find((c) => c.id === data.categoryId)?.name ?? "카테고리"}</Badge>
+          <Badge variant={"default"}>{categories?.find((c) => c.id === data.categoryId)?.name ?? "카테고리"}</Badge>
           <p>{`조회수: ${data.views}`}</p>
           <p>{`읽는 시간: ${data.readTime}분`}</p>
         </div>
