@@ -9,7 +9,7 @@ export const postOptions = (payload: PostPayload) =>
     queryFn: () => axiosInstance.get<PostPayload, Post>("/post", { params: payload }),
   });
 
-export const postsOptions = (payload: PostsPayload = {}) =>
+export const postsOptions = (payload: PostsPayload) =>
   queryOptions({
     queryKey: ["posts", payload],
     queryFn: () => axiosInstance.get<PostsPayload, PostsWithCount>("/posts", { params: payload }),

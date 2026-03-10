@@ -15,6 +15,7 @@ export interface PostsPayload {
   category?: string;
   page?: number;
   limit?: number;
+  temp?: boolean;
 }
 
 export interface PostsWithCount {
