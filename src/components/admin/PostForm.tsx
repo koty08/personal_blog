@@ -12,26 +12,17 @@ import { useTheme } from "next-themes";
 import { useEffect } from "react";
 import { Checkbox } from "../ui/checkbox";
 import { Button } from "../ui/button";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { categoryOptions } from "@/services/category/options";
 import { PostCreatePayload } from "@/services/post/interface";
 import { josa } from "es-hangul";
 import { postCreateOptions, postUpdateOptions } from "@/services/post/options";
-import dynamic from "next/dynamic";
 import { fileDeleteOptions, fileUploadOptions } from "@/services/file/option";
 import { toast } from "sonner";
 import CategoryManage from "./CategoryManage";
-import { postDefaultValue } from "@/consts/posts";
+import { postDefaultValue, postFieldLabel } from "@/consts/posts";
+import dynamic from "next/dynamic";
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
-
-const fieldLabel: Record<keyof PostCreatePayload, string> = {
-  title: "제목",
-  uid: "UID",
-  content: "내용",
-  categoryId: "카테고리",
-  readTime: "읽는 시간",
-  published: "게시 여부",
-};
 
 interface PostFormProps {
   type: "CREATE" | "UPDATE";
@@ -42,7 +33,7 @@ export default function PostForm({ type, originalData }: PostFormProps) {
   const router = useRouter();
   const { resolvedTheme } = useTheme();
 
-  const { data: categories } = useQuery(categoryOptions);
+  const { data: categories } = useSuspenseQuery(categoryOptions);
   const postCreate = useMutation(postCreateOptions);
   const postUpdate = useMutation(postUpdateOptions);
   const fileUpload = useMutation(fileUploadOptions);
@@ -112,10 +103,10 @@ export default function PostForm({ type, originalData }: PostFormProps) {
   return (
     <Card className="w-full">
       <CardContent className="flex flex-col gap-4">
-        <LabelWrapper label={fieldLabel.title} orientation="vertical">
+        <LabelWrapper label={postFieldLabel.title} orientation="vertical">
           <Input name="title" type="text" placeholder="제목을 입력해주세요." value={values.title} onChange={handleChange} />
         </LabelWrapper>
-        <LabelWrapper label={fieldLabel.uid} orientation="vertical">
+        <LabelWrapper label={postFieldLabel.uid} orientation="vertical">
           <Input
             name="uid"
             type="text"
@@ -124,7 +115,7 @@ export default function PostForm({ type, originalData }: PostFormProps) {
             onChange={handleChange}
           />
         </LabelWrapper>
-        <LabelWrapper label={fieldLabel.content} orientation="vertical">
+        <LabelWrapper label={postFieldLabel.content} orientation="vertical">
           <MDEditor
             value={values.content}
             className="w-full resize-none rounded"
@@ -148,13 +139,13 @@ export default function PostForm({ type, originalData }: PostFormProps) {
           />
         </LabelWrapper>
         <div className="flex flex-wrap items-center gap-4">
-          <LabelWrapper label={fieldLabel.categoryId} orientation="horizontal">
+          <LabelWrapper label={postFieldLabel.categoryId} orientation="horizontal">
             <Select onValueChange={(value) => handleChangeWithVal({ name: "categoryId", value })}>
               <SelectTrigger className="hover:bg-accent transition-all hover:cursor-pointer">
                 <SelectValue placeholder={"카테고리 선택"} />
               </SelectTrigger>
               <SelectContent>
-                {categories?.map((c) => (
+                {categories.map((c) => (
                   <SelectItem key={c.id} value={c.id.toString()} className="hover:bg-accent transition-all hover:cursor-pointer">
                     {c.name}
                   </SelectItem>
@@ -163,10 +154,10 @@ export default function PostForm({ type, originalData }: PostFormProps) {
             </Select>
             <CategoryManage />
           </LabelWrapper>
-          <LabelWrapper label={fieldLabel.readTime} orientation="horizontal">
+          <LabelWrapper label={postFieldLabel.readTime} orientation="horizontal">
             <Input name="readTime" type="number" className="w-15" value={values.readTime} onChange={handleChange} />
           </LabelWrapper>
-          <LabelWrapper label={fieldLabel.published} orientation="horizontal">
+          <LabelWrapper label={postFieldLabel.published} orientation="horizontal">
             <Checkbox id="published" className="mt-0.5 size-5 cursor-pointer" />
           </LabelWrapper>
         </div>
@@ -186,7 +177,7 @@ export default function PostForm({ type, originalData }: PostFormProps) {
 function postValidator(form: PostCreatePayload) {
   const validList: (keyof PostCreatePayload)[] = ["title", "uid", "content", "categoryId", "readTime"];
   const emptyField = validList.find((e) => !form[e]);
-  if (emptyField) return `${josa(fieldLabel[emptyField], "을/를")} 입력해주세요.`;
+  if (emptyField) return `${josa(postFieldLabel[emptyField], "을/를")} 입력해주세요.`;
   else if (!form.uid.match(/^[a-zA-Z0-9-]+$/)) return "올바른 uid 형식이 아닙니다.";
 
   return "";
