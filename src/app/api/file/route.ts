@@ -24,7 +24,7 @@ export const DELETE = checkIsKotyWrapper(async (request: NextRequest) => {
   try {
     const fullPath = `${imagePath.server}${path}`;
     await fs.rm(fullPath);
-    return NextResponse.json({}, { status: 204 });
+    return new NextResponse(null, { status: 204 });
   } catch (error) {
     console.error(error);
     return apiError.internalServerError("이미지 삭제");

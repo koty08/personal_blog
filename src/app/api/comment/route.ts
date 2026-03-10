@@ -81,7 +81,7 @@ export async function DELETE(request: Request) {
       where: { id: Number(id) },
     });
 
-    return NextResponse.json({}, { status: 204 });
+    return new NextResponse(null, { status: 204 });
   } catch (error) {
     console.error(error);
     return apiError.internalServerError("댓글 삭제");

@@ -127,7 +127,7 @@ export const DELETE = checkIsKotyWrapper(async (request: NextRequest) => {
     existingImagePaths.forEach(async (path) => {
       await fs.rm(`${imagePath.server}${path}`);
     });
-    return NextResponse.json({}, { status: 204 });
+    return new NextResponse(null, { status: 204 });
   } catch {
     return apiError.internalServerError("게시글 삭제");
   }

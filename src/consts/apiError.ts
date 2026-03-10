@@ -7,5 +7,5 @@ export const apiError = {
   unauthorized: NextResponse.json({ message: "권한이 없습니다." }, { status: 403 }),
   conflict: (detail: string) => NextResponse.json({ message: `${josa(detail, "이/가")} 이미 존재합니다.` }, { status: 409 }),
   notFound: (detail: string) => NextResponse.json({ message: `${josa(detail, "을/를")} 찾을 수 없습니다.}` }, { status: 404 }),
-  internalServerError: (detail: string) => NextResponse.json({ message: `${detail}중 오류가 발생했습니다.` }, { status: 500 }),
+  internalServerError: (detail: string) => NextResponse.json({ message: `${detail} 중 오류가 발생했습니다.` }, { status: 500 }),
 };

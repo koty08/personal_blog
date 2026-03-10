@@ -96,7 +96,7 @@ export const DELETE = checkIsKotyWrapper(async (request: NextRequest) => {
         },
       }),
     ]);
-    return NextResponse.json({}, { status: 204 });
+    return new NextResponse(null, { status: 204 });
   } catch (error) {
     console.error(error);
     return apiError.internalServerError("카테고리 삭제");
