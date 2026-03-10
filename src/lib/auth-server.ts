@@ -10,9 +10,8 @@ export const checkIsKoty = async () => {
   });
 
   if (!session) return false;
-  else {
-    return session.user.email === `${process.env.ADMIN_KOTY_EMAIL}` ? true : false;
-  }
+
+  return session.user.email === process.env.ADMIN_KOTY_EMAIL;
 };
 
 type RouteHandler = (request: NextRequest) => Promise<NextResponse>;

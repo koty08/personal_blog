@@ -1,27 +1,18 @@
 import PostCategoryLinks from "@/components/posts/PostsCategoryLinks";
 import PostOrderSelect from "@/components/posts/PostOrderSelect";
 import { getQueryClient } from "@/lib/getQueryClient";
-import { postsOptions } from "@/services/post/options";
-import { PostsOrderType } from "@/services/post/interface";
 import { categoryOptions } from "@/services/category/options";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import PostsListView from "@/components/posts/PostsListView";
-import { SearchParams } from "@/lib/serverInterface";
 import QueryWrapper from "@/lib/QueryWrapper";
+import { checkIsKoty } from "@/lib/auth-server";
+import PostCreateAndFilter from "@/components/admin/PostCreateAndFilter";
 
-export default async function Posts({ searchParams }: { searchParams: SearchParams }) {
-  const { order, page, category: rawCategory } = await searchParams;
-  const category = rawCategory ? decodeURI(rawCategory) : undefined;
+export default async function Posts() {
   const queryClient = getQueryClient();
+  const isKoty = await checkIsKoty();
 
   void queryClient.prefetchQuery(categoryOptions);
-  void queryClient.prefetchQuery(
-    postsOptions({
-      order: order as PostsOrderType,
-      page: Number(page || 1),
-      category,
-    })
-  );
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
@@ -29,7 +20,10 @@ export default async function Posts({ searchParams }: { searchParams: SearchPara
         <div className="flex items-center justify-between gap-3">
           <QueryWrapper loadingStyle="h-9" errorStyle="h-9">
             <PostCategoryLinks />
-            <PostOrderSelect />
+            <div className="flex items-center gap-2">
+              <PostOrderSelect />
+              {isKoty && <PostCreateAndFilter />}
+            </div>
           </QueryWrapper>
         </div>
         <QueryWrapper loadingStyle="h-160" errorStyle="h-32">

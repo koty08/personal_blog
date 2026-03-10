@@ -24,6 +24,7 @@ export default function PostsListView() {
       order: (searchParams.get("order") as PostsOrderType) ?? undefined,
       page: Number(searchParams.get("page") || 1),
       category: searchParams.get("category") ?? undefined,
+      temp: searchParams.get("temp") === "true" ? true : undefined,
     })
   );
   const { data: categories } = useSuspenseQuery(categoryOptions);
