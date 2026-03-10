@@ -3,13 +3,13 @@
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
-import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { commentCreateOptions, commentsOptions } from "@/services/comment/options";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { LoginButton } from "../admin/AuthButtons";
+import { LoginButton } from "../common/AuthButtons";
 import PostCommentItem from "./PostCommentItem";
 import { CornerDownRight } from "lucide-react";
 

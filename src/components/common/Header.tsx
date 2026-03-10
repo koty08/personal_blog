@@ -8,7 +8,7 @@ import { Button } from "../ui/button";
 import { CircleUserRound, Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { LoginButton, LogoutButton } from "../admin/AuthButtons";
+import { LoginButton, LogoutButton } from "./AuthButtons";
 import { authClient } from "@/lib/auth-client";
 
 const links = [
