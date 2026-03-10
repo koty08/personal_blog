@@ -13,14 +13,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useMutation } from "@tanstack/react-query";
 import { postDeleteOptions } from "@/services/post/options";
 import { toast } from "sonner";
+import { useTypedMutation } from "@/hooks/useTypedMutation";
 
 export default function PostSettings() {
   const router = useRouter();
   const pathname = usePathname();
-  const postDelete = useMutation(postDeleteOptions);
+  const postDelete = useTypedMutation(postDeleteOptions);
 
   const onUpdate = () => {
     router.push(`${pathname}/update`);
@@ -33,12 +33,11 @@ export default function PostSettings() {
         { uid },
         {
           onSuccess: () => {
+            toast.success("게시글이 삭제되었습니다.");
             router.push("/posts");
           },
-          onError: () => {
-            toast("게시글 삭제중 오류가 발생했습니다.", {
-              position: "bottom-center",
-            });
+          onError: (error) => {
+            toast.error(error.response?.data.message ?? "게시글 삭제 중 오류가 발생했습니다.");
           },
         }
       );

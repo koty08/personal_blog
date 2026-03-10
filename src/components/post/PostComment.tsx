@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
-import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { commentCreateOptions, commentsOptions } from "@/services/comment/options";
 import { Separator } from "@/components/ui/separator";
@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { LoginButton } from "../common/AuthButtons";
 import PostCommentItem from "./PostCommentItem";
 import { CornerDownRight } from "lucide-react";
+import { useTypedMutation } from "@/hooks/useTypedMutation";
 
 export default function PostComment() {
   const { data: session } = authClient.useSession();
@@ -23,22 +24,22 @@ export default function PostComment() {
   const queryClient = useQueryClient();
 
   const { data: comments } = useSuspenseQuery(commentsOptions({ uid }));
-  const { mutate: createComment, isPending: isCreating } = useMutation(commentCreateOptions);
+  const createComment = useTypedMutation(commentCreateOptions);
 
   const handleCreate = () => {
     if (!session?.user) return;
     else if (!newComment.trim()) return toast.warning("댓글을 입력해주세요.");
 
-    createComment(
+    createComment.mutate(
       { postUid: uid, content: newComment },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
           setNewComment("");
-          queryClient.invalidateQueries({ queryKey: commentsOptions({ uid }).queryKey });
+          await queryClient.invalidateQueries({ queryKey: commentsOptions({ uid }).queryKey });
           toast.success("댓글이 작성되었습니다.");
         },
-        onError: () => {
-          toast.error("댓글 작성에 실패했습니다.");
+        onError: (error) => {
+          toast.error(error.response?.data.message ?? "댓글 작성 중 오류가 발생했습니다.");
         },
       }
     );
@@ -48,16 +49,18 @@ export default function PostComment() {
     if (!session?.user || !replyId) return;
     else if (!replyContent.trim()) return toast.warning("답글을 입력해주세요.");
 
-    createComment(
+    createComment.mutate(
       { postUid: uid, content: replyContent, parentId: replyId },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
           setReplyId(null);
           setReplyContent("");
-          queryClient.invalidateQueries({ queryKey: ["comments", { uid }] });
+          await queryClient.invalidateQueries({ queryKey: ["comments", { uid }] });
           toast.success("답글이 작성되었습니다.");
         },
-        onError: () => toast.error("답글 작성에 실패했습니다."),
+        onError: (error) => {
+          toast.error(error.response?.data.message ?? "답글 작성 중 오류가 발생했습니다.");
+        },
       }
     );
   };
@@ -76,11 +79,11 @@ export default function PostComment() {
             placeholder="댓글을 입력하세요..."
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            disabled={isCreating}
+            disabled={createComment.isPending}
           />
           <div className="text-right">
-            <Button type="submit" onClick={handleCreate} disabled={isCreating}>
-              {isCreating ? "등록 중..." : "등록"}
+            <Button type="submit" onClick={handleCreate} disabled={createComment.isPending}>
+              등록
             </Button>
           </div>
         </div>
@@ -130,7 +133,7 @@ export default function PostComment() {
                           <Button variant="ghost" onClick={() => setReplyId(null)}>
                             취소
                           </Button>
-                          <Button onClick={handleReply} disabled={isCreating}>
+                          <Button onClick={handleReply} disabled={createComment.isPending}>
                             등록
                           </Button>
                         </div>
@@ -149,7 +152,7 @@ export default function PostComment() {
                       <Button variant="ghost" onClick={() => setReplyId(null)}>
                         취소
                       </Button>
-                      <Button onClick={handleReply} disabled={isCreating}>
+                      <Button onClick={handleReply} disabled={createComment.isPending}>
                         등록
                       </Button>
                     </div>

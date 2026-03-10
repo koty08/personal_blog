@@ -24,10 +24,7 @@ export default function useForm<T>({ initialVal, onSubmit, validator }: useFormP
     setIsLoading(true);
     const validResult = validator(values);
     if (!validResult.length) await onSubmit(values);
-    else
-      toast(validResult, {
-        position: "bottom-center",
-      });
+    else toast.warning(validResult);
     setIsLoading(false);
   };
 

@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Category } from "@my-prisma/client";
-
 import { categoryCreateOptions, categoryDeleteOptions, categoryOptions, categoryUpdateOptions } from "@/services/category/options";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
@@ -21,63 +20,75 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
+import { useTypedMutation } from "@/hooks/useTypedMutation";
 
 export default function CategoryManage() {
-  const queryClient = useQueryClient();
-  const { data: categories, isLoading } = useQuery(categoryOptions);
-
   const [newCategory, setNewCategory] = useState("");
-  const [editingCategory, setEditingCategory] = useState<{
-    id: number;
-    name: string;
-  } | null>(null);
+  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
 
-  const onSuccess = () => {
+  const { data: categories } = useSuspenseQuery(categoryOptions);
+
+  const queryClient = useQueryClient();
+  const categoryCreate = useTypedMutation(categoryCreateOptions);
+  const categoryUpdate = useTypedMutation(categoryUpdateOptions);
+  const categoryDelete = useTypedMutation(categoryDeleteOptions);
+
+  const onSuccessCb = () => {
     queryClient.invalidateQueries({ queryKey: categoryOptions.queryKey });
     setNewCategory("");
     setEditingCategory(null);
   };
 
-  const categoryCreate = useMutation({
-    ...categoryCreateOptions,
-    onSuccess: () => {
-      toast.success("카테고리가 생성되었습니다.");
-      onSuccess();
-    },
-    onError: () => toast.error("카테고리 생성 중 오류가 발생했습니다."),
-  });
-
-  const categoryUpdate = useMutation({
-    ...categoryUpdateOptions,
-    onSuccess: () => {
-      toast.success("카테고리가 수정되었습니다.");
-      onSuccess();
-    },
-    onError: () => toast.error("카테고리 수정 중 오류가 발생했습니다."),
-  });
-
-  const categoryDelete = useMutation({
-    ...categoryDeleteOptions,
-    onSuccess: () => {
-      toast.success("카테고리가 삭제되었습니다.");
-      onSuccess();
-    },
-    onError: () => toast.error("카테고리 삭제 중 오류가 발생했습니다."),
-  });
-
   const handleAddCategory = () => {
     if (newCategory.trim()) {
-      categoryCreate.mutate({ name: newCategory.trim() });
+      categoryCreate.mutate(
+        { name: newCategory.trim() },
+        {
+          onSuccess: () => {
+            toast.success("카테고리가 생성되었습니다.");
+            onSuccessCb();
+          },
+          onError: (error) => {
+            toast.error(error.response?.data.message ?? "카테고리 생성 중 오류가 발생했습니다.");
+          },
+        }
+      );
     }
   };
 
   const handleUpdateCategory = () => {
     if (editingCategory && editingCategory.name.trim()) {
-      categoryUpdate.mutate({
-        id: editingCategory.id,
-        name: editingCategory.name.trim(),
-      });
+      categoryUpdate.mutate(
+        {
+          id: editingCategory.id,
+          name: editingCategory.name.trim(),
+        },
+        {
+          onSuccess: () => {
+            toast.success("카테고리가 수정되었습니다.");
+            onSuccessCb();
+          },
+          onError: (error) => {
+            toast.error(error.response?.data.message ?? "카테고리 수정 중 오류가 발생했습니다.");
+          },
+        }
+      );
     }
+  };
+
+  const handleDeleteCategory = (targetId: number) => {
+    categoryDelete.mutate(
+      { id: targetId },
+      {
+        onSuccess: () => {
+          toast.success("카테고리가 삭제되었습니다.");
+          onSuccessCb();
+        },
+        onError: (error) => {
+          toast.error(error.response?.data.message ?? "카테고리 삭제 중 오류가 발생했습니다.");
+        },
+      }
+    );
   };
 
   return (
@@ -94,13 +105,12 @@ export default function CategoryManage() {
           <Separator />
           <div className="flex gap-2">
             <Input value={newCategory} onChange={(e) => setNewCategory(e.target.value)} placeholder="새 카테고리 이름" />
-            <Button onClick={handleAddCategory} disabled={categoryCreate.isPending}>
+            <Button disabled={categoryCreate.isPending} onClick={handleAddCategory}>
               추가
             </Button>
           </div>
           <div className="grid gap-2">
-            {isLoading && <p>로딩 중...</p>}
-            {categories?.map((category: Category) => (
+            {categories.map((category: Category) => (
               <div key={category.id} className="flex items-center justify-between gap-2">
                 {editingCategory?.id === category.id ? (
                   <Input
@@ -118,7 +128,7 @@ export default function CategoryManage() {
                 <div className="flex gap-1">
                   {editingCategory?.id === category.id ? (
                     <>
-                      <Button variant="ghost" size="sm" onClick={handleUpdateCategory}>
+                      <Button variant="ghost" size="sm" disabled={categoryUpdate.isPending} onClick={handleUpdateCategory}>
                         저장
                       </Button>
                       <Button variant="ghost" size="sm" onClick={() => setEditingCategory(null)}>
@@ -154,7 +164,7 @@ export default function CategoryManage() {
                           </AlertDialogHeader>
                           <AlertDialogFooter>
                             <AlertDialogCancel>취소</AlertDialogCancel>
-                            <AlertDialogAction onClick={() => categoryDelete.mutate({ id: category.id })}>삭제</AlertDialogAction>
+                            <AlertDialogAction onClick={() => handleDeleteCategory(category.id)}>삭제</AlertDialogAction>
                           </AlertDialogFooter>
                         </AlertDialogContent>
                       </AlertDialog>

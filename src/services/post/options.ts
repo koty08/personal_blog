@@ -17,12 +17,12 @@ export const postsOptions = (payload: PostsPayload) =>
 
 export const postCreateOptions = mutationOptions({
   mutationKey: ["post", "create"],
-  mutationFn: (payload: PostCreatePayload) => axiosInstance.post<PostCreatePayload, undefined>("/post", payload),
+  mutationFn: (payload: PostCreatePayload) => axiosInstance.post<PostCreatePayload, Post>("/post", payload),
 });
 
 export const postUpdateOptions = mutationOptions({
   mutationKey: ["post", "update"],
-  mutationFn: (payload: PostCreatePayload) => axiosInstance.put<PostCreatePayload, undefined>("/post", payload),
+  mutationFn: (payload: PostCreatePayload) => axiosInstance.put<PostCreatePayload, Post>("/post", payload),
 });
 
 export const postDeleteOptions = mutationOptions({

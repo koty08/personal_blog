@@ -16,11 +16,12 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { commentDeleteOptions, commentsOptions, commentUpdateOptions } from "@/services/comment/options";
 import { useParams } from "next/navigation";
 import { useRelativeTime } from "@/hooks/useRelativeTime";
 import dayjs from "dayjs";
+import { useTypedMutation } from "@/hooks/useTypedMutation";
 
 interface PostCommentItemProps {
   comment: CommentWithUser;
@@ -36,38 +37,37 @@ export default function PostCommentItem({ comment, userId, parentId }: PostComme
   const relativeTime = useRelativeTime(dayjs(comment.createdAt));
   const isReply = !!parentId;
 
-  const { mutate: updateComment, isPending: isUpdating } = useMutation(commentUpdateOptions);
-  const { mutate: deleteComment } = useMutation(commentDeleteOptions);
+  const updateComment = useTypedMutation(commentUpdateOptions);
+  const deleteComment = useTypedMutation(commentDeleteOptions);
 
   const handleUpdate = () => {
-    if (!userId) return;
-    else if (!editContent.trim()) return toast.warning("댓글을 입력해주세요.");
+    if (!editContent.trim()) return toast.warning("댓글을 입력해주세요.");
 
-    updateComment(
+    updateComment.mutate(
       { id: comment.id, content: editContent },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
           setIsEditing(false);
-          queryClient.invalidateQueries({ queryKey: commentsOptions({ uid }).queryKey });
+          await queryClient.invalidateQueries({ queryKey: commentsOptions({ uid }).queryKey });
           toast.success("댓글이 수정되었습니다.");
         },
-        onError: () => {
-          toast.error("댓글 수정에 실패했습니다.");
+        onError: (error) => {
+          toast.error(error.response?.data.message ?? "댓글 수정 중 오류가 발생했습니다.");
         },
       }
     );
   };
 
   const handleDelete = () => {
-    deleteComment(
+    deleteComment.mutate(
       { id: comment.id },
       {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: commentsOptions({ uid }).queryKey });
+        onSuccess: async () => {
+          await queryClient.invalidateQueries({ queryKey: commentsOptions({ uid }).queryKey });
           toast.success("댓글이 삭제되었습니다.");
         },
-        onError: () => {
-          toast.error("댓글 삭제에 실패했습니다.");
+        onError: (error) => {
+          toast.error(error.response?.data.message ?? "댓글 삭제 중 오류가 발생했습니다.");
         },
       }
     );
@@ -114,8 +114,8 @@ export default function PostCommentItem({ comment, userId, parentId }: PostComme
             <Button variant="ghost" onClick={() => setIsEditing(false)}>
               취소
             </Button>
-            <Button onClick={handleUpdate} disabled={isUpdating}>
-              {isUpdating ? "저장 중..." : "저장"}
+            <Button onClick={handleUpdate} disabled={updateComment.isPending}>
+              저장
             </Button>
           </div>
         </div>
