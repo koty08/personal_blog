@@ -13,6 +13,9 @@ export async function POST(request: Request) {
   if (!postUid || !content) return apiError.missingParams;
 
   try {
+    const existingPost = await prisma.post.findUnique({ where: { uid: postUid } });
+    if (!existingPost) return apiError.notFound(`UID: ${postUid}의 게시글`);
+
     const comment = await prisma.comment.create({
       data: {
         postUid: postUid,

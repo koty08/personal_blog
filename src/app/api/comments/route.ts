@@ -9,6 +9,9 @@ export async function GET(request: Request) {
   if (!uid) return apiError.missingParams;
 
   try {
+    const existingPost = await prisma.post.findUnique({ where: { uid } });
+    if (!existingPost) return apiError.notFound(`UID: ${uid}의 게시글`);
+
     const comments = await prisma.comment.findMany({
       where: {
         postUid: uid,
