@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { commentCreateOptions, commentsOptions } from "@/services/comment/options";
 import { Separator } from "@/components/ui/separator";
@@ -22,7 +22,7 @@ export default function PostComment() {
   const [expandedReplyIds, setExpandedReplyIds] = useState<number[]>([]);
   const queryClient = useQueryClient();
 
-  const { data: comments, isLoading } = useQuery(commentsOptions({ uid }));
+  const { data: comments } = useSuspenseQuery(commentsOptions({ uid }));
   const { mutate: createComment, isPending: isCreating } = useMutation(commentCreateOptions);
 
   const handleCreate = () => {
@@ -66,20 +66,10 @@ export default function PostComment() {
     setExpandedReplyIds((prev) => (prev.includes(commentId) ? prev.filter((id) => id !== commentId) : [...prev, commentId]));
   };
 
-  if (isLoading) {
-    return (
-      <div className="pt-6">
-        <Separator className="my-6" />
-        <h3 className="mb-4 text-xl font-bold">댓글</h3>
-        <div>댓글을 불러오는 중입니다...</div>
-      </div>
-    );
-  }
-
   return (
     <div className="flex flex-col gap-6 pt-6">
       <Separator />
-      <h3 className="text-xl font-bold">댓글 ({comments?.length})</h3>
+      <h3 className="text-xl font-bold">댓글 ({comments.length})</h3>
       {session?.user ? (
         <div className="flex flex-col gap-2">
           <Textarea
@@ -102,7 +92,7 @@ export default function PostComment() {
       )}
       <div className="flex flex-col gap-6">
         {comments
-          ?.filter((c) => !c.parentId)
+          .filter((c) => !c.parentId)
           .map((comment) => {
             const replies = comments.filter((c) => c.parentId === comment.id);
             const isVisible = expandedReplyIds.includes(comment.id);

@@ -1,9 +1,8 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { imagePath } from "@/consts/posts";
 import { postOptions } from "@/services/post/options";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import MDEditor from "@uiw/react-md-editor";
 import { useTheme } from "next-themes";
 import { useParams } from "next/navigation";
@@ -12,7 +11,7 @@ import ReactModal from "react-modal";
 
 export default function MarkDownViewer() {
   const { uid } = useParams<{ uid: string }>();
-  const { data } = useQuery(postOptions({ uid }));
+  const { data } = useSuspenseQuery(postOptions({ uid }));
   const { resolvedTheme } = useTheme();
 
   useEffect(() => {
@@ -44,12 +43,9 @@ const CustomImage = ({ ...props }) => {
   const src = `${imagePath.client}${props.src}`;
 
   const onImgWheel = (e: React.WheelEvent<HTMLImageElement>) => {
-    // Zoom In
     if (e.nativeEvent.deltaY < 0) {
       if (scale < 5) setScale((prev) => prev + 1);
-    }
-    // Zoom Out
-    else {
+    } else {
       if (scale > 0) setScale((prev) => prev - 1);
     }
   };

@@ -1,7 +1,7 @@
 "use client";
 
 import { postOptions } from "@/services/post/options";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -19,7 +19,7 @@ const MarginByHeading: Record<string, string> = {
 
 export default function PostTOC() {
   const { uid } = useParams<{ uid: string }>();
-  const { isFetched } = useQuery(postOptions({ uid }));
+  const { isFetched } = useSuspenseQuery(postOptions({ uid }));
   const [headings, setHeadings] = useState<Heading[]>([]);
 
   useEffect(() => {
@@ -33,9 +33,9 @@ export default function PostTOC() {
   }, [isFetched]);
 
   return (
-    <div className={"sticky top-[60px] h-fit border-l-4 flex flex-col gap-1"}>
+    <div className={"sticky top-15 flex h-fit flex-col gap-1 border-l-4"}>
       {headings.map((heading) => (
-        <Link key={heading.id} href={{ hash: heading.id }} className={`${MarginByHeading[heading.type]} hover:underline`}>
+        <Link key={heading.id} href={{ hash: heading.id }} replace className={`${MarginByHeading[heading.type]} hover:underline`}>
           {heading.id.replace("-", " ")}
         </Link>
       ))}
