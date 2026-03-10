@@ -2,11 +2,12 @@
 
 import { categoryOptions } from "@/services/category/options";
 import { Button } from "../ui/button";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 export default function PostCategoryLinks() {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentCategory = searchParams.get("category");
   const { data: categories } = useSuspenseQuery(categoryOptions);
@@ -18,7 +19,10 @@ export default function PostCategoryLinks() {
   };
 
   const onButtonClicked = (name: string) => {
-    router.push(name === "전체보기" ? "/posts" : `/posts?category=${encodeURIComponent(name)}`);
+    const params = new URLSearchParams(searchParams);
+    if (name !== "전체보기") params.set("category", name);
+    else params.delete("category");
+    router.push(`${pathname}?${params}`);
   };
 
   return (
