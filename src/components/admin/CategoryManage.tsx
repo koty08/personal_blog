@@ -21,6 +21,7 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { useTypedMutation } from "@/hooks/useTypedMutation";
+import DeleteConfirmDialog from "../common/DeleteConfirmDialog";
 
 export default function CategoryManage() {
   const [newCategory, setNewCategory] = useState("");
@@ -138,7 +139,7 @@ export default function CategoryManage() {
                   ) : (
                     <>
                       <Button
-                        variant="ghost"
+                        variant="outline"
                         size="sm"
                         onClick={() =>
                           setEditingCategory({
@@ -151,22 +152,11 @@ export default function CategoryManage() {
                       </Button>
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
-                          <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-600">
+                          <Button variant="destructive" size="sm">
                             삭제
                           </Button>
                         </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>정말 삭제하시겠습니까?</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              이 카테고리에 속한 모든 게시글의 카테고리 정보가 초기화될 수 있습니다.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>취소</AlertDialogCancel>
-                            <AlertDialogAction onClick={() => handleDeleteCategory(category.id)}>삭제</AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
+                        <DeleteConfirmDialog target="댓글" onDelete={() => handleDeleteCategory(category.id)} />
                       </AlertDialog>
                     </>
                   )}

@@ -22,6 +22,7 @@ import { useParams } from "next/navigation";
 import { useRelativeTime } from "@/hooks/useRelativeTime";
 import dayjs from "dayjs";
 import { useTypedMutation } from "@/hooks/useTypedMutation";
+import DeleteConfirmDialog from "../common/DeleteConfirmDialog";
 
 interface PostCommentItemProps {
   comment: CommentWithUser;
@@ -80,28 +81,19 @@ export default function PostCommentItem({ comment, userId, parentId }: PostComme
           <span className="font-semibold">{comment.user?.name ?? "알 수 없음"}</span>
           <span className="text-muted-foreground text-sm">{relativeTime}</span>
         </div>
-        <div className="flex gap-1">
+        <div className="flex gap-2">
           {userId === comment.userId && !isEditing && (
             <>
-              <Button variant="ghost" size="sm" onClick={() => setIsEditing(true)}>
+              <Button variant="outline" size="sm" onClick={() => setIsEditing(true)}>
                 수정
               </Button>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-600">
+                  <Button variant="destructive" size="sm">
                     삭제
                   </Button>
                 </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>정말 삭제하시겠습니까?</AlertDialogTitle>
-                    <AlertDialogDescription>삭제된 댓글은 복구할 수 없습니다.</AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>취소</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDelete}>삭제</AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
+                <DeleteConfirmDialog target="댓글" onDelete={handleDelete} />
               </AlertDialog>
             </>
           )}
