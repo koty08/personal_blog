@@ -16,7 +16,7 @@ export default function useForm<T>({ initialVal, onSubmit, validator }: useFormP
     setValues({ ...values, [name]: value });
   };
 
-  const handleChangeWithVal = ({ name, value }: { name: keyof T; value: string }) => {
+  const handleChangeWithVal = ({ name, value }: { name: keyof T; value: string | boolean }) => {
     setValues({ ...values, [name]: value });
   };
 

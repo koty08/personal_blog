@@ -6,7 +6,7 @@ import { CustomPreviewImage } from "../post/MarkDownViewer";
 import { Post } from "@my-prisma/client";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Input } from "../ui/input";
-import LabelWrapper from "../ui/LabelWrapper";
+import LabelWrapper from "../common/LabelWrapper";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { useTheme } from "next-themes";
 import { useEffect } from "react";
@@ -158,7 +158,12 @@ export default function PostForm({ type, originalData }: PostFormProps) {
             <Input name="readTime" type="number" className="w-15" value={values.readTime} onChange={handleChange} />
           </LabelWrapper>
           <LabelWrapper label={postFieldLabel.published} orientation="horizontal">
-            <Checkbox id="published" className="mt-0.5 size-5 cursor-pointer" />
+            <Checkbox
+              id="published"
+              checked={values.published}
+              className="mt-0.5 size-5 cursor-pointer"
+              onCheckedChange={(val) => handleChangeWithVal({ name: "published", value: val as boolean })}
+            />
           </LabelWrapper>
         </div>
       </CardContent>
