@@ -6,6 +6,7 @@ import { Noto_Sans_KR } from "next/font/google";
 import { ThemeProvider } from "@/provider/ThemeProvider";
 import QCProvider from "@/provider/QCProvider";
 import { Toaster } from "@/components/ui/sonner";
+import GlobalBackground from "@/components/common/GlobalBackground";
 
 const open_sans = Noto_Sans_KR({ subsets: ["latin"] });
 
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko" data-locator-target="vscode" suppressHydrationWarning data-scroll-behavior="smooth">
       <body className={open_sans.className}>
+        <GlobalBackground />
         <QCProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <Header />
