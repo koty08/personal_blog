@@ -51,6 +51,7 @@ export const projects = [
   {
     title: "개인 블로그",
     desc: "Next.js 기반의 풀스택 블로그",
+    role: "풀스택 개발 · 디자인 · 배포 전반",
     tech: ["Next.js", "Tailwind CSS", "Prisma"],
     gradient: "from-blue-500/15 to-violet-500/15",
     accent: "border-blue-500/30",

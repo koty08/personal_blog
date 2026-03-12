@@ -356,39 +356,37 @@ function AboutInner() {
             </div>
           </SectionCard>
 
-          <div className="space-y-4">
-            <div className="about-reveal flex items-center gap-3">
-              <div className="bg-primary/10 rounded-xl p-2">
-                <FolderOpen className="text-primary h-6 w-6" />
-              </div>
-              <h2 className="text-3xl font-bold tracking-tight">Projects</h2>
-            </div>
-
-            {projects.map((p) => (
-              <motion.div
-                key={p.title}
-                className={`about-project-card bg-linear-to-br ${p.gradient} bg-card/80 rounded-2xl border ${p.accent} p-6 shadow-sm backdrop-blur-sm`}
-                variants={hoverLift}
-                initial="rest"
-                whileHover="hover"
-              >
-                <div className="mb-3 flex items-start justify-between">
-                  <div>
-                    <h3 className="mb-1 text-xl font-bold">{p.title}</h3>
-                    <p className="text-muted-foreground text-sm">{p.desc}</p>
+          <SectionCard icon={<FolderOpen className="text-primary h-6 w-6" />} title="Projects">
+            <div className="grid gap-4 sm:grid-cols-2">
+              {projects.map((p) => (
+                <motion.div
+                  key={p.title}
+                  className={`about-project-card flex flex-col bg-linear-to-br ${p.gradient} rounded-xl border ${p.accent} p-5 shadow-sm backdrop-blur-sm`}
+                  variants={hoverLift}
+                  initial="rest"
+                  whileHover="hover"
+                >
+                  <div className="mb-3 flex items-start justify-between">
+                    <div>
+                      <h3 className="mb-0.5 text-lg font-bold">{p.title}</h3>
+                      <p className="text-muted-foreground text-sm">{p.desc}</p>
+                    </div>
+                    <ExternalLink className="text-muted-foreground mt-0.5 h-4 w-4 shrink-0" />
                   </div>
-                  <ExternalLink className="text-muted-foreground mt-0.5 h-4 w-4 shrink-0" />
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {p.tech.map((t) => (
-                    <span key={t} className="bg-background/70 rounded-full px-2.5 py-0.5 text-xs font-medium backdrop-blur-sm">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                  <p className="text-muted-foreground mb-4 border-l-2 border-l-current/20 pl-3 text-xs leading-relaxed">
+                    {p.role}
+                  </p>
+                  <div className="mt-auto flex flex-wrap gap-1.5">
+                    {p.tech.map((t) => (
+                      <span key={t} className="bg-background/70 rounded-full px-2.5 py-0.5 text-xs font-medium backdrop-blur-sm">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </SectionCard>
 
           <SectionCard icon={<Trophy className="text-primary h-6 w-6" />} title="Awards & Experience">
             <div className="space-y-4">
