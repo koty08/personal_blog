@@ -1,3 +1,4 @@
+import { HeadingLevel } from "@/components/post/PostTOC";
 import { PostCreatePayload } from "@/services/post/interface";
 
 export const postDefaultValue = {
@@ -28,4 +29,10 @@ export const labelByOrder: Record<string, string> = {
 export const imagePath = {
   server: "./public/images/post",
   client: "/images/post",
+};
+
+export const marginByHLevel: Record<HeadingLevel, string> = {
+  h1: "ml-2.5",
+  h2: "ml-5",
+  h3: "ml-7.5",
 };

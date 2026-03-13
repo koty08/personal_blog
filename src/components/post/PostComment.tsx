@@ -72,7 +72,7 @@ export default function PostComment() {
   return (
     <div className="flex flex-col gap-6 pt-6">
       <Separator />
-      <h3 className="text-xl font-bold">댓글 ({comments.length})</h3>
+      <p className="text-xl font-bold">댓글 ({comments.length})</p>
       {session?.user ? (
         <div className="flex flex-col gap-2">
           <Textarea
