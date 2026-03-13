@@ -33,19 +33,35 @@ export async function GET(request: NextRequest) {
       orderBy = { register_date: "desc" };
   }
 
+  const where = {
+    ...(category && { category: { name: category } }),
+    published: isKoty ? !temp : true,
+  };
+
   try {
+    const totalPosts = await prisma.post.count({ where });
     const posts = await prisma.post.findMany({
       skip: (page - 1) * limit,
       take: limit,
-      where: {
-        ...(category && { category: { name: category } }),
-        published: isKoty ? !temp : true,
-      },
+      where,
       orderBy,
+      include: {
+        _count: {
+          select: {
+            comments: true,
+          },
+        },
+      },
     });
+
+    const formattedPosts = posts.map(({ _count, ...post }) => ({
+      ...post,
+      commentCount: _count.comments,
+    }));
+
     return NextResponse.json({
-      count: posts.length,
-      posts: posts,
+      count: totalPosts,
+      posts: formattedPosts,
     });
   } catch (error) {
     console.log(error);

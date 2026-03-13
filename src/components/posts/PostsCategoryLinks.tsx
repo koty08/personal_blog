@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
-export default function PostCategoryLinks() {
+export default function PostCategoryLinks({ vertical = false }: { vertical?: boolean }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -26,7 +26,7 @@ export default function PostCategoryLinks() {
   };
 
   return (
-    <div className="flex max-h-18 flex-wrap gap-2 overflow-hidden">
+    <div className={vertical ? "flex flex-col gap-1" : "flex max-h-18 flex-wrap gap-2 overflow-hidden"}>
       {[allCategory, ...categories].map((c) => {
         const isSelected = c.name === "전체보기" ? !currentCategory : currentCategory === c.name;
         return (
@@ -35,7 +35,7 @@ export default function PostCategoryLinks() {
             variant={isSelected ? "default" : "secondary"}
             size="sm"
             onClick={() => onButtonClicked(c.name)}
-            className={`rounded-lg transition-all hover:cursor-pointer ${
+            className={`rounded-md transition-all hover:cursor-pointer ${
               isSelected ? "font-semibold" : "text-muted-foreground hover:text-foreground bg-secondary/40"
             }`}
           >

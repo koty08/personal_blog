@@ -1,11 +1,10 @@
 "use client";
 
+import { Fragment } from "react";
 import Link from "next/link";
 import dayjs from "dayjs";
-import PostThumbnail from "@/components/post/PostThumbnail";
-import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { removeMDFromContent, getFirstImage } from "@/lib/markdownUtils";
+import { removeMDFromContent } from "@/lib/markdownUtils";
 import CustomPagination from "@/components/common/CustomPagination";
 import { Separator } from "@/components/ui/separator";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -30,40 +29,35 @@ export default function PostsListView() {
   const { data: categories } = useSuspenseQuery(categoryOptions);
 
   return (
-    <div className="flex flex-col gap-6">
-      {data.posts.map((post) => {
-        const path = getFirstImage(post.content);
-        return (
-          <Link key={post.uid} href={`/post/${post.uid}`} className="group">
-            <Card className="flex flex-col overflow-hidden transition-all hover:-translate-y-1 hover:shadow-md sm:flex-row">
-              <div className="aspect-video shrink-0 overflow-hidden sm:aspect-auto sm:w-72">
-                <PostThumbnail
-                  path={path}
-                  alt={post.title}
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
+    <div className="flex flex-col gap-2">
+      {data.posts.map((post, idx) => (
+        <Fragment key={post.uid}>
+          <Link href={`/post/${post.uid}`} className="group">
+            <div className={`group-hover:bg-accent/30 flex flex-col gap-2 rounded-md p-3 transition-colors`}>
+              <div className="flex items-center gap-2">
+                <Badge variant="secondary" className="shrink-0 text-xs font-normal">
+                  {categories.find((c) => c.id === post.categoryId)?.name ?? "카테고리"}
+                </Badge>
+                <h3 className="group-hover:text-primary line-clamp-1 flex-1 font-medium transition-colors">{post.title}</h3>
+                <span className="text-muted-foreground hidden shrink-0 text-xs sm:block">
+                  {dayjs(post.register_date).format("YYYY-MM-DD")}
+                </span>
               </div>
-              <div className="flex flex-1 flex-col gap-4 p-6">
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center justify-between">
-                    <Badge variant="secondary" className="font-normal">
-                      {categories.find((c) => c.id === post.categoryId)?.name ?? "카테고리"}
-                    </Badge>
-                    <span className="text-muted-foreground text-sm">{dayjs(post.register_date).format("YYYY-MM-DD")}</span>
-                  </div>
-                  <h3 className="group-hover:text-primary line-clamp-1 text-xl font-bold tracking-tight transition-colors">{post.title}</h3>
-                  <p className="text-muted-foreground line-clamp-2 text-sm leading-relaxed">{removeMDFromContent(post.content)}</p>
-                </div>
-                <div className="text-muted-foreground mt-auto flex items-center gap-3 text-xs">
-                  <span>{`조회수 ${post.views}`}</span>
+              <div className="text-muted-foreground flex items-center gap-5">
+                <p className="line-clamp-1 flex-1 text-sm">{removeMDFromContent(post.content)}</p>
+                <div className="flex shrink-0 items-center gap-2 text-xs">
+                  <span>{`조회 ${post.views}`}</span>
                   <Separator orientation="vertical" className="h-3" />
-                  <span>{`읽는 시간 ${post.readTime}분`}</span>
+                  <span>{`댓글 ${post.commentCount}`}</span>
+                  <Separator orientation="vertical" className="h-3" />
+                  <span>{`${post.readTime}분`}</span>
                 </div>
               </div>
-            </Card>
+            </div>
           </Link>
-        );
-      })}
+          {idx !== data.posts.length - 1 && <Separator />}
+        </Fragment>
+      ))}
       <CustomPagination totalCount={data.count} itemPerPage={POST_PER_PAGE} />
     </div>
   );

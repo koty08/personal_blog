@@ -18,7 +18,9 @@ export interface PostsPayload {
   temp?: boolean;
 }
 
+export type PostsWithCommentCount = Post & { commentCount: number };
+
 export interface PostsWithCount {
-  posts: Post[];
+  posts: PostsWithCommentCount[];
   count: number;
 }
