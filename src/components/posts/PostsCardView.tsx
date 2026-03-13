@@ -28,7 +28,7 @@ export default function PostCardView() {
         const path = getFirstImage(post.content);
         return (
           <Link key={post.uid} href={`/post/${post.uid}`} className="group">
-            <Card className="hover:bg-accent h-full gap-5 overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-md">
+            <Card className="hover:bg-accent/30 h-full gap-5 overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-md">
               <div className="aspect-video w-full overflow-hidden">
                 <PostThumbnail
                   path={path}
@@ -36,7 +36,7 @@ export default function PostCardView() {
                   className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
-              <div className="flex flex-col gap-2 p-4">
+              <div className="flex flex-col gap-2 px-4 pt-4">
                 <div className="text-secondary-foreground flex flex-wrap justify-between gap-2">
                   <Badge variant="secondary" className="font-normal">
                     {categories.find((c) => c.id === post.categoryId)?.name ?? "카테고리"}
