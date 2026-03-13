@@ -44,6 +44,7 @@
     "react-dom": "19.1.0",
     "react-error-boundary": "^6.1.1",
     "react-modal": "^3.16.3",
+    "rehype-sanitize": "^6.0.0",
     "remove-markdown": "^0.6.2",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1"
