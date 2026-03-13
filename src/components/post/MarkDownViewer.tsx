@@ -19,13 +19,11 @@ export default function MarkDownViewer() {
   }, [resolvedTheme]);
 
   return (
-    data && (
       <MDEditor.Markdown
         source={data.content}
         components={{ img: CustomImage }}
         className="bg-inherit! whitespace-pre-wrap"
-      ></MDEditor.Markdown>
-    )
+      />
   );
 }
 

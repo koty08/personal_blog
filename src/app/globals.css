@@ -235,6 +235,8 @@ html.dark ::-webkit-scrollbar-thumb:hover {
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    /* react-md-editor 스타일 오버라이딩 */
+    --color-border-muted: var(--color-border);
   }
   body {
     @apply bg-background text-foreground;
