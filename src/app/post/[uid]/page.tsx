@@ -42,11 +42,9 @@ export default async function PostPage({ params }: { params: Params }) {
           </div>
         </main>
         <aside className="hidden lg:col-span-2 lg:block">
-          <div className="sticky top-24">
-            <QueryWrapper loadingStyle="h-30">
-              <PostTOC />
-            </QueryWrapper>
-          </div>
+          <QueryWrapper loadingStyle="h-30">
+            <PostTOC />
+          </QueryWrapper>
         </aside>
       </div>
     </HydrationBoundary>

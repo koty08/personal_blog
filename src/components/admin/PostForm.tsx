@@ -23,6 +23,7 @@ import CategoryManage from "./CategoryManage";
 import { postDefaultValue, postFieldLabel } from "@/consts/posts";
 import dynamic from "next/dynamic";
 import { useTypedMutation } from "@/hooks/useTypedMutation";
+import rehypeSanitize from "rehype-sanitize";
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 interface PostFormProps {
@@ -135,6 +136,7 @@ export default function PostForm({ type, originalData }: PostFormProps) {
             onChange={(val) => handleChangeWithVal({ name: "content", value: val ?? "" })}
             onPaste={onPasted}
             previewOptions={{
+              rehypePlugins: [[rehypeSanitize]],
               components: {
                 img: (props) =>
                   CustomPreviewImage({

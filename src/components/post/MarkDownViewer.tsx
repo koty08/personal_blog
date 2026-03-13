@@ -8,6 +8,7 @@ import { useTheme } from "next-themes";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ReactModal from "react-modal";
+import rehypeSanitize from "rehype-sanitize";
 
 export default function MarkDownViewer() {
   const { uid } = useParams<{ uid: string }>();
@@ -19,11 +20,12 @@ export default function MarkDownViewer() {
   }, [resolvedTheme]);
 
   return (
-      <MDEditor.Markdown
-        source={data.content}
-        components={{ img: CustomImage }}
-        className="bg-inherit! whitespace-pre-wrap"
-      />
+    <MDEditor.Markdown
+      source={data.content}
+      components={{ img: CustomImage }}
+      className="bg-inherit! whitespace-pre-wrap"
+      rehypePlugins={[rehypeSanitize]}
+    />
   );
 }
 
