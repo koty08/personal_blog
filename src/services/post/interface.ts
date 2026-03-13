@@ -8,7 +8,7 @@ export type PostCreatePayload = Omit<Post, "id" | "register_date" | "updated_dat
 
 export type PostUpdatePayload = PostCreatePayload & "updated_date";
 
-export type PostsOrderType = "latest" | "views" | "oldest" | "updated";
+export type PostsOrderType = "latest" | "popularity" | "oldest" | "updated";
 
 export interface PostsPayload {
   order?: PostsOrderType;

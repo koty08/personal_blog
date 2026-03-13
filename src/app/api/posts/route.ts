@@ -20,8 +20,8 @@ export async function GET(request: NextRequest) {
     case "latest":
       orderBy = { register_date: "desc" };
       break;
-    case "views":
-      orderBy = [{ views: "desc" }, { register_date: "desc" }];
+    case "popularity":
+      orderBy = [{ views: "desc" }, { comments: { _count: "desc" } }, { register_date: "desc" }];
       break;
     case "oldest":
       orderBy = { register_date: "asc" };
