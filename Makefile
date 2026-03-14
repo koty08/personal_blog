@@ -4,6 +4,7 @@ COMPOSE_DEV = docker-compose -f docker-compose.yaml -f docker-compose.dev.yaml
 # 최초 배포
 init:
 	docker volume create personal_blog_db_data
+	docker volume create post_images
 	$(COMPOSE) up --build -d
 
 # 재배포

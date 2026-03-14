@@ -20,7 +20,11 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    volumes:
+      - post_images:/usr/src/app/public/images/post
 
 volumes:
   personal_blog_db_data:
+    external: true
+  post_images:
     external: true

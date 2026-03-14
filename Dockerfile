@@ -28,6 +28,7 @@ RUN npm ci --omit=dev
 COPY --from=builder /usr/src/app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /usr/src/app/.next ./.next
 COPY --from=builder /usr/src/app/public ./public
+RUN mkdir -p ./public/images/post
 COPY --from=builder /usr/src/app/prisma ./prisma
 COPY --from=builder /usr/src/app/entrypoint.sh ./entrypoint.sh
 RUN chmod +x ./entrypoint.sh
