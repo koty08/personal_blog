@@ -17,7 +17,7 @@ export interface Heading {
 
 export default function PostTOC() {
   const { uid } = useParams<{ uid: string }>();
-  const { isFetched } = useSuspenseQuery(postOptions({ uid }));
+  const { data } = useSuspenseQuery(postOptions({ uid }));
   const [headings, setHeadings] = useState<Heading[]>([]);
   const [activeId, setActiveId] = useState<string>("");
 
@@ -30,7 +30,7 @@ export default function PostTOC() {
         text: el.textContent ?? "",
       }));
     setHeadings(normalizeHeadings(rawHeadings));
-  }, [isFetched]);
+  }, [data.content]);
 
   useEffect(() => {
     if (headings.length === 0) return;
@@ -40,7 +40,7 @@ export default function PostTOC() {
         const visible = entries.find((e) => e.isIntersecting);
         if (visible) setActiveId(visible.target.id.replace("user-content-", ""));
       },
-      { rootMargin: "0px 0px -80% 0px" }
+      { rootMargin: "0px 0px -85% 0px", threshold: 1 }
     );
 
     headings.forEach(({ id }) => {
