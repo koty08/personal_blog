@@ -13,7 +13,7 @@ interface PostThumbnailProps {
 const fallbackPath = "/images/common/no-image.png";
 
 export default function PostThumbnail({ path, alt, className }: PostThumbnailProps) {
-  const [src, setSrc] = useState(path ? imagePath.client + path : fallbackPath);
+  const [src, setSrc] = useState(path ? imagePath + path : fallbackPath);
 
   const onError = () => {
     setSrc(fallbackPath);

@@ -40,7 +40,7 @@ const zoomValue: Record<number, string> = {
 const CustomImage = ({ ...props }) => {
   const [scale, setScale] = useState<number>(1);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const src = `${imagePath.client}${props.src}`;
+  const src = `${imagePath}${props.src}`;
 
   const onImgWheel = (e: React.WheelEvent<HTMLImageElement>) => {
     if (e.nativeEvent.deltaY < 0) {
@@ -64,7 +64,7 @@ const CustomImage = ({ ...props }) => {
 };
 
 export const CustomPreviewImage = ({ ...props }) => {
-  return <img {...props} src={`${imagePath.client}${props.src}`} alt="image" className="hover:cursor-pointer" />;
+  return <img {...props} src={`${imagePath}${props.src}`} alt="image" className="hover:cursor-pointer" />;
 };
 
 const modalStyles: ReactModal.Styles = {

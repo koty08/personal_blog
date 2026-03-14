@@ -4,7 +4,7 @@ import { getAllImages } from "@/lib/markdownUtils";
 import fs from "fs/promises";
 import { apiError } from "@/consts/apiError";
 import { checkIsKotyWrapper } from "@/lib/auth-server";
-import { imagePath } from "@/consts/posts";
+import path from "path";
 
 export async function GET(request: NextRequest) {
   const uid = request.nextUrl.searchParams.get("uid");
@@ -107,6 +107,8 @@ export const PUT = checkIsKotyWrapper(async (request: NextRequest) => {
   }
 });
 
+const imageServerPath = path.join(process.cwd(), "public/images/post");
+
 export const DELETE = checkIsKotyWrapper(async (request: NextRequest) => {
   const uid = request.nextUrl.searchParams.get("uid");
   if (!uid) return apiError.missingParams;
@@ -124,7 +126,7 @@ export const DELETE = checkIsKotyWrapper(async (request: NextRequest) => {
         },
       }),
     ]);
-    await Promise.all(existingImagePaths.map((path) => fs.rm(`${imagePath.server}${path}`)));
+    await Promise.all(existingImagePaths.map((path) => fs.rm(`${imageServerPath}${path}`)));
     return new NextResponse(null, { status: 204 });
   } catch {
     return apiError.internalServerError("게시글 삭제");
