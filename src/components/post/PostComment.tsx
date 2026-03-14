@@ -117,7 +117,7 @@ export default function PostComment() {
                   {isVisible ? "숨기기" : replies.length ? `답글 ${replies.length}개 보기` : `답글 달기`}
                 </Button>
                 {areRepliesVisible && (
-                  <div className="bg-card relative mt-2 ml-8 flex flex-col gap-3 rounded-sm px-4 py-3 shadow-lg">
+                  <div className="bg-card/40 relative mt-2 ml-8 flex flex-col gap-3 rounded-sm px-4 py-3 shadow-lg">
                     <CornerDownRight className="absolute top-1 -left-7" />
                     {replies.map((reply) => (
                       <PostCommentItem key={reply.id} comment={reply} userId={session?.user.id} parentId={comment.id} />

@@ -4,17 +4,7 @@ import { useState } from "react";
 import { CommentWithUser } from "@/services/comment/interface";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { commentDeleteOptions, commentsOptions, commentUpdateOptions } from "@/services/comment/options";

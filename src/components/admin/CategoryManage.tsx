@@ -9,17 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "../ui/alert-dialog";
+import { AlertDialog, AlertDialogTrigger } from "../ui/alert-dialog";
 import { useTypedMutation } from "@/hooks/useTypedMutation";
 import DeleteConfirmDialog from "../common/DeleteConfirmDialog";
 

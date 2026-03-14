@@ -2,17 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "../ui/button";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { postDeleteOptions } from "@/services/post/options";
 import { toast } from "sonner";
 import { useTypedMutation } from "@/hooks/useTypedMutation";

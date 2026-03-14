@@ -36,7 +36,7 @@ export default function PostCategoryLinks({ vertical = false }: { vertical?: boo
             size="sm"
             onClick={() => onButtonClicked(c.name)}
             className={`rounded-md transition-all hover:cursor-pointer ${
-              isSelected ? "font-semibold" : "text-muted-foreground hover:text-foreground bg-secondary/40"
+              isSelected ? "font-semibold" : "text-muted-foreground hover:text-foreground bg-secondary"
             }`}
           >
             {c.name}

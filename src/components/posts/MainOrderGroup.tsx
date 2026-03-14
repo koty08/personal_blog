@@ -13,7 +13,7 @@ export default function MainOrderGroup() {
   };
 
   return (
-    <div className="bg-muted/50 flex items-center gap-1 rounded-lg px-2 py-1">
+    <div className="bg-muted flex items-center gap-1 rounded-lg px-2 py-1">
       {Object.entries(omit(labelByOrder, ["oldest"])).map(([key, label]) => (
         <Button
           key={key}
