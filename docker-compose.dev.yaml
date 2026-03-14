@@ -1,5 +1,11 @@
 services:
+  db:
+    env_file:
+      - .env.dev
+
   app:
+    env_file:
+      - .env.dev
     build:
       context: .
       target: development
@@ -12,6 +18,8 @@ services:
     command: npm run dev
 
   studio:
+    env_file:
+      - .env.dev
     build:
       context: .
       target: development
@@ -22,7 +30,6 @@ services:
       - "5555:5555"
     command: npx prisma studio --port 5555 --browser none
     environment:
-      DATABASE_URL: ${DATABASE_URL}
       HOST: 0.0.0.0
     depends_on:
       - db

@@ -4,7 +4,7 @@
 FROM node:22-alpine AS base
 WORKDIR /usr/src/app
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
 # 1. Development stage
 FROM base AS development
@@ -23,7 +23,9 @@ FROM node:22-alpine AS runner
 WORKDIR /usr/src/app
 ENV NODE_ENV=production
 COPY --from=builder /usr/src/app/package*.json ./
-RUN npm install --omit=dev
+RUN npm ci --omit=dev
+# builder에서 생성된 prisma client 복사 (prisma는 devDependency라 generate 불가)
+COPY --from=builder /usr/src/app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /usr/src/app/.next ./.next
 COPY --from=builder /usr/src/app/public ./public
 COPY --from=builder /usr/src/app/prisma ./prisma
