@@ -9,6 +9,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ReactModal from "react-modal";
 import rehypeSanitize from "rehype-sanitize";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 export default function MarkDownViewer() {
   const { uid } = useParams<{ uid: string }>();
@@ -42,21 +43,57 @@ const CustomImage = ({ ...props }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const src = `${imagePath}${props.src}`;
 
-  const onImgWheel = (e: React.WheelEvent<HTMLImageElement>) => {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
+  const handleWheel = (e: React.WheelEvent<HTMLImageElement>) => {
+    e.stopPropagation();
     if (e.nativeEvent.deltaY < 0) {
       if (scale < 5) setScale((prev) => prev + 1);
     } else {
-      if (scale > 0) setScale((prev) => prev - 1);
+      if (scale > 1) setScale((prev) => prev - 1);
     }
   };
   ReactModal.setAppElement("#main");
 
   return (
     <span>
-      <img {...props} src={src} alt="image" className="hover:cursor-pointer" onClick={() => setIsOpen(true)} />
-      <ReactModal isOpen={isOpen} onRequestClose={() => setIsOpen(false)} style={modalStyles}>
-        <div className="flex h-full w-full items-center justify-center" onClick={() => setIsOpen(false)}>
-          <img {...props} src={src} alt="image" className={`${zoomValue[scale]}`} onWheel={onImgWheel} />
+      <Tooltip>
+        <TooltipTrigger>
+          <img {...props} src={src} alt="image" className="hover:cursor-pointer" onClick={() => setIsOpen(true)} />
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>클릭하여 이미지를 확대할 수 있습니다.</p>
+        </TooltipContent>
+      </Tooltip>
+      <ReactModal
+        isOpen={isOpen}
+        onRequestClose={() => {
+          setIsOpen(false);
+          setScale(1);
+        }}
+        style={modalStyles}
+      >
+        <div
+          className="flex h-full w-full items-center justify-center"
+          onClick={() => {
+            setIsOpen(false);
+            setScale(1);
+          }}
+          onWheel={handleWheel}
+        >
+          <img {...props} src={src} alt="image" className={`transition-transform duration-150 ${zoomValue[scale]}`} />
+          <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full bg-black/50 px-4 py-2 text-sm text-white">
+            스크롤로 확대/축소 · 클릭으로 닫기
+          </div>
         </div>
       </ReactModal>
     </span>
