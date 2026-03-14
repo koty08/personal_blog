@@ -3,6 +3,7 @@ import dayjs, { Dayjs } from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import updateLocale from "dayjs/plugin/updateLocale";
 import "dayjs/locale/ko";
+import { dateFormat } from "@/consts/common";
 
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
@@ -37,7 +38,7 @@ export const useRelativeTime = (targetDate: Dayjs) => {
       if (diffInHours < 24) {
         setDisplayTime(target.fromNow());
       } else {
-        setDisplayTime(target.format("YYYY년 MM월 DD일"));
+        setDisplayTime(target.format(dateFormat));
       }
     };
 

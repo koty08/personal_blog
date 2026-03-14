@@ -11,6 +11,7 @@ import { PostsOrderType } from "@/services/post/interface";
 import { categoryOptions } from "@/services/category/options";
 import { Badge } from "../ui/badge";
 import dayjs from "dayjs";
+import { dateFormat } from "@/consts/common";
 
 export default function PostCardView() {
   const searchParams = useSearchParams();
@@ -41,7 +42,7 @@ export default function PostCardView() {
                   <Badge variant="secondary" className="font-normal">
                     {categories.find((c) => c.id === post.categoryId)?.name ?? "카테고리"}
                   </Badge>
-                  {dayjs(post.register_date).format("YYYY-MM-DD")}
+                  {dayjs(post.register_date).format(dateFormat)}
                 </div>
                 <CardTitle className="line-clamp-1 text-lg">{post.title}</CardTitle>
                 <CardContent className="text-muted-foreground p-0 text-sm">

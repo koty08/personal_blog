@@ -12,6 +12,7 @@ import { postsOptions } from "@/services/post/options";
 import { categoryOptions } from "@/services/category/options";
 import { useSearchParams } from "next/navigation";
 import { PostsOrderType } from "@/services/post/interface";
+import { dateFormat } from "@/consts/common";
 
 const POST_PER_PAGE = 8;
 
@@ -40,7 +41,7 @@ export default function PostsListView() {
                 </Badge>
                 <h3 className="line-clamp-1 flex-1 font-medium transition-colors">{post.title}</h3>
                 <span className="text-muted-foreground hidden shrink-0 text-xs sm:block">
-                  {dayjs(post.register_date).format("YYYY-MM-DD")}
+                  {dayjs(post.register_date).format(dateFormat)}
                 </span>
               </div>
               <div className="text-muted-foreground flex items-center gap-5">
