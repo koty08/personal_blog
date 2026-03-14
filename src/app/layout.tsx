@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/provider/ThemeProvider";
 import QCProvider from "@/provider/QCProvider";
 import { Toaster } from "@/components/ui/sonner";
 import GlobalBackground from "@/components/common/GlobalBackground";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const open_sans = Noto_Sans_KR({ subsets: ["latin"] });
 
@@ -22,12 +23,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <GlobalBackground />
         <QCProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            <Header />
-            <div id="main" className="container mx-auto min-h-[85vh] max-w-6xl space-y-12 px-5 py-5 md:py-10">
-              {children}
-            </div>
-            <Footer />
-            <Toaster />
+            <TooltipProvider>
+              <Header />
+              <div id="main" className="container mx-auto min-h-[85vh] max-w-6xl space-y-12 px-5 py-5 md:py-10">
+                {children}
+              </div>
+              <Footer />
+              <Toaster />
+            </TooltipProvider>
           </ThemeProvider>
         </QCProvider>
       </body>
