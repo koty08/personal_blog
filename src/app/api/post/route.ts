@@ -82,7 +82,7 @@ export const PUT = checkIsKotyWrapper(async (request: NextRequest) => {
     const imagesToDelete = existingImagePaths.filter((path) => !newImagePaths.includes(path));
 
     const newPost = await prisma.$transaction(async (tx) => {
-      const post = await prisma.post.update({
+      const post = await tx.post.update({
         where: { uid },
         data: {
           ...body,
@@ -91,9 +91,9 @@ export const PUT = checkIsKotyWrapper(async (request: NextRequest) => {
         },
       });
 
-      if (imagesToDelete.length) await prisma.postImage.deleteMany({ where: { path: { in: imagesToDelete }, postId: existingPost.id } });
+      if (imagesToDelete.length) await tx.postImage.deleteMany({ where: { path: { in: imagesToDelete }, postId: existingPost.id } });
       if (imagesToAdd.length)
-        await prisma.postImage.createMany({
+        await tx.postImage.createMany({
           data: imagesToAdd.map((path) => ({ path, postId: existingPost.id })),
         });
 
@@ -124,9 +124,7 @@ export const DELETE = checkIsKotyWrapper(async (request: NextRequest) => {
         },
       }),
     ]);
-    existingImagePaths.forEach(async (path) => {
-      await fs.rm(`${imagePath.server}${path}`);
-    });
+    await Promise.all(existingImagePaths.map((path) => fs.rm(`${imagePath.server}${path}`)));
     return new NextResponse(null, { status: 204 });
   } catch {
     return apiError.internalServerError("게시글 삭제");
