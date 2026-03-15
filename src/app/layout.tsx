@@ -8,6 +8,7 @@ import QCProvider from "@/provider/QCProvider";
 import { Toaster } from "@/components/ui/sonner";
 import GlobalBackground from "@/components/common/GlobalBackground";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import ScrollToTopButton from "@/components/common/ScrollToTopButton";
 
 const open_sans = Noto_Sans_KR({ subsets: ["latin"] });
 
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 {children}
               </div>
               <Footer />
+              <ScrollToTopButton />
               <Toaster />
             </TooltipProvider>
           </ThemeProvider>
