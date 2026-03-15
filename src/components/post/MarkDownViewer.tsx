@@ -5,6 +5,7 @@ import { postOptions } from "@/services/post/options";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import MDEditor from "@uiw/react-md-editor";
 import { useTheme } from "next-themes";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ReactModal from "react-modal";
@@ -68,7 +69,16 @@ const CustomImage = ({ ...props }) => {
     <span>
       <Tooltip>
         <TooltipTrigger>
-          <img {...props} src={src} alt="image" className="hover:cursor-pointer" onClick={() => setIsOpen(true)} />
+          <Image
+            {...props}
+            src={src}
+            alt="image"
+            width={0}
+            height={0}
+            sizes="100vw"
+            className="h-auto w-auto hover:cursor-pointer"
+            onClick={() => setIsOpen(true)}
+          />
         </TooltipTrigger>
         <TooltipContent>
           <p>클릭하여 이미지를 확대할 수 있습니다.</p>
@@ -90,7 +100,15 @@ const CustomImage = ({ ...props }) => {
           }}
           onWheel={handleWheel}
         >
-          <img {...props} src={src} alt="image" className={`transition-transform duration-150 ${zoomValue[scale]}`} />
+          <Image
+            {...props}
+            src={src}
+            alt="image"
+            width={0}
+            height={0}
+            sizes="100vw"
+            className={`h-auto w-auto transition-transform duration-150 ${zoomValue[scale]}`}
+          />
           <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full bg-black/50 px-4 py-2 text-sm text-white">
             스크롤로 확대/축소 · 클릭으로 닫기
           </div>
