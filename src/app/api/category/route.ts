@@ -7,7 +7,15 @@ export async function GET() {
   try {
     const categories = await prisma.category.findMany({
       include: {
-        _count: true,
+        _count: {
+          select: {
+            posts: {
+              where: {
+                published: true,
+              },
+            },
+          },
+        },
       },
     });
     return NextResponse.json(
