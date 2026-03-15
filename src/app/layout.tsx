@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <TooltipProvider>
               <Header />
-              <div id="main" className="container mx-auto min-h-[85vh] max-w-6xl space-y-12 px-5 py-5 md:py-10">
+              <div id="main" className="container mx-auto min-h-[84vh] max-w-6xl space-y-12 px-5 py-5 md:py-10">
                 {children}
               </div>
               <Footer />
