@@ -26,7 +26,7 @@ export default async function Posts() {
           </div>
         </aside>
         <div className="flex flex-col gap-6">
-          <div className="flex items-center justify-between gap-3 lg:justify-end">
+          <div className="flex flex-wrap items-center justify-between gap-3 lg:justify-end">
             <div className="lg:hidden">
               <QueryWrapper loadingStyle="h-9" errorStyle="h-9">
                 <PostCategoryLinks />

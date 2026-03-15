@@ -19,20 +19,13 @@ html {
 ::-webkit-scrollbar-thumb {
   background: #888;
   border-radius: 10px;
-  border: 3px solid #fff;
+  border: 3px solid transparent;
+  background-clip: padding-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
-}
-
-html.dark ::-webkit-scrollbar-thumb {
-  background: #c4c4c4;
-  border: 3px solid #030712;
-}
-
-html.dark ::-webkit-scrollbar-thumb:hover {
-  background: #fafafa;
+  background-clip: padding-box;
 }
 
 @keyframes scale-1 {
