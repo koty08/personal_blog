@@ -25,7 +25,7 @@ export default function MarkDownViewer() {
     <MDEditor.Markdown
       source={data.content}
       components={{ img: CustomImage }}
-      className="bg-inherit! whitespace-pre-wrap"
+      className="bg-transparent! whitespace-pre-wrap"
       rehypePlugins={[rehypeSanitize]}
     />
   );
@@ -76,7 +76,12 @@ const CustomImage = ({ ...props }) => {
             width={0}
             height={0}
             sizes="100vw"
-            className="h-auto w-auto hover:cursor-pointer"
+            className="hover:cursor-pointer"
+            onLoad={(e) => {
+              const img = e.currentTarget;
+              img.style.width = `${img.naturalWidth}px`;
+              img.style.aspectRatio = `${img.naturalWidth} / ${img.naturalHeight}`;
+            }}
             onClick={() => setIsOpen(true)}
           />
         </TooltipTrigger>
@@ -107,7 +112,12 @@ const CustomImage = ({ ...props }) => {
             width={0}
             height={0}
             sizes="100vw"
-            className={`h-auto w-auto transition-transform duration-150 ${zoomValue[scale]}`}
+            onLoad={(e) => {
+              const img = e.currentTarget;
+              img.style.width = `${img.naturalWidth}px`;
+              img.style.aspectRatio = `${img.naturalWidth} / ${img.naturalHeight}`;
+            }}
+            className={`transition-transform duration-150 ${zoomValue[scale]}`}
           />
           <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full bg-black/50 px-4 py-2 text-sm text-white">
             스크롤로 확대/축소 · 클릭으로 닫기
