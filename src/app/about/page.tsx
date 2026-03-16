@@ -20,9 +20,18 @@ const hoverLift: Variants = {
   hover: { scale: 1.06, y: -4, transition: { type: "spring", stiffness: 320, damping: 18 } },
 };
 
+const traitContainer: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
+};
+
+const traitItem: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+};
+
 function AboutInner() {
   const heroRef = useRef<HTMLElement>(null);
-  const dotGridRef = useRef<HTMLDivElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const marqueeRef = useRef<HTMLDivElement>(null);
@@ -59,17 +68,6 @@ function AboutInner() {
         },
       });
 
-      gsap.to(dotGridRef.current, {
-        y: "38%",
-        ease: "none",
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: 1,
-        },
-      });
-
       gsap.to(heroContentRef.current, {
         y: -90,
         opacity: 0,
@@ -82,23 +80,12 @@ function AboutInner() {
         },
       });
 
-      gsap.to(".about-scroll-indicator", {
-        opacity: 0,
-        ease: "none",
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: "12% top",
-          end: "28% top",
-          scrub: 1,
-        },
-      });
-
       ScrollTrigger.batch(".about-reveal", {
         onEnter: (batch) => {
           gsap.fromTo(
             batch,
-            { opacity: 0, y: 64 },
-            { opacity: 1, y: 0, stagger: 0.12, duration: 0.9, ease: "power3.out", overwrite: true }
+            { opacity: 0, y: 64, filter: "blur(8px)" },
+            { opacity: 1, y: 0, filter: "blur(0px)", stagger: 0.12, duration: 0.9, ease: "power3.out", overwrite: true }
           );
         },
         once: true,
@@ -172,16 +159,13 @@ function AboutInner() {
         className="from-primary/50 via-primary to-primary/50 fixed top-0 right-0 left-0 z-50 h-1.25 origin-left bg-linear-to-r"
         style={{ transform: "scaleX(0)" }}
       />
-      <main>
+      <main className="relative z-10">
         <section
           ref={heroRef}
           className="relative -mt-5 flex h-screen flex-col items-center justify-center overflow-hidden md:-mt-10"
           onMouseMove={onMouseMove}
         >
-          <div
-            ref={dotGridRef}
-            className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_1px_1px,var(--muted-foreground)_1px,transparent_0)] mask-[linear-gradient(to_bottom,transparent_5%,white_75%)] bg-size-[45px_45px] opacity-30 [-webkit-mask-image:linear-gradient(to_bottom,transparent_5%,white_75%)]"
-          />
+          <div className="from-primary/12 pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,var(--tw-gradient-from),transparent)]" />
           <div ref={heroContentRef} className="relative z-10 text-center">
             <motion.div style={{ x: textX, y: textY }} className="space-y-5 px-4">
               <h1 className="min-h-[1.2em] text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
@@ -204,25 +188,22 @@ function AboutInner() {
               </motion.p>
             </motion.div>
           </div>
-          <div
-            className={`about-scroll-indicator absolute bottom-10 z-10 transition-opacity duration-500 ${typingDone ? "opacity-100" : "opacity-0"}`}
-          >
+          <div className={`absolute bottom-30 z-10 transition-opacity duration-500 ${typingDone ? "opacity-100" : "opacity-0"}`}>
             <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}>
               <MoveDown className="h-10 w-10" />
             </motion.div>
           </div>
         </section>
-
         <div className="container mx-auto max-w-5xl space-y-24 px-4 py-20 md:px-6">
           <SectionCard icon={<User className="text-primary h-6 w-6" />} title="About Me">
             <div className="flex flex-col gap-8 md:flex-row">
               <div className="flex shrink-0 flex-col items-center gap-4 md:w-52 md:items-start">
-                <div className="ring-primary/20 rounded-full ring-2 ring-offset-2 ring-offset-transparent">
+                <div className="ring-primary/20 rounded-full ring-2 ring-offset-2 ring-offset-transparent transition-transform duration-300 hover:scale-105">
                   <Image
                     src={`https://github.com/${profile.githubUsername}.png`}
                     alt={profile.name}
-                    width={96}
-                    height={96}
+                    width={112}
+                    height={112}
                     className="rounded-full object-cover"
                   />
                 </div>
@@ -263,11 +244,17 @@ function AboutInner() {
                 <blockquote className="border-l-primary/40 text-muted-foreground border-l-2 pl-4 leading-relaxed italic">
                   {profile.quote}
                 </blockquote>
-                <div className="flex flex-col gap-6">
+                <motion.div
+                  className="flex flex-col gap-6"
+                  variants={traitContainer}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, amount: 0.3 }}
+                >
                   {profile.traits.map((trait) => {
                     const Icon = trait.icon;
                     return (
-                      <div key={trait.label} className="flex gap-3">
+                      <motion.div key={trait.label} className="flex gap-3" variants={traitItem}>
                         <div className="bg-primary/10 mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg">
                           <Icon className="text-primary h-4 w-4" />
                         </div>
@@ -275,17 +262,17 @@ function AboutInner() {
                           <p className="text-sm font-semibold">{trait.label}</p>
                           <p className="text-muted-foreground mt-0.5 text-sm">{trait.desc}</p>
                         </div>
-                      </div>
+                      </motion.div>
                     );
                   })}
-                </div>
+                </motion.div>
               </div>
             </div>
           </SectionCard>
 
           <SectionCard icon={<Code2 className="text-primary h-6 w-6" />} title="Skills">
             <div
-              className="mb-8 cursor-default overflow-hidden py-2"
+              className="mb-8 cursor-default overflow-hidden mask-[linear-gradient(to_right,transparent,white_10%,white_90%,transparent)] py-2"
               onMouseEnter={() => marqueeTweenRef.current?.timeScale(0.15)}
               onMouseLeave={() => marqueeTweenRef.current?.timeScale(1)}
             >
@@ -334,10 +321,10 @@ function AboutInner() {
           <SectionCard icon={<Briefcase className="text-primary h-6 w-6" />} title="Career">
             <div className="about-career-section space-y-0">
               {careers.map((item, i) => (
-                <div key={i} className="flex gap-6">
+                <div key={i} className="group hover:bg-primary/5 -mx-3 flex gap-6 rounded-xl px-3 py-2 transition-colors">
                   <div className="flex flex-col items-center">
                     <motion.div
-                      className="border-primary bg-background z-10 mt-1.5 h-3.5 w-3.5 shrink-0 rounded-full border-2"
+                      className="border-primary bg-primary/20 group-hover:bg-primary/50 z-10 mt-1.5 h-3.5 w-3.5 shrink-0 rounded-full border-2 transition-colors"
                       initial={{ scale: 0, opacity: 0 }}
                       whileInView={{ scale: 1, opacity: 1 }}
                       viewport={{ once: true }}
@@ -361,7 +348,7 @@ function AboutInner() {
               {projects.map((p) => (
                 <motion.div
                   key={p.title}
-                  className={`about-project-card flex flex-col bg-linear-to-br ${p.gradient} rounded-xl border ${p.accent} p-5 shadow-sm backdrop-blur-sm`}
+                  className={`about-project-card group flex flex-col bg-linear-to-br ${p.gradient} rounded-xl border ${p.accent} p-5 shadow-sm backdrop-blur-sm`}
                   variants={hoverLift}
                   initial="rest"
                   whileHover="hover"
@@ -371,14 +358,12 @@ function AboutInner() {
                       <h3 className="mb-0.5 text-lg font-bold">{p.title}</h3>
                       <p className="text-muted-foreground text-sm">{p.desc}</p>
                     </div>
-                    <ExternalLink className="text-muted-foreground mt-0.5 h-4 w-4 shrink-0" />
+                    <ExternalLink className="text-muted-foreground mt-0.5 h-4 w-4 shrink-0 opacity-50 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100" />
                   </div>
-                  <p className="text-muted-foreground mb-4 border-l-2 border-l-current/20 pl-3 text-xs leading-relaxed">
-                    {p.role}
-                  </p>
+                  <p className="text-muted-foreground mb-4 border-l-2 border-l-current/20 pl-3 text-xs leading-relaxed">{p.role}</p>
                   <div className="mt-auto flex flex-wrap gap-1.5">
                     {p.tech.map((t) => (
-                      <span key={t} className="bg-background/70 rounded-full px-2.5 py-0.5 text-xs font-medium backdrop-blur-sm">
+                      <span key={t} className="bg-background/90 rounded-full px-2.5 py-0.5 text-xs font-medium">
                         {t}
                       </span>
                     ))}
