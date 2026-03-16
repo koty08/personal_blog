@@ -26,7 +26,7 @@ export default function PostCategoryLinks({ vertical = false }: { vertical?: boo
   };
 
   return (
-    <div className={vertical ? "flex flex-col gap-1" : "flex max-h-18 flex-wrap gap-2 overflow-hidden"}>
+    <div className={vertical ? "flex flex-col gap-2" : "flex max-h-18 flex-wrap gap-2 overflow-hidden"}>
       {[allCategory, ...categories].map((c) => {
         const isSelected = c.name === "전체보기" ? !currentCategory : currentCategory === c.name;
         return (

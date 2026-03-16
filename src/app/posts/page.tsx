@@ -39,7 +39,7 @@ export default async function Posts() {
               </QueryWrapper>
             </div>
           </div>
-          <QueryWrapper loadingStyle="h-160" errorStyle="h-32">
+          <QueryWrapper loadingStyle="h-156" errorStyle="h-32">
             <PostsListView />
           </QueryWrapper>
         </div>
