@@ -74,7 +74,7 @@ export default function PostComment() {
       <Separator />
       <p className="text-xl font-bold">댓글 ({comments.length})</p>
       {session?.user ? (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-4">
           <Textarea
             placeholder="댓글을 입력하세요..."
             value={newComment}
@@ -103,7 +103,7 @@ export default function PostComment() {
             const isReplying = replyId === comment.id;
 
             return (
-              <div key={comment.id} className="flex flex-col gap-2">
+              <div key={comment.id} className="mt-6 flex flex-col gap-2">
                 <PostCommentItem comment={comment} userId={session?.user.id} />
                 <Button
                   variant="link"

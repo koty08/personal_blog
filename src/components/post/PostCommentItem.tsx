@@ -74,7 +74,7 @@ export default function PostCommentItem({ comment, userId, parentId }: PostComme
         <div className="flex gap-2">
           {userId === comment.userId && !isEditing && (
             <>
-              <Button variant="outline" size="sm" onClick={() => setIsEditing(true)}>
+              <Button size="sm" onClick={() => setIsEditing(true)}>
                 수정
               </Button>
               <AlertDialog>
