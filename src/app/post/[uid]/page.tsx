@@ -28,8 +28,8 @@ export default async function PostPage({ params }: { params: Params }) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="grid grid-cols-12 gap-x-8 px-5 pt-4">
-        <main className="col-span-12 lg:col-span-10">
+      <div className="pt-4 lg:grid lg:grid-cols-12 lg:gap-x-8">
+        <main className="lg:col-span-10">
           <div className="flex flex-col gap-12">
             <QueryWrapper loadingStyle="h-[calc(100vh-10rem)]" errorStyle="h-[calc(100vh-10rem)]">
               <PostInformation />
