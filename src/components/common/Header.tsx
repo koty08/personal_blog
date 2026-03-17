@@ -28,7 +28,7 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="mx-5 mt-2 mb-4 flex items-center justify-between">
+    <header className="mx-auto mt-2.5 mb-4 flex max-w-430 items-center justify-between px-4">
       <Link href={"/"} className="flex items-center gap-x-2 text-lg font-bold">
         <Avatar>
           <AvatarImage src="https://avatars.githubusercontent.com/u/43947871?s=40&v=4" />
