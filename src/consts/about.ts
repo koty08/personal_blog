@@ -1,17 +1,29 @@
 import {
   SiReact,
   SiNextdotjs,
-  SiReactquery,
   SiTypescript,
   SiTailwindcss,
   SiRedux,
-  SiGit,
-  SiFigma,
   SiPrisma,
   SiDocker,
   IconType,
+  SiTanstack,
+  SiJavascript,
+  SiReduxsaga,
+  SiStyledcomponents,
+  SiCodeceptjs,
+  SiNginx,
+  SiGithub,
+  SiGitlab,
+  SiWebpack,
+  SiVite,
+  SiJira,
+  SiConfluence,
+  SiExpress,
+  SiBetterauth,
+  SiSpringboot,
 } from "@icons-pack/react-simple-icons";
-import { Box, Users, Zap, Shield } from "lucide-react";
+import { Layers, Users, Zap, Shield } from "lucide-react";
 
 export const heroTitle = "안녕하세요, FE 개발자 Koty입니다.";
 
@@ -27,7 +39,7 @@ export const profile = {
     major: "정보컴퓨터공학부",
     period: "2020.03 - 2027.02 (졸업 예정)",
   },
-  quote: "협업의 가치를 믿고, 보안과 기술의 조화를 추구하는 FE 개발자입니다.",
+  quote: "협업의 가치를 믿고, 기술과 보안의 조화를 추구합니다.",
   traits: [
     {
       icon: Users,
@@ -65,22 +77,42 @@ export const skillCategories: Record<
     icon: IconType;
   }[]
 > = {
-  Frontend: [
+  "Frontend Core": [
     { name: "React", icon: SiReact },
     { name: "Next.js", icon: SiNextdotjs },
     { name: "TypeScript", icon: SiTypescript },
-    { name: "Tailwind CSS", icon: SiTailwindcss },
+    { name: "Javascript", icon: SiJavascript },
   ],
-  "State & Data": [
+  "State Management": [
+    { name: "Tanstack Query", icon: SiTanstack },
+    { name: "Zustand", icon: Layers },
     { name: "Redux", icon: SiRedux },
-    { name: "React Query", icon: SiReactquery },
-    { name: "Zustand", icon: Box },
+    { name: "Redux Saga", icon: SiReduxsaga },
   ],
-  Tools: [
-    { name: "Git", icon: SiGit },
-    { name: "Figma", icon: SiFigma },
+  Styling: [
+    { name: "Tailwind CSS", icon: SiTailwindcss },
+    { name: "Styled Components", icon: SiStyledcomponents },
+  ],
+  "Testing & Building": [
+    { name: "Playwright", icon: Layers },
+    { name: "CodeceptJS", icon: SiCodeceptjs },
+    { name: "Webpack", icon: SiWebpack },
+    { name: "Vite", icon: SiVite },
+  ],
+  Collaboration: [
+    { name: "GitHub", icon: SiGithub },
+    { name: "GitLab", icon: SiGitlab },
+    { name: "Jira", icon: SiJira },
+    { name: "Confluence", icon: SiConfluence },
+    { name: "Slack", icon: Layers },
+  ],
+  "Backend & Infra": [
+    { name: "Express.js", icon: SiExpress },
     { name: "Prisma", icon: SiPrisma },
+    { name: "Better Auth", icon: SiBetterauth },
+    { name: "Spring Boot", icon: SiSpringboot },
     { name: "Docker", icon: SiDocker },
+    { name: "Nginx", icon: SiNginx },
   ],
 };
 
