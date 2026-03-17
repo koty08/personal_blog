@@ -2,7 +2,7 @@
 
 import "./about.css";
 import { useRef, useEffect } from "react";
-import { MoveDown, Briefcase, Trophy, Code2, User, FolderOpen, ExternalLink, GraduationCap, Mail } from "lucide-react";
+import { MoveDown, Briefcase, Trophy, Code2, User, FolderOpen, ExternalLink, GraduationCap, Mail, CalendarFold } from "lucide-react";
 import { motion, useMotionValue, useSpring, useTransform, Variants } from "framer-motion";
 import { ReactLenis, useLenis } from "lenis/react";
 import gsap from "gsap";
@@ -375,16 +375,44 @@ function AboutInner() {
 
           <SectionCard icon={<Trophy className="text-primary h-6 w-6" />} title="Awards & Experience">
             <div className="space-y-4">
-              {awardExperiences.map((award, i) => (
+              {[...awardExperiences].map((award, i) => (
                 <motion.div
                   key={i}
-                  className="about-award-item border-l-primary/40 hover:border-l-primary flex gap-4 border-l-2 pl-4 transition-colors"
+                  className="about-award-item border-l-primary/40 hover:border-l-primary flex items-start gap-2 border-l-2 pl-3 transition-colors"
                   whileHover={{ x: 6 }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 >
-                  <div>
-                    <p className="font-semibold">{award.title}</p>
-                    <p className="text-muted-foreground text-sm">{award.desc}</p>
+                  <span
+                    className={`mt-0.5 shrink-0 rounded-md border px-2 py-0.5 text-xs ${
+                      award.type === "award"
+                        ? "border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                        : "border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-blue-400"
+                    }`}
+                  >
+                    {award.type === "award" ? "수상" : "활동"}
+                  </span>
+                  <div className="flex flex-1 flex-wrap items-start justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <p className="font-semibold">{award.title}</p>
+                      {award.link && (
+                        <a
+                          href={award.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-muted-foreground hover:text-primary transition-colors"
+                        >
+                          <ExternalLink className="h-4 w-4" />
+                        </a>
+                      )}
+                    </div>
+                    <div className="flex shrink-0 items-center gap-2">
+                      {award.date && (
+                        <div className="text-muted-foreground flex items-center gap-1 text-sm">
+                          <CalendarFold className="h-4 w-4" />
+                          {award.date}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </motion.div>
               ))}

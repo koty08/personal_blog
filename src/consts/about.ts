@@ -127,4 +127,24 @@ export const careers = [
   },
 ];
 
-export const awardExperiences = [{ title: "2020 제 5회 부산 ICT 융합 해커톤", desc: "--" }];
+export type AwardExperience = {
+  type: "award" | "experience";
+  date: string;
+  title: string;
+  link?: string;
+};
+
+export const awardExperiences: AwardExperience[] = [
+  { type: "experience", date: "2025.09 ~ ing", title: "교내 개발 동아리 활동 - PNUops", link: "https://pnuops.github.io/pnu-ops/" },
+  { type: "experience", date: "2025.03", title: "2025 정컴 바이브코딩 해커톤", link: "https://github.com/202155570/junvis_pnu" },
+  { type: "experience", date: "2020.03 ~ 2023.06", title: "교내 보안 학술 동아리 활동 - KEEPER", link: "https://keeper.or.kr/" },
+  {
+    type: "experience",
+    date: "2021.05 ~ 2021.09",
+    title: "부산대학교 제4회 창의융합 소프트웨어 해커톤",
+    link: "https://github.com/koty08/PNU_4th_hackathon_USDH",
+  },
+  { type: "award", date: "2020.11", title: "제6회 정보보안 온라인 경진대회 우수상 수상" },
+  { type: "award", date: "2020.11", title: "제5회 부산 ICT 융합 해커톤 최우수상 수상" },
+  { type: "experience", date: "2020.07 ~ 2020.09", title: "부울경 화이트해커 양성사업 1기" },
+];
