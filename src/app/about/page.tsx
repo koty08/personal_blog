@@ -12,12 +12,13 @@ import SectionCard from "@/components/about/SectionCard";
 import { skillCategories, allSkills, careers, projects, awardExperiences, heroDesc, heroTitle, profile } from "@/consts/about";
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const hoverLift: Variants = {
   rest: { scale: 1, y: 0 },
-  hover: { scale: 1.06, y: -4, transition: { type: "spring", stiffness: 320, damping: 18 } },
+  hover: { scale: 1.03, y: -4, transition: { type: "spring", stiffness: 320, damping: 18 } },
 };
 
 const traitContainer: Variants = {
@@ -348,17 +349,40 @@ function AboutInner() {
               {projects.map((p) => (
                 <motion.div
                   key={p.title}
-                  className={`about-project-card group flex flex-col bg-linear-to-br ${p.gradient} rounded-xl border ${p.accent} p-5 shadow-sm backdrop-blur-sm`}
+                  className={cn(
+                    p.gradient,
+                    p.accent,
+                    `about-project-card group flex flex-col rounded-xl border bg-linear-to-br p-5 shadow-sm backdrop-blur-sm`
+                  )}
                   variants={hoverLift}
                   initial="rest"
                   whileHover="hover"
                 >
                   <div className="mb-3 flex items-start justify-between">
                     <div>
-                      <h3 className="mb-0.5 text-lg font-bold">{p.title}</h3>
+                      <h3 className="mb-1.5 text-lg font-bold">{p.title}</h3>
                       <p className="text-muted-foreground text-sm">{p.desc}</p>
                     </div>
-                    <ExternalLink className="text-muted-foreground mt-0.5 h-4 w-4 shrink-0 opacity-50 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100" />
+                    <div className="flex items-center gap-2">
+                      <a
+                        href={p.githubLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-muted-foreground hover:text-primary transition-colors"
+                      >
+                        <SiGithub className="h-4.5 w-4.5" />
+                      </a>
+                      {p.link && (
+                        <a
+                          href={p.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-muted-foreground hover:text-primary transition-colors"
+                        >
+                          <ExternalLink className="h-4.5 w-4.5" />
+                        </a>
+                      )}
+                    </div>
                   </div>
                   <p className="text-muted-foreground mb-4 border-l-2 border-l-current/20 pl-3 text-xs leading-relaxed">{p.role}</p>
                   <div className="mt-auto flex flex-wrap gap-1.5">
