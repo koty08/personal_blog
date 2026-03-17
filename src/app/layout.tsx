@@ -2,7 +2,7 @@ import "./globals.css";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import type { Metadata } from "next";
-import { Noto_Sans_KR } from "next/font/google";
+import localFont from "next/font/local";
 import { ThemeProvider } from "@/provider/ThemeProvider";
 import QCProvider from "@/provider/QCProvider";
 import { Toaster } from "@/components/ui/sonner";
@@ -10,7 +10,12 @@ import GlobalBackground from "@/components/common/GlobalBackground";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ScrollToTopButton from "@/components/common/ScrollToTopButton";
 
-const open_sans = Noto_Sans_KR({ subsets: ["latin"] });
+const pretendard = localFont({
+  src: "../../public/fonts/pretendard/PretendardVariable.woff2",
+  display: "swap",
+  weight: "100 900",
+  variable: "--font-pretendard",
+});
 
 export const metadata: Metadata = {
   title: "Koty's Blog",
@@ -20,7 +25,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko" data-locator-target="vscode" suppressHydrationWarning data-scroll-behavior="smooth">
-      <body className={open_sans.className}>
+      <body className={pretendard.className}>
         <GlobalBackground />
         <QCProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
