@@ -13,6 +13,7 @@ import { skillCategories, allSkills, careers, projects, awardExperiences, heroDe
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { highlightNumbers } from "@/lib/highlightNumbers";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -195,7 +196,7 @@ function AboutInner() {
             </motion.div>
           </div>
         </section>
-        <div className="container mx-auto max-w-5xl space-y-24 px-4 py-20 md:px-6">
+        <div className="container mx-auto max-w-5xl space-y-24">
           <SectionCard icon={<User className="text-primary h-6 w-6" />} title="About Me">
             <div className="flex flex-col gap-8 md:flex-row">
               <div className="flex shrink-0 flex-col items-center gap-4 md:w-52 md:items-start">
@@ -320,12 +321,12 @@ function AboutInner() {
           </SectionCard>
 
           <SectionCard icon={<Briefcase className="text-primary h-6 w-6" />} title="Career">
-            <div className="about-career-section space-y-0">
+            <div className="about-career-section">
               {careers.map((item, i) => (
-                <div key={i} className="group hover:bg-primary/5 -mx-3 flex gap-6 rounded-xl px-3 py-2 transition-colors">
-                  <div className="flex flex-col items-center">
+                <div key={i} className="flex gap-5">
+                  <div className="flex flex-col items-center pt-2">
                     <motion.div
-                      className="border-primary bg-primary/20 group-hover:bg-primary/50 z-10 mt-1.5 h-3.5 w-3.5 shrink-0 rounded-full border-2 transition-colors"
+                      className="border-primary bg-primary/20 z-10 h-3.5 w-3.5 shrink-0 rounded-full border-2"
                       initial={{ scale: 0, opacity: 0 }}
                       whileInView={{ scale: 1, opacity: 1 }}
                       viewport={{ once: true }}
@@ -333,11 +334,52 @@ function AboutInner() {
                     />
                     {i < careers.length - 1 && <div className="about-career-line bg-border mt-2 w-px flex-1 origin-top" />}
                   </div>
-                  <div className="pb-6">
-                    <h3 className="text-xl font-bold">{item.role}</h3>
-                    <p className="text-primary text-sm font-medium">{item.company}</p>
-                    <p className="text-muted-foreground text-sm">{item.period}</p>
-                    <p className="text-muted-foreground mt-2">{item.desc}</p>
+                  <div className="flex-1">
+                    <div className="mb-4 flex flex-wrap items-start justify-between gap-2">
+                      <div>
+                        <h3 className="text-xl font-bold">{item.company}</h3>
+                        <p className="text-primary mt-0.5 text-sm font-semibold">{item.role}</p>
+                      </div>
+                      <div className="flex shrink-0 items-center gap-2 rounded-full border px-3 py-0.5 text-sm">
+                        <CalendarFold className="stroke-muted-foreground h-3.5 w-3.5" />
+                        <span className="text-muted-foreground">{item.period}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      {item.projects.map((project, j) => (
+                        <div
+                          key={j}
+                          className="bg-muted/40 hover:bg-muted/60 border-border/40 hover:border-border/60 rounded-xl border p-4 transition-colors"
+                        >
+                          <div className="mb-2.5 flex items-start justify-between gap-2">
+                            <div>
+                              <h4 className="font-semibold">{project.title}</h4>
+                              <p className="text-muted-foreground mt-0.5 text-xs">{project.subtitle.trim()}</p>
+                            </div>
+                            {project.link && (
+                              <a
+                                href={project.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-muted-foreground hover:text-primary shrink-0 transition-colors"
+                              >
+                                <ExternalLink className="h-5 w-5" />
+                              </a>
+                            )}
+                          </div>
+                          <ul className="space-y-1.5">
+                            {project.desc.map((line, i) => {
+                              return (
+                                <li key={`desc${i}`} className="text-muted-foreground flex items-start gap-2 text-sm">
+                                  <span className="bg-primary/50 mt-2 h-1 w-1 shrink-0 rounded-full" />
+                                  <span>{highlightNumbers(line)}</span>
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -352,17 +394,14 @@ function AboutInner() {
                   className={cn(
                     p.gradient,
                     p.accent,
-                    `about-project-card group flex flex-col rounded-xl border bg-linear-to-br p-5 shadow-sm backdrop-blur-sm`
+                    `about-project-card group flex flex-col gap-3 rounded-xl border bg-linear-to-br p-5 shadow-sm backdrop-blur-sm`
                   )}
                   variants={hoverLift}
                   initial="rest"
                   whileHover="hover"
                 >
-                  <div className="mb-3 flex items-start justify-between">
-                    <div>
-                      <h3 className="mb-1.5 text-lg font-bold">{p.title}</h3>
-                      <p className="text-muted-foreground text-sm">{p.desc}</p>
-                    </div>
+                  <div className="mb-1 flex items-center justify-between">
+                    <h3 className="text-lg font-bold">{p.title}</h3>
                     <div className="flex items-center gap-2">
                       <a
                         href={p.githubLink}
@@ -384,7 +423,8 @@ function AboutInner() {
                       )}
                     </div>
                   </div>
-                  <p className="text-muted-foreground mb-4 border-l-2 border-l-current/20 pl-3 text-xs leading-relaxed">{p.role}</p>
+                  <p className="text-muted-foreground text-sm">{p.desc}</p>
+                  <p className="text-muted-foreground border-l-2 border-l-current/20 pl-3 text-xs leading-relaxed">{p.role}</p>
                   <div className="mt-auto flex flex-wrap gap-1.5">
                     {p.tech.map((t) => (
                       <span key={t} className="bg-background/90 rounded-full px-2.5 py-0.5 text-xs font-medium">

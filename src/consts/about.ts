@@ -25,7 +25,7 @@ import {
 } from "@icons-pack/react-simple-icons";
 import { Layers, Users, Zap, Shield } from "lucide-react";
 
-export const heroTitle = "안녕하세요, FE 개발자 Koty입니다.";
+export const heroTitle = "안녕하세요, 개발자 Koty입니다.";
 
 export const heroDesc = "빠르게 변화하고 발전되는 기술들에 맞추어 다양하고 폭넓은 경험을 추구합니다.";
 
@@ -109,10 +109,45 @@ export const allSkills = Object.values(skillCategories).flat();
 
 export const careers = [
   {
-    role: "Frontend Developer",
     company: "AI Spera",
+    role: "Frontend Developer - 연구원(산업기능요원)",
     period: "2022.08 - 2025.07",
-    desc: "웹 애플리케이션 설계 및 개발",
+    projects: [
+      {
+        title: "Criminal IP",
+        subtitle: "사이버 위협 인텔리전스(CTI) 검색 엔진",
+        link: "https://www.criminalip.io",
+        desc: [
+          "월간 사용자 수 30만명 이상, 전 세계 이용자를 위한 다국어 처리",
+          "특정 IP 및 도메인과 관련된 방대한 데이터들을 효과적으로 시각화",
+          "제품의 월/연간 구독형 결제 게이트웨이 연동 작업 (Stripe/Paypal)",
+          "Lighthouse를 통한 분석 및 페이지 Performance 향상",
+          "Bundle Analyzer를 통한 분석 및 최적화 - 청크 사이즈 20% 개선, 빌드 속도 35% 개선",
+          "주요 패키지 및 취약점 존재 패키지 업그레이드 및 마이그레이션",
+        ],
+      },
+      {
+        title: "Criminal IP 브라우저 확장 프로그램",
+        subtitle: " 접속한 사이트의 IP/도메인 정보 분석 및 실시간 대응이 가능한 브라우저 확장 프로그램",
+        link: "https://chromewebstore.google.com/detail/criminal-ip-ai-based-phis/dhkbjdnlhahnffncheehbnoaecncdpdk",
+        desc: [
+          "주간 사용자 수 5천명 이상, 웹스토어 추천 배지 채택",
+          "설계 및 제품 개발, 웹스토어에 배포 전반 수행",
+          "서비스 워커 <=> 페이지 런타임 메시지 전달 최적화",
+          "다양한 Chrome 확장 프로그램 API, 스토리지 및 IndexedDB 활용",
+        ],
+      },
+      {
+        title: "Criminal IP 아웃룩 애드인",
+        subtitle: "메일에 포함되어 있는 URL/도메인 정보 분석 플러그인",
+        link: "https://marketplace.microsoft.com/ko-KR/product/WA200007637",
+        desc: [
+          "설계 및 제품 개발, 마켓플레이스에 배포 전반 수행",
+          "비동기 및 병렬 처리로 스캔 속도 극대화",
+          "낮은 버전의 아웃룩에서 호환 가능하도록 폴리필 및 트랜스파일링 설정",
+        ],
+      },
+    ],
   },
 ];
 
