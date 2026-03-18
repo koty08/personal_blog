@@ -14,6 +14,7 @@ import { useSearchParams } from "next/navigation";
 import { PostsOrderType } from "@/services/post/interface";
 import { dateFormat } from "@/consts/common";
 import { Eye, MessageSquare, ScrollText } from "lucide-react";
+import NoData from "../common/NoData";
 
 const POST_PER_PAGE = 8;
 
@@ -29,6 +30,8 @@ export default function PostsListView() {
     })
   );
   const { data: categories } = useSuspenseQuery(categoryOptions);
+
+  if (data.count === 0) return <NoData target="생성된 게시글" />;
 
   return (
     <div className="flex flex-col gap-2">

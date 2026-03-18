@@ -13,6 +13,7 @@ import { Badge } from "../ui/badge";
 import dayjs from "dayjs";
 import { dateFormat } from "@/consts/common";
 import { Eye, MessageSquare, ScrollText } from "lucide-react";
+import NoData from "../common/NoData";
 
 export default function PostCardView() {
   const searchParams = useSearchParams();
@@ -23,6 +24,8 @@ export default function PostCardView() {
     })
   );
   const { data: categories } = useSuspenseQuery(categoryOptions);
+
+  if (data.count === 0) return <NoData target="생성된 게시글" />;
 
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
