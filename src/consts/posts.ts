@@ -1,6 +1,8 @@
 import { HeadingLevel } from "@/components/post/PostTOC";
 import { PostCreatePayload } from "@/services/post/interface";
 
+export const POST_PER_PAGE = 9;
+
 export const postDefaultValue = {
   uid: "",
   title: "",

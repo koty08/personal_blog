@@ -3,13 +3,14 @@ import prisma from "../prisma";
 import { Prisma } from "@my-prisma/client";
 import { apiError } from "@/consts/apiError";
 import { checkIsKoty } from "@/lib/auth-server";
+import { POST_PER_PAGE } from "@/consts/posts";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
   const order = searchParams.get("order");
   const category = searchParams.get("category");
   const page = Number(searchParams.get("page") || 1);
-  const limit = Number(searchParams.get("limit") || 8);
+  const limit = Number(searchParams.get("limit") || POST_PER_PAGE);
   const temp = Boolean(searchParams.get("temp"));
 
   let orderBy: Prisma.PostOrderByWithRelationInput | Prisma.PostOrderByWithRelationInput[];
