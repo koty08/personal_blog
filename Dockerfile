@@ -22,11 +22,11 @@ RUN npm run build
 FROM node:22-alpine AS runner
 WORKDIR /usr/src/app
 ENV NODE_ENV=production
-COPY --from=builder /usr/src/app/package*.json ./
-RUN npm ci --omit=dev
-# builder에서 생성된 prisma client 복사 (prisma는 devDependency라 generate 불가)
+# standalone 빌드 결과물 복사 (node_modules 포함)
+COPY --from=builder /usr/src/app/.next/standalone ./
+# builder에서 생성된 prisma client 복사 (standalone의 node_modules에 덮어씌움)
 COPY --from=builder /usr/src/app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /usr/src/app/.next ./.next
+COPY --from=builder /usr/src/app/.next/static ./.next/static
 COPY --from=builder /usr/src/app/public ./public
 RUN mkdir -p ./public/images/post
 COPY --from=builder /usr/src/app/prisma ./prisma
@@ -34,4 +34,4 @@ COPY --from=builder /usr/src/app/entrypoint.sh ./entrypoint.sh
 RUN chmod +x ./entrypoint.sh
 EXPOSE 3000
 ENTRYPOINT ["./entrypoint.sh"]
-CMD ["npm", "run", "start"]
+CMD ["node", "server.js"]
