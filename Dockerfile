@@ -13,6 +13,8 @@ FROM base AS development
 
 # 2. Builder stage (프로덕션 빌드용)
 FROM base AS builder
+ARG NEXT_PUBLIC_BASE_URL
+ENV NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL
 COPY prisma ./prisma/
 RUN npx prisma generate
 COPY . .
