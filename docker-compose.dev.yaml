@@ -1,0 +1,35 @@
+services:
+  db:
+    env_file:
+      - .env.dev
+
+  app:
+    env_file:
+      - .env.dev
+    build:
+      context: .
+      target: development
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+      - /usr/src/app/.next
+    ports:
+      - "3000:3000"
+    command: npm run dev
+
+  studio:
+    env_file:
+      - .env.dev
+    build:
+      context: .
+      target: development
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "5555:5555"
+    command: npx prisma studio --port 5555 --browser none
+    environment:
+      HOST: 0.0.0.0
+    depends_on:
+      - db

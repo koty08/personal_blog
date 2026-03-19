@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client"
+  output = "./generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Post {
+  id  Int @id @default(autoincrement())
+  uid String @unique
+  title String
+  content String
+  register_date DateTime @default(now())
+  updated_date DateTime @default(now())
+  views Int @default(0)
+  published Boolean @default(false)
+  readTime Int @default(10)
+  category Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+  images PostImage[]
+  comments Comment[]
+}
+
+model Category {
+  id Int @id @default(autoincrement())
+  name String @unique
+  posts Post[]
+}
+
+model PostImage {
+  id Int @id @default(autoincrement())
+  path String
+  post Post @relation(fields: [postId], references: [id])
+  postId Int
+}
+
+model Comment {
+  id Int @id @default(autoincrement())
+  content String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  post Post @relation(fields: [postUid], references: [uid], onDelete: Cascade)
+  postUid String
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parentId Int?
+  parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies  Comment[] @relation("CommentReplies")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified Boolean
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  sessions      Session[]
+  accounts      Account[]
+  comments      Comment[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  userId                String
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}

@@ -1,0 +1,13 @@
+import Link from "next/link";
+
+export default function NotFound() {
+  return (
+    <div className="flex h-screen flex-col items-center justify-center gap-4">
+      <h2 className="pb-3 text-4xl font-bold">404 | Not Found</h2>
+      <p className="text-xl">요청하신 페이지를 찾을 수 없습니다.</p>
+      <Link href="/" className="rounded-sm border px-3 py-2">
+        메인 페이지로 돌아가기
+      </Link>
+    </div>
+  );
+}

@@ -1,0 +1,36 @@
+# 볼륨 초기화: docker-compose -f docker-compose.yaml -f docker-compose.dev.yaml down -v
+# 실행: docker-compose -f docker-compose.yaml -f docker-compose.dev.yaml up --build
+services:
+  db:
+    image: postgres:17
+    restart: always
+    volumes:
+      - personal_blog_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  app:
+    build:
+      context: .
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    volumes:
+      - post_images:/usr/src/app/public/images/post
+
+volumes:
+  personal_blog_db_data:
+    external: true
+  post_images:
+    external: true

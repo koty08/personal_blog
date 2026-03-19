@@ -1,0 +1,8 @@
+/* GSAP will animate these elements in */
+.about-reveal {
+  opacity: 0;
+}
+
+.about-project-card {
+  opacity: 0;
+}
