@@ -22,13 +22,17 @@ RUN npm run build
 FROM node:22-alpine AS runner
 WORKDIR /usr/src/app
 ENV NODE_ENV=production
-# standalone 빌드 결과물 복사 (node_modules 포함)
+ENV HOSTNAME=0.0.0.0
+# standalone 빌드 결과물 복사
 COPY --from=builder /usr/src/app/.next/standalone ./
+COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/.next/static ./.next/static
 COPY --from=builder /usr/src/app/public ./public
 RUN mkdir -p ./public/images/post
-# 스키마, 마이그레이션, 생성된 prisma client 복사
+# 스키마, 마이그레이션, 생성된 prisma client, prisma.config.ts 복사
 COPY --from=builder /usr/src/app/prisma ./prisma
+COPY --from=builder /usr/src/app/prisma.config.ts ./prisma.config.ts
+# prisma 마이그레이션 진행
 COPY --from=builder /usr/src/app/entrypoint.sh ./entrypoint.sh
 RUN chmod +x ./entrypoint.sh
 EXPOSE 3000
