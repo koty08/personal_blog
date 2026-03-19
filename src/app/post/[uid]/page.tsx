@@ -12,6 +12,23 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { checkIsKoty } from "@/lib/auth-server";
 import { commentsOptions } from "@/services/comment/options";
 import QueryWrapper from "@/lib/QueryWrapper";
+import type { Metadata } from "next";
+import { removeMDFromContent } from "@/lib/markdownUtils";
+
+export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+  const { uid } = await params;
+  if (!uid) return {};
+
+  const post = await getQueryClient()
+    .fetchQuery(postOptions({ uid }))
+    .catch(() => null);
+  if (!post) return {};
+
+  return {
+    title: post.title,
+    description: removeMDFromContent(post.content.slice(0, 100)),
+  };
+}
 
 export default async function PostPage({ params }: { params: Params }) {
   const { uid } = await params;
