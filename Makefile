@@ -11,6 +11,10 @@ init:
 deploy:
 	$(COMPOSE) up --build -d
 
+# 재시작 (이미지 재빌드 없음)
+restart:
+	$(COMPOSE) up -d
+
 # 종료
 down:
 	$(COMPOSE) down
@@ -27,4 +31,4 @@ dev:
 dev-down:
 	$(COMPOSE_DEV) down -v
 
-.PHONY: init deploy down logs dev dev-down
+.PHONY: init deploy restart down logs dev dev-down
