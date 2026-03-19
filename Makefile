@@ -1,5 +1,5 @@
-COMPOSE = docker compose -f docker-compose.yaml -f docker-compose.prod.yaml
-COMPOSE_DEV = docker compose -f docker-compose.yaml -f docker-compose.dev.yaml
+COMPOSE = docker compose --env-file .env.prod -f docker-compose.yaml -f docker-compose.prod.yaml
+COMPOSE_DEV = docker compose --env-file .env.dev -f docker-compose.yaml -f docker-compose.dev.yaml
 
 # 최초 배포
 init:
