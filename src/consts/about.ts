@@ -161,7 +161,7 @@ export const projects = [
     tech: ["Next.js", "Tailwind CSS", "Tanstack Query", "Prisma"],
     gradient: "from-blue-500/10 to-violet-500/10 dark:from-blue-500/20 dark:to-violet-500/20",
     accent: "border-blue-500/25 dark:border-blue-400/35",
-    link: "https://koty.dev",
+    link: "https://kotys.dev",
     githubLink: "https://github.com/koty08/personal_blog",
   },
   {
