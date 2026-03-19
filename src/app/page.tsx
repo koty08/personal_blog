@@ -29,7 +29,9 @@ export default async function Main({ searchParams }: { searchParams: SearchParam
       <div className="space-y-8">
         <div className="flex flex-col items-center justify-between gap-4 border-b pb-4 sm:flex-row">
           <h2 className="text-2xl font-semibold tracking-tight">{`${labelByOrder[order ?? "latest"]} 게시물`}</h2>
-          <MainOrderGroup />
+          <QueryWrapper loadingStyle="h-10">
+            <MainOrderGroup />
+          </QueryWrapper>
         </div>
         <QueryWrapper loadingStyle="h-192" errorStyle="h-32">
           <PostCardView />
