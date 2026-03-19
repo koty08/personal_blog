@@ -22,6 +22,7 @@ import {
   SiExpress,
   SiBetterauth,
   SiSpringboot,
+  SiFigma,
 } from "@icons-pack/react-simple-icons";
 import { Layers, Users, Zap, Shield } from "lucide-react";
 
@@ -81,6 +82,7 @@ export const skillCategories: Record<
   Styling: [
     { name: "Tailwind CSS", icon: SiTailwindcss },
     { name: "Styled Components", icon: SiStyledcomponents },
+    { name: "Figma", icon: SiFigma },
   ],
   "Testing & Building": [
     { name: "Playwright", icon: Layers },

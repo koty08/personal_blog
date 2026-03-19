@@ -288,11 +288,11 @@ export default function AboutInner() {
               </div>
             </div>
 
-            <div className="space-y-5">
+            <div className="grid gap-4 sm:grid-cols-2">
               {Object.entries(skillCategories).map(([cat, items]) => (
                 <div key={cat}>
-                  <p className="text-muted-foreground mb-3 text-xs font-semibold tracking-widest uppercase">{cat}</p>
-                  <div className="flex flex-wrap gap-2">
+                  <p className="text-muted-foreground mb-2 text-xs font-semibold tracking-widest uppercase">{cat}</p>
+                  <div className="flex flex-wrap gap-1.5">
                     {items.map((skill) => {
                       const Icon = skill.icon;
                       return (
@@ -301,10 +301,10 @@ export default function AboutInner() {
                           variants={hoverLift}
                           initial="rest"
                           whileHover="hover"
-                          className="bg-secondary/60 hover:bg-primary/10 hover:border-primary/25 flex cursor-default items-center gap-2 rounded-xl border border-transparent px-3.5 py-2 transition-colors"
+                          className="bg-secondary/60 hover:bg-primary/10 hover:border-primary/25 flex cursor-default items-center gap-1.5 rounded-lg border border-transparent px-2.5 py-1 transition-colors"
                         >
-                          <Icon className="text-primary/70 h-4 w-4 shrink-0" />
-                          <span className="text-sm font-medium">{skill.name}</span>
+                          <Icon className="text-primary/70 h-3.5 w-3.5 shrink-0" />
+                          <span className="text-xs font-medium">{skill.name}</span>
                         </motion.div>
                       );
                     })}
