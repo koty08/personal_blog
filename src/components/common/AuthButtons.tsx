@@ -3,6 +3,7 @@
 import { authClient } from "@/lib/auth-client";
 import { Button } from "../ui/button";
 import { usePathname, useRouter } from "next/navigation";
+import { SiGithub } from "@icons-pack/react-simple-icons";
 
 export const LoginButton = () => {
   const pathname = usePathname();
@@ -15,6 +16,7 @@ export const LoginButton = () => {
 
   return (
     <Button variant={"outline"} onClick={handleClick}>
+      <SiGithub />
       GitHub 계정으로 로그인
     </Button>
   );
