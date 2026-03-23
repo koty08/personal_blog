@@ -27,6 +27,7 @@ ENV NODE_ENV=production
 ENV HOSTNAME=0.0.0.0
 # standalone 빌드 결과물 복사
 COPY --from=builder /usr/src/app/.next/standalone ./
+# prisma migrate 위해 node_modules 전체 복사
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/.next/static ./.next/static
 COPY --from=builder /usr/src/app/public ./public
@@ -34,9 +35,6 @@ RUN mkdir -p ./public/images/post
 # 스키마, 마이그레이션, 생성된 prisma client, prisma.config.ts 복사
 COPY --from=builder /usr/src/app/prisma ./prisma
 COPY --from=builder /usr/src/app/prisma.config.ts ./prisma.config.ts
-# prisma 마이그레이션 진행
-COPY --from=builder /usr/src/app/entrypoint.sh ./entrypoint.sh
-RUN chmod +x ./entrypoint.sh
+
 EXPOSE 3000
-ENTRYPOINT ["./entrypoint.sh"]
-CMD ["node", "server.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node server.js"]
