@@ -439,7 +439,7 @@ export default function AboutInner() {
                   initial="rest"
                   whileHover="hover"
                 >
-                  <div className="mb-1 flex items-center justify-between">
+                  <div className="mb-1 flex items-center justify-between gap-2">
                     <h3 className="text-lg font-bold">{p.title}</h3>
                     <div className="flex items-center gap-2">
                       <a
