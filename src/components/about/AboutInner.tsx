@@ -7,7 +7,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useTypewriter } from "@/hooks/useTypewriter";
 import SectionCard from "@/components/about/SectionCard";
-import { skillCategories, allSkills, careers, projects, awardExperiences, heroDesc, heroTitle, profile } from "@/consts/about";
+import { skillCategories, allSkills, careers, projects, awardExperiences, heroTitle, heroDesc, profile } from "@/consts/about";
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -162,8 +162,26 @@ export default function AboutInner() {
           onMouseMove={onMouseMove}
         >
           <div className="from-primary/12 pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,var(--tw-gradient-from),transparent)]" />
+          <div
+            className="pointer-events-none absolute inset-0 z-0"
+            style={{
+              backgroundImage:
+                "linear-gradient(hsl(var(--border) / 0.5) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--border) / 0.5) 1px, transparent 1px)",
+              backgroundSize: "64px 64px",
+            }}
+          />
+          <motion.div
+            animate={{ y: [-20, 20, -20], x: [-10, 10, -10] }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+            className="bg-primary/6 pointer-events-none absolute top-1/4 left-1/4 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
+          />
+          <motion.div
+            animate={{ y: [20, -20, 20], x: [10, -10, 10] }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+            className="bg-primary/8 pointer-events-none absolute right-1/4 bottom-1/4 h-56 w-56 translate-x-1/2 translate-y-1/2 rounded-full blur-3xl"
+          />
           <div ref={heroContentRef} className="relative z-10 text-center">
-            <motion.div style={{ x: textX, y: textY }} className="space-y-5 px-4">
+            <motion.div style={{ x: textX, y: textY }} className="flex flex-col items-center gap-8 px-4">
               <h1 className="min-h-[1.2em] text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
                 {typedTitle}
                 <motion.span
@@ -174,11 +192,38 @@ export default function AboutInner() {
                   |
                 </motion.span>
               </h1>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={typingDone ? { opacity: 1 } : {}}
+                transition={{ duration: 0.3 }}
+                className="flex items-center gap-3"
+              >
+                <motion.div
+                  initial={{ scaleX: 0 }}
+                  animate={typingDone ? { scaleX: 1 } : {}}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  style={{ originX: 1 }}
+                  className="to-primary/50 h-px w-24 bg-linear-to-r from-transparent"
+                />
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={typingDone ? { scale: 1 } : {}}
+                  transition={{ duration: 0.3, delay: 0.2 }}
+                  className="border-primary/40 bg-primary/15 h-1.5 w-1.5 rounded-full border"
+                />
+                <motion.div
+                  initial={{ scaleX: 0 }}
+                  animate={typingDone ? { scaleX: 1 } : {}}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  style={{ originX: 0 }}
+                  className="from-primary/50 h-px w-24 bg-linear-to-r to-transparent"
+                />
+              </motion.div>
               <motion.p
                 initial={{ opacity: 0, y: 14 }}
                 animate={typingDone ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.7, ease: "easeOut" }}
-                className="text-muted-foreground text-xl"
+                transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
+                className="text-muted-foreground text-lg"
               >
                 {heroDesc}
               </motion.p>
