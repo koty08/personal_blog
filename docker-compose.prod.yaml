@@ -7,6 +7,7 @@ services:
     build:
       args:
         - NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
+        - SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
     env_file:
       - .env.prod
     restart: always
