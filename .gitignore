@@ -46,3 +46,5 @@ prisma/generated
 
 # rclone (Google Drive credentials)
 rclone/
+# Sentry Config File
+.env.sentry-build-plugin
