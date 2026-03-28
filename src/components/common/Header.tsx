@@ -22,6 +22,7 @@ export default function Header() {
   const { data: session } = authClient.useSession();
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState<boolean>(false);
 
   useEffect(() => {
     setMounted(true);
@@ -81,7 +82,7 @@ export default function Header() {
             </div>
           </PopoverContent>
         </Popover>
-        <Sheet>
+        <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
           <SheetTrigger asChild>
             <Button variant="outline" className="has-[>svg]:px-2.5 sm:hidden">
               <Menu />
@@ -92,13 +93,18 @@ export default function Header() {
               <SheetTitle>전체 메뉴</SheetTitle>
             </SheetHeader>
             <nav className="flex flex-col gap-1 px-4">
-              <Link href="/" className="hover:bg-accent rounded-md px-3 py-2.5 text-sm font-medium transition-colors">
+              <Link
+                href="/"
+                onClick={() => setSheetOpen(false)}
+                className="hover:bg-accent rounded-md px-3 py-2.5 text-sm font-medium transition-colors"
+              >
                 메인
               </Link>
               {links.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
+                  onClick={() => setSheetOpen(false)}
                   className="hover:bg-accent rounded-md px-3 py-2.5 text-sm font-medium transition-colors"
                 >
                   {link.name}
