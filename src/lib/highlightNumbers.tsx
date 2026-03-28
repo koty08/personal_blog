@@ -6,7 +6,7 @@ export function highlightNumbers(text: string): React.ReactNode[] {
   while ((match = regex.exec(text)) !== null) {
     if (match.index > lastIndex) parts.push(text.slice(lastIndex, match.index));
     parts.push(
-      <span key={match.index} className="text-primary font-semibold">
+      <span key={match.index} className="text-accent-foreground font-semibold">
         {match[0]}
       </span>
     );
