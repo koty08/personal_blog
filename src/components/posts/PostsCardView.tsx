@@ -51,7 +51,7 @@ export default function PostCardView() {
                 </div>
                 <CardTitle className="line-clamp-2 text-base leading-snug">{post.title}</CardTitle>
                 <CardContent className="text-muted-foreground p-0 text-sm">
-                  <p className="line-clamp-2 leading-relaxed">{removeMDFromContent(post.content)}</p>
+                  <p className="line-clamp-2 min-h-[45.5px] leading-relaxed">{removeMDFromContent(post.content)}</p>
                 </CardContent>
                 <div className="text-muted-foreground border-border/50 flex items-center gap-3 border-t pt-2 text-xs">
                   <span className="flex items-center gap-1">
