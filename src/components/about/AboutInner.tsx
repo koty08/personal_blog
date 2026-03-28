@@ -12,6 +12,7 @@ import { SiGithub } from "@icons-pack/react-simple-icons";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { highlightNumbers } from "@/lib/highlightNumbers";
+import Orb from "./Orb";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -155,34 +156,19 @@ export default function AboutInner() {
         className="from-primary/50 via-primary to-primary/50 fixed top-0 right-0 left-0 z-50 h-1.25 origin-left bg-linear-to-r"
         style={{ transform: "scaleX(0)" }}
       />
+      <div className="absolute inset-0 top-14 z-0 h-[calc(100vh-40px)] w-full">
+        <Orb hue={24} backgroundColor="transparent" />
+      </div>
       <main className="relative z-10">
         <section
           ref={heroRef}
           className="relative -mt-5 flex h-screen flex-col items-center justify-center overflow-hidden md:-mt-10"
           onMouseMove={onMouseMove}
         >
-          <div className="from-primary/12 pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,var(--tw-gradient-from),transparent)]" />
-          <div
-            className="pointer-events-none absolute inset-0 z-0"
-            style={{
-              backgroundImage:
-                "linear-gradient(hsl(var(--border) / 0.5) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--border) / 0.5) 1px, transparent 1px)",
-              backgroundSize: "64px 64px",
-            }}
-          />
-          <motion.div
-            animate={{ y: [-20, 20, -20], x: [-10, 10, -10] }}
-            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-            className="bg-primary/6 pointer-events-none absolute top-1/4 left-1/4 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
-          />
-          <motion.div
-            animate={{ y: [20, -20, 20], x: [10, -10, 10] }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-            className="bg-primary/8 pointer-events-none absolute right-1/4 bottom-1/4 h-56 w-56 translate-x-1/2 translate-y-1/2 rounded-full blur-3xl"
-          />
+          <div className="from-primary/10 pointer-events-none absolute inset-0 z-1 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,var(--tw-gradient-from),transparent)]" />
           <div ref={heroContentRef} className="relative z-10 text-center">
             <motion.div style={{ x: textX, y: textY }} className="flex flex-col items-center gap-8 px-4">
-              <h1 className="min-h-[1.2em] text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+              <h1 className="min-h-[1.2em] text-4xl font-bold tracking-tight md:text-5xl">
                 {typedTitle}
                 <motion.span
                   animate={{ opacity: typingDone ? [1, 0] : 1 }}
@@ -229,7 +215,7 @@ export default function AboutInner() {
               </motion.p>
             </motion.div>
           </div>
-          <div className={`absolute bottom-30 z-10 transition-opacity duration-500 ${typingDone ? "opacity-100" : "opacity-0"}`}>
+          <div className={`absolute bottom-40 z-10 transition-opacity duration-500 ${typingDone ? "opacity-100" : "opacity-0"}`}>
             <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}>
               <MoveDown className="h-10 w-10" />
             </motion.div>
