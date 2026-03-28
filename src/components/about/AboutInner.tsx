@@ -7,11 +7,12 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useTypewriter } from "@/hooks/useTypewriter";
 import SectionCard from "@/components/about/SectionCard";
-import { skillCategories, allSkills, careers, projects, awardExperiences, heroDesc, heroTitle, profile } from "@/consts/about";
+import { skillCategories, allSkills, careers, projects, awardExperiences, heroTitle, heroDesc, profile } from "@/consts/about";
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { highlightNumbers } from "@/lib/highlightNumbers";
+import Orb from "./Orb";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -155,16 +156,19 @@ export default function AboutInner() {
         className="from-primary/50 via-primary to-primary/50 fixed top-0 right-0 left-0 z-50 h-1.25 origin-left bg-linear-to-r"
         style={{ transform: "scaleX(0)" }}
       />
+      <div className="absolute inset-0 top-14 z-0 h-[calc(100vh-40px)] w-full">
+        <Orb hue={24} backgroundColor="transparent" />
+      </div>
       <main className="relative z-10">
         <section
           ref={heroRef}
           className="relative -mt-5 flex h-screen flex-col items-center justify-center overflow-hidden md:-mt-10"
           onMouseMove={onMouseMove}
         >
-          <div className="from-primary/12 pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,var(--tw-gradient-from),transparent)]" />
+          <div className="from-primary/10 pointer-events-none absolute inset-0 z-1 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,var(--tw-gradient-from),transparent)]" />
           <div ref={heroContentRef} className="relative z-10 text-center">
-            <motion.div style={{ x: textX, y: textY }} className="space-y-5 px-4">
-              <h1 className="min-h-[1.2em] text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+            <motion.div style={{ x: textX, y: textY }} className="flex flex-col items-center gap-8 px-4">
+              <h1 className="min-h-[1.2em] text-4xl font-bold tracking-tight md:text-5xl">
                 {typedTitle}
                 <motion.span
                   animate={{ opacity: typingDone ? [1, 0] : 1 }}
@@ -174,17 +178,44 @@ export default function AboutInner() {
                   |
                 </motion.span>
               </h1>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={typingDone ? { opacity: 1 } : {}}
+                transition={{ duration: 0.3 }}
+                className="flex items-center gap-3"
+              >
+                <motion.div
+                  initial={{ scaleX: 0 }}
+                  animate={typingDone ? { scaleX: 1 } : {}}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  style={{ originX: 1 }}
+                  className="to-primary/50 h-px w-24 bg-linear-to-r from-transparent"
+                />
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={typingDone ? { scale: 1 } : {}}
+                  transition={{ duration: 0.3, delay: 0.2 }}
+                  className="border-primary/40 bg-primary/15 h-1.5 w-1.5 rounded-full border"
+                />
+                <motion.div
+                  initial={{ scaleX: 0 }}
+                  animate={typingDone ? { scaleX: 1 } : {}}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  style={{ originX: 0 }}
+                  className="from-primary/50 h-px w-24 bg-linear-to-r to-transparent"
+                />
+              </motion.div>
               <motion.p
                 initial={{ opacity: 0, y: 14 }}
                 animate={typingDone ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.7, ease: "easeOut" }}
-                className="text-muted-foreground text-xl"
+                transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
+                className="text-muted-foreground text-lg"
               >
                 {heroDesc}
               </motion.p>
             </motion.div>
           </div>
-          <div className={`absolute bottom-30 z-10 transition-opacity duration-500 ${typingDone ? "opacity-100" : "opacity-0"}`}>
+          <div className={`absolute bottom-40 z-10 transition-opacity duration-500 ${typingDone ? "opacity-100" : "opacity-0"}`}>
             <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}>
               <MoveDown className="h-10 w-10" />
             </motion.div>
@@ -394,7 +425,7 @@ export default function AboutInner() {
                   initial="rest"
                   whileHover="hover"
                 >
-                  <div className="mb-1 flex items-center justify-between">
+                  <div className="mb-1 flex items-center justify-between gap-2">
                     <h3 className="text-lg font-bold">{p.title}</h3>
                     <div className="flex items-center gap-2">
                       <a
