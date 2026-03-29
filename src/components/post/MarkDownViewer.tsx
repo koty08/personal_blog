@@ -24,7 +24,7 @@ export default function MarkDownViewer() {
     <MDEditor.Markdown
       source={data.content}
       components={{ img: CustomImage }}
-      className="bg-transparent! whitespace-pre-wrap"
+      className="bg-transparent!"
       rehypePlugins={[rehypeSanitize]}
     />
   );
