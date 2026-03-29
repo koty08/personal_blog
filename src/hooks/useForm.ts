@@ -13,7 +13,8 @@ export default function useForm<T>({ initialVal, onSubmit, validator }: useFormP
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-    setValues({ ...values, [name]: value });
+    const type = (event.target as HTMLInputElement).type;
+    setValues({ ...values, [name]: type === "number" ? Number(value) : value });
   };
 
   const handleChangeWithVal = ({ name, value }: { name: keyof T; value: string | boolean }) => {
