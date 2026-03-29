@@ -81,7 +81,7 @@ export default function PostForm({ type, originalData }: PostFormProps) {
         onSuccess: (res) => {
           handleChangeWithVal({
             name: "content",
-            value: values.content + `![](/${res.filename})`,
+            value: values.content + `![](${res.url})`,
           });
         },
         onError: (error) => {
@@ -91,16 +91,16 @@ export default function PostForm({ type, originalData }: PostFormProps) {
     }
   };
 
-  const onImageDeleted = async (path: string) => {
+  const onImageDeleted = async (url: string) => {
     if (fileDelete.isPending) return;
 
     fileDelete.mutate(
-      { path },
+      { url },
       {
         onSuccess: () => {
           handleChangeWithVal({
             name: "content",
-            value: values.content.replace(`![](${path})`, ""),
+            value: values.content.replace(`![](${url})`, ""),
           });
         },
         onError: (error) => {
