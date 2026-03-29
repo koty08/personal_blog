@@ -26,12 +26,9 @@ RUN npm run build
 FROM node:22-alpine AS runner
 WORKDIR /usr/src/app
 ENV NODE_ENV=production
-ENV HOSTNAME=0.0.0.0
-# standalone 빌드 결과물 복사
-COPY --from=builder /usr/src/app/.next/standalone ./
-# prisma migrate 위해 node_modules 전체 복사
+COPY --from=builder /usr/src/app/package.json ./package.json
 COPY --from=builder /usr/src/app/node_modules ./node_modules
-COPY --from=builder /usr/src/app/.next/static ./.next/static
+COPY --from=builder /usr/src/app/.next ./.next
 COPY --from=builder /usr/src/app/public ./public
 RUN mkdir -p ./public/images/post
 # 스키마, 마이그레이션, 생성된 prisma client, prisma.config.ts 복사
@@ -39,4 +36,4 @@ COPY --from=builder /usr/src/app/prisma ./prisma
 COPY --from=builder /usr/src/app/prisma.config.ts ./prisma.config.ts
 
 EXPOSE 3000
-CMD ["sh", "-c", "npx prisma migrate deploy && node server.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npm start"]
