@@ -28,8 +28,6 @@ export const labelByOrder: Record<string, string> = {
   oldest: "과거",
 };
 
-export const imagePath = "/images/post";
-
 export const marginByHLevel: Record<HeadingLevel, string> = {
   h1: "ml-2.5",
   h2: "ml-5",

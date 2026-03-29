@@ -1,6 +1,5 @@
 "use client";
 
-import { imagePath } from "@/consts/posts";
 import { postOptions } from "@/services/post/options";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import MDEditor from "@uiw/react-md-editor";
@@ -42,7 +41,7 @@ const zoomValue: Record<number, string> = {
 const CustomImage = ({ ...props }) => {
   const [scale, setScale] = useState<number>(1);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const src = `${imagePath}${props.src}`;
+  const src = props.src;
 
   useEffect(() => {
     if (isOpen) {
@@ -129,7 +128,7 @@ const CustomImage = ({ ...props }) => {
 };
 
 export const CustomPreviewImage = ({ ...props }) => {
-  return <img {...props} src={`${imagePath}${props.src}`} alt="image" className="hover:cursor-pointer" />;
+  return <img {...props} src={props.src} alt="image" className="hover:cursor-pointer" />;
 };
 
 const modalStyles: ReactModal.Styles = {

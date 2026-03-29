@@ -39,5 +39,4 @@ services:
       DROPBOX_REMOTE_PATH: "/backup/personal_blog"
     volumes:
       - personal_blog_db_data:/backup/personal_blog_db_data:ro
-      - post_images:/backup/post_images:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro

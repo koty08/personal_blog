@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../prisma";
 import { getAllImages } from "@/lib/markdownUtils";
-import fs from "fs/promises";
+import { DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { r2, R2_BUCKET_NAME, R2_PUBLIC_URL } from "@/lib/r2";
 import { apiError } from "@/consts/apiError";
 import { checkIsKotyWrapper } from "@/lib/auth-server";
-import path from "path";
 
 export async function GET(request: NextRequest) {
   const uid = request.nextUrl.searchParams.get("uid");
@@ -107,8 +107,6 @@ export const PUT = checkIsKotyWrapper(async (request: NextRequest) => {
   }
 });
 
-const imageServerPath = path.join(process.cwd(), "public/images/post");
-
 export const DELETE = checkIsKotyWrapper(async (request: NextRequest) => {
   const uid = request.nextUrl.searchParams.get("uid");
   if (!uid) return apiError.missingParams;
@@ -120,13 +118,13 @@ export const DELETE = checkIsKotyWrapper(async (request: NextRequest) => {
     const existingImagePaths = existingPost.images.map((image) => image.path);
     await prisma.$transaction([
       prisma.postImage.deleteMany({ where: { path: { in: existingImagePaths }, postId: existingPost.id } }),
-      prisma.post.delete({
-        where: {
-          uid,
-        },
-      }),
+      prisma.post.delete({ where: { uid } }),
     ]);
-    await Promise.all(existingImagePaths.map((path) => fs.rm(`${imageServerPath}${path}`)));
+    await Promise.all(
+      existingImagePaths.map((url) =>
+        r2.send(new DeleteObjectCommand({ Bucket: R2_BUCKET_NAME, Key: url.replace(`${R2_PUBLIC_URL}/`, "") }))
+      )
+    );
     return new NextResponse(null, { status: 204 });
   } catch {
     return apiError.internalServerError("게시글 삭제");
