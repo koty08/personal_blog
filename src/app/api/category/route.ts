@@ -6,13 +6,6 @@ import { checkIsKotyWrapper } from "@/lib/auth-server";
 export async function GET() {
   try {
     const categories = await prisma.category.findMany({
-      where: {
-        posts: {
-          some: {
-            published: true,
-          },
-        },
-      },
       include: {
         _count: {
           select: {
