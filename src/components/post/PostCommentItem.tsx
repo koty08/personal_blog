@@ -13,14 +13,16 @@ import { useRelativeTime } from "@/hooks/useRelativeTime";
 import dayjs from "dayjs";
 import { useTypedMutation } from "@/hooks/useTypedMutation";
 import DeleteConfirmDialog from "../common/DeleteConfirmDialog";
+import ClientOnlyWrapper from "@/lib/ClientOnlyWrapper";
+import { authClient } from "@/lib/auth-client";
 
 interface PostCommentItemProps {
   comment: CommentWithUser;
-  userId?: string;
   parentId?: number;
 }
 
-export default function PostCommentItem({ comment, userId, parentId }: PostCommentItemProps) {
+export default function PostCommentItem({ comment,  parentId }: PostCommentItemProps) {
+  const { data: session } = authClient.useSession();
   const { uid } = useParams<{ uid: string }>();
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(comment.content);
@@ -72,21 +74,23 @@ export default function PostCommentItem({ comment, userId, parentId }: PostComme
           <span className="text-muted-foreground text-sm">{relativeTime}</span>
         </div>
         <div className="flex gap-2">
-          {userId === comment.userId && !isEditing && (
-            <>
-              <Button size="sm" onClick={() => setIsEditing(true)}>
-                수정
-              </Button>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="destructive" size="sm">
-                    삭제
-                  </Button>
-                </AlertDialogTrigger>
-                <DeleteConfirmDialog target="댓글" onDelete={handleDelete} />
-              </AlertDialog>
-            </>
-          )}
+          <ClientOnlyWrapper>
+            {session?.user.id === comment.userId && !isEditing && (
+              <>
+                <Button size="sm" onClick={() => setIsEditing(true)}>
+                  수정
+                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="destructive" size="sm">
+                      삭제
+                    </Button>
+                  </AlertDialogTrigger>
+                  <DeleteConfirmDialog target="댓글" onDelete={handleDelete} />
+                </AlertDialog>
+              </>
+            )}
+          </ClientOnlyWrapper>
         </div>
       </div>
       {isEditing ? (
