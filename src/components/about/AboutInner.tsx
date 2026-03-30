@@ -167,8 +167,8 @@ export default function AboutInner() {
         >
           <div className="from-primary/10 pointer-events-none absolute inset-0 z-1 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,var(--tw-gradient-from),transparent)]" />
           <div ref={heroContentRef} className="relative z-10 text-center">
-            <motion.div style={{ x: textX, y: textY }} className="flex flex-col items-center gap-8 px-4">
-              <h1 className="min-h-[1.2em] text-4xl font-bold tracking-tight md:text-5xl">
+            <motion.div style={{ x: textX, y: textY }} className="flex flex-col items-center gap-8">
+              <h1 className="min-h-[1.2em] text-[clamp(1.75rem,5vmin,3rem)] font-bold tracking-tight">
                 {typedTitle}
                 <motion.span
                   animate={{ opacity: typingDone ? [1, 0] : 1 }}
@@ -209,7 +209,7 @@ export default function AboutInner() {
                 initial={{ opacity: 0, y: 14 }}
                 animate={typingDone ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
-                className="text-muted-foreground text-lg"
+                className="text-accent-foreground max-w-[min(80vw,80vh,44rem)] text-lg"
               >
                 {heroDesc}
               </motion.p>
