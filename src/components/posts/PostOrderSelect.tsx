@@ -3,7 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { omit } from "es-toolkit";
-import { labelByOrder } from "@/consts/posts";
+import { labelByOrder } from "@/consts/post";
 
 export default function PostOrderSelect() {
   const pathname = usePathname();

@@ -20,7 +20,7 @@ import { postCreateOptions, postUpdateOptions } from "@/services/post/options";
 import { fileDeleteOptions, fileUploadOptions } from "@/services/file/option";
 import { toast } from "sonner";
 import CategoryManage from "./CategoryManage";
-import { postDefaultValue, postFieldLabel } from "@/consts/posts";
+import { postDefaultValue, postFieldLabel } from "@/consts/post";
 import dynamic from "next/dynamic";
 import { useTypedMutation } from "@/hooks/useTypedMutation";
 import rehypeSanitize from "rehype-sanitize";

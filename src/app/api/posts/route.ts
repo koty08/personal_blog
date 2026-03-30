@@ -3,7 +3,7 @@ import prisma from "../prisma";
 import { Prisma } from "@my-prisma/client";
 import { apiError } from "@/consts/apiError";
 import { checkIsKoty } from "@/lib/auth-server";
-import { POST_PER_PAGE } from "@/consts/posts";
+import { POST_PER_PAGE } from "@/consts/post";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
