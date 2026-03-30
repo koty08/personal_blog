@@ -1,6 +1,6 @@
 "use client";
 
-import { marginByHLevel } from "@/consts/posts";
+import { marginByHLevel, sanitizePrefix } from "@/consts/post";
 import { postOptions } from "@/services/post/options";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import Link from "next/link";
@@ -26,7 +26,7 @@ export default function PostTOC() {
       .filter((el) => el.id !== "title")
       .map((el) => ({
         level: el.tagName.toLowerCase() as HeadingLevel,
-        id: el.id.replace("user-content-", ""),
+        id: el.id.replace(sanitizePrefix, ""),
         text: el.textContent ?? "",
       }));
     setHeadings(normalizeHeadings(rawHeadings));
@@ -38,13 +38,13 @@ export default function PostTOC() {
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries.find((e) => e.isIntersecting);
-        if (visible) setActiveId(visible.target.id.replace("user-content-", ""));
+        if (visible) setActiveId(visible.target.id.replace(sanitizePrefix, ""));
       },
-      { rootMargin: "-35% 0px -55% 0px", threshold: 0 }
+      { rootMargin: "0px 0px -85% 0px", threshold: 0 }
     );
 
     headings.forEach(({ id }) => {
-      const el = document.getElementById(id) ?? document.getElementById(`user-content-${id}`);
+      const el = document.getElementById(id) ?? document.getElementById(`${sanitizePrefix}${id}`);
       if (el) observer.observe(el);
     });
 
@@ -56,9 +56,9 @@ export default function PostTOC() {
       {headings.map((heading) => (
         <Link
           key={heading.id}
-          href={{ hash: heading.id }}
+          href={{ hash: `${sanitizePrefix}${heading.id}` }}
           replace
-          className={`${marginByHLevel[heading.level]} transition-colors hover:underline ${
+          className={`${marginByHLevel[heading.level]} text-sm transition-colors hover:underline ${
             activeId === heading.id ? "text-foreground font-semibold" : "text-muted-foreground"
           }`}
         >

@@ -4,7 +4,7 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { postsOptions } from "@/services/post/options";
 import { SearchParams } from "@/lib/serverInterface";
 import { PostsOrderType } from "@/services/post/interface";
-import { labelByOrder } from "@/consts/posts";
+import { labelByOrder } from "@/consts/post";
 import MainOrderGroup from "@/components/posts/MainOrderGroup";
 import QueryWrapper from "@/lib/QueryWrapper";
 import { categoryOptions } from "@/services/category/options";

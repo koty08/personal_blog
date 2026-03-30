@@ -15,7 +15,7 @@ import { PostsOrderType } from "@/services/post/interface";
 import { dateFormat } from "@/consts/common";
 import { Eye, MessageSquare, ScrollText } from "lucide-react";
 import NoData from "../common/NoData";
-import { POST_PER_PAGE } from "@/consts/posts";
+import { POST_PER_PAGE } from "@/consts/post";
 
 export default function PostsListView() {
   const searchParams = useSearchParams();
