@@ -22,6 +22,10 @@ down:
 logs:
 	$(COMPOSE) logs -f
 
+# 미사용 이미지, 컨테이너, 캐시 정리
+clean:
+	docker system prune -a
+
 # 개발 환경 실행
 dev:
 	$(COMPOSE_DEV) up --build
