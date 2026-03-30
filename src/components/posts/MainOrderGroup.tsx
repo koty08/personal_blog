@@ -1,6 +1,6 @@
 "use client";
 
-import { labelByOrder } from "@/consts/posts";
+import { labelByOrder } from "@/consts/post";
 import { Button } from "../ui/button";
 import { omit } from "es-toolkit";
 import { useRouter, useSearchParams } from "next/navigation";

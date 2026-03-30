@@ -1,6 +1,6 @@
 "use client";
 
-import { marginByHLevel } from "@/consts/posts";
+import { marginByHLevel } from "@/consts/post";
 import { postOptions } from "@/services/post/options";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import Link from "next/link";
