@@ -33,3 +33,5 @@ export const marginByHLevel: Record<HeadingLevel, string> = {
   h2: "ml-5",
   h3: "ml-7.5",
 };
+
+export const sanitizePrefix = "user-content-";
