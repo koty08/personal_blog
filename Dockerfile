@@ -29,6 +29,7 @@ ENV NODE_ENV=production
 COPY --from=builder /usr/src/app/package.json ./package.json
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/.next ./.next
+COPY --from=builder /usr/src/app/next.config.ts ./next.config.ts
 COPY --from=builder /usr/src/app/public ./public
 # 스키마, 마이그레이션, 생성된 prisma client, prisma.config.ts 복사
 COPY --from=builder /usr/src/app/prisma ./prisma
