@@ -58,7 +58,7 @@ export default function PostTOC() {
           key={heading.id}
           href={{ hash: `${sanitizePrefix}${heading.id}` }}
           replace
-          className={`${marginByHLevel[heading.level]} transition-colors hover:underline ${
+          className={`${marginByHLevel[heading.level]} text-sm transition-colors hover:underline ${
             activeId === heading.id ? "text-foreground font-semibold" : "text-muted-foreground"
           }`}
         >
