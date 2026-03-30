@@ -40,7 +40,7 @@ export default function PostTOC() {
         const visible = entries.find((e) => e.isIntersecting);
         if (visible) setActiveId(visible.target.id.replace(sanitizePrefix, ""));
       },
-      { rootMargin: "-35% 0px -55% 0px", threshold: 0 }
+      { rootMargin: "0px 0px -85% 0px", threshold: 0 }
     );
 
     headings.forEach(({ id }) => {
