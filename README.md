@@ -1,23 +1,31 @@
-# kotys.dev — 개인 블로그
+# 📝 kotys.dev (personal_blog)
 
-Next.js 기반의 개인 블로그입니다.
+개인 블로그 프로젝트입니다.
 
-## 기술 스택
+🔗 **[kotys.dev](https://kotys.dev)**
 
-| 분류       | 기술                              |
-| ---------- | --------------------------------- |
-| 프레임워크 | Next.js 16 (App Router), React 19 |
-| 언어       | TypeScript                        |
-| 스타일     | Tailwind CSS, Radix UI            |
-| 상태 관리  | TanStack Query                    |
-| 인증       | Better Auth (GitHub OAuth)        |
-| ORM        | Prisma                            |
-| DB         | PostgreSQL 17                     |
-| 인프라     | Docker, Nginx, Cloudflare         |
-| CI/CD      | GitHub Actions                    |
+---
 
-프로덕션 환경은 `.env.prod` 파일과 `nginx/certs/` 디렉토리에 SSL 인증서가 필요합니다.
+## 🛠 Tech Stack
 
-## CI/CD
+| 분류 | 기술 |
+|------|------|
+| 프레임워크 | Next.js (App Router) |
+| 언어 | TypeScript |
+| 스타일 | Tailwind CSS, Radix UI |
+| 상태 관리 | TanStack Query |
+| Auth | Better Auth (GitHub OAuth) |
+| ORM | Prisma |
+| DB | PostgreSQL 17 |
+| 인프라 | Docker, Docker Compose, Nginx, Vultr VPS |
+| 스토리지 | Cloudflare R2 (S3 호환) |
+| DNS/CDN | Cloudflare |
+| CI/CD | GitHub Actions + appleboy/ssh-action |
 
-`main` 브랜치에 push 또는 PR 머지 시 GitHub Actions가 자동으로 서버에 SSH 접속하여 `make deploy`를 실행합니다.
+---
+
+## 🏗 Architecture
+
+<img width="987" height="987" alt="flow" src="https://github.com/user-attachments/assets/cfb4fb68-6c67-4fae-868e-40aa18a449d8" />
+
+---
