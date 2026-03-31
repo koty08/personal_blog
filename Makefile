@@ -6,9 +6,14 @@ init:
 	docker volume create personal_blog_db_data
 	$(COMPOSE) up --build -d
 
-# 재배포
+# 재배포 (로컬 빌드)
 deploy:
 	$(COMPOSE) up --build -d
+
+# 재배포 (CI에서 빌드된 이미지 사용)
+deploy-image:
+	$(COMPOSE) pull app
+	$(COMPOSE) up -d --no-build
 
 # 재시작 (이미지 재빌드 없음)
 restart:
@@ -34,4 +39,4 @@ dev:
 dev-down:
 	$(COMPOSE_DEV) down -v
 
-.PHONY: init deploy restart down logs dev dev-down
+.PHONY: init deploy deploy-image restart down logs dev dev-down
