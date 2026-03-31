@@ -5,7 +5,7 @@ import { postsOptions } from "@/services/post/options";
 import { SearchParams } from "@/lib/serverInterface";
 import { PostsOrderType } from "@/services/post/interface";
 import { labelByOrder } from "@/consts/post";
-import MainOrderGroup from "@/components/posts/MainOrderGroup";
+import MainOrderGroup from "@/components/main/MainOrderGroup";
 import QueryWrapper from "@/lib/QueryWrapper";
 import { categoryOptions } from "@/services/category/options";
 import { statsOptions } from "@/services/stats/options";
