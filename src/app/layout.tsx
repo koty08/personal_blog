@@ -19,8 +19,17 @@ const pretendard = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://kotys.dev"),
   title: "Koty's Blog",
   description: "Koty의 개발 블로그",
+  openGraph: {
+    type: "website",
+    siteName: "Koty's Blog",
+    title: "Koty's Blog",
+    images: [{ url: "/images/common/og-image.png" }],
+    description: "Koty의 개발 블로그",
+    locale: "ko_KR",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
