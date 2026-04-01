@@ -13,7 +13,7 @@ import { checkIsKoty } from "@/lib/auth-server";
 import { commentsOptions } from "@/services/comment/options";
 import QueryWrapper from "@/lib/QueryWrapper";
 import type { Metadata } from "next";
-import { removeMDFromContent } from "@/lib/markdownUtils";
+import { getFirstImage, removeMDFromContent } from "@/lib/markdownUtils";
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { uid } = await params;
@@ -24,9 +24,20 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     .catch(() => null);
   if (!post) return {};
 
+  const description = removeMDFromContent(post.content.slice(0, 100));
+  const image = getFirstImage(post.content) ?? "/images/common/no-image.png";
+
   return {
     title: post.title,
-    description: removeMDFromContent(post.content.slice(0, 100)),
+    description,
+    openGraph: {
+      type: "article",
+      title: post.title,
+      description,
+      images: [{ url: image }],
+      publishedTime: new Date(post.register_date).toISOString(),
+      modifiedTime: post.updated_date ? new Date(post.updated_date).toISOString() : undefined,
+    },
   };
 }
 
