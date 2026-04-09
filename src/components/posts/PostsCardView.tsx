@@ -40,6 +40,7 @@ export default function PostCardView() {
                   alt={post.title}
                   objectFit="contain"
                   className="h-full w-full transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"
                 />
               </div>
               <div className="flex flex-col gap-3 p-4">
