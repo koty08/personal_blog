@@ -131,10 +131,13 @@ export const DELETE = checkIsKotyWrapper(async (request: NextRequest) => {
   }
 });
 
-const checkPostKeys = (body: any) => {
+const checkPostKeys = (body: unknown) => {
+  if (typeof body !== "object" || body === null) return false;
   const keys = ["uid", "title", "content", "categoryId", "readTime", "published"];
   return keys.every((key) => {
-    if (typeof body[key] !== "boolean" && !body[key]) return false;
+    if (!(key in body)) return false;
+    const value = (body as Record<string, unknown>)[key];
+    if (typeof value !== "boolean" && !value) return false;
     return true;
   });
 };

@@ -12,7 +12,7 @@ import { categoryOptions } from "@/services/category/options";
 import { Badge } from "../ui/badge";
 import dayjs from "dayjs";
 import { dateFormat } from "@/consts/common";
-import { Eye, MessageSquare, ScrollText } from "lucide-react";
+import { Clock, Eye, MessageSquare } from "lucide-react";
 import NoData from "../common/NoData";
 
 export default function PostCardView() {
@@ -40,6 +40,7 @@ export default function PostCardView() {
                   alt={post.title}
                   objectFit="contain"
                   className="h-full w-full transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"
                 />
               </div>
               <div className="flex flex-col gap-3 p-4">
@@ -63,7 +64,7 @@ export default function PostCardView() {
                     {post.commentCount}
                   </span>
                   <span className="flex items-center gap-1">
-                    <ScrollText className="h-3.5 w-3.5" />
+                    <Clock className="h-3.5 w-3.5" />
                     {`${post.readTime}분`}
                   </span>
                 </div>
