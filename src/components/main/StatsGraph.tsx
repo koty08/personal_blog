@@ -31,12 +31,12 @@ export default function StatsGraph() {
           <AreaChart data={chartData} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
             <defs>
               <linearGradient id="colorUniques" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="var(--chart-1)" stopOpacity={0.6} />
+                <stop offset="5%" stopColor="var(--chart-1)" stopOpacity={0.5} />
                 <stop offset="95%" stopColor="var(--chart-1)" stopOpacity={0} />
               </linearGradient>
               <linearGradient id="colorPageViews" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="var(--chart-5)" stopOpacity={0.6} />
-                <stop offset="95%" stopColor="var(--chart-5)" stopOpacity={0} />
+                <stop offset="5%" stopColor="var(--chart-3)" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="var(--chart-3)" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" className="stroke-border/50" />
@@ -51,23 +51,15 @@ export default function StatsGraph() {
             <YAxis tick={{ fontSize: 11 }} className="fill-muted-foreground" tickLine={false} axisLine={false} />
             <Tooltip
               contentStyle={{
-                backgroundColor: "hsl(var(--card))",
-                border: "1px solid hsl(var(--border))",
+                backgroundColor: "var(--card)",
+                border: "1px solid var(--border)",
                 borderRadius: "8px",
                 fontSize: "12px",
               }}
-              labelStyle={{ color: "hsl(var(--foreground))", fontWeight: 600 }}
-              itemStyle={{ color: "hsl(var(--muted-foreground))" }}
+              labelStyle={{ color: "var(--foreground)", fontWeight: 600 }}
             />
-            <Area
-              type="monotone"
-              dataKey="페이지뷰"
-              stroke="hsl(var(--muted-foreground))"
-              strokeWidth={1.5}
-              fill="url(#colorPageViews)"
-              dot={false}
-            />
-            <Area type="monotone" dataKey="방문자" stroke="hsl(var(--primary))" strokeWidth={2} fill="url(#colorUniques)" dot={false} />
+            <Area type="monotone" dataKey="페이지뷰" stroke="var(--chart-3)" fill="url(#colorPageViews)" dot={false} />
+            <Area type="monotone" dataKey="방문자" stroke="var(--chart-1)" fill="url(#colorUniques)" dot={false} />
           </AreaChart>
         </ResponsiveContainer>
       </CardContent>
