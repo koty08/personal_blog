@@ -29,7 +29,7 @@ export default async function Main({ searchParams }: { searchParams: SearchParam
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-x-20 gap-y-4 md:flex-row md:items-center">
           <div className="shrink-0 space-y-1">
-            <h1 className="text-3xl font-extrabold tracking-tight md:text-5xl">Koty's Blog</h1>
+            <h1 className="text-3xl font-extrabold tracking-tight md:text-5xl">{"Koty's Blog"}</h1>
             <p className="text-muted-foreground text-lg">개발 경험과 지식을 공유하는 공간입니다.</p>
           </div>
           <QueryWrapper loadingStyle="h-24.5 w-full max-w-124 ml-auto" errorStyle="h-24.5">

@@ -8,11 +8,12 @@ interface PostThumbnailProps {
   alt: string;
   className?: string;
   objectFit?: "contain" | "cover";
+  sizes?: string;
 }
 
 const fallbackPath = "/images/common/no-image.png";
 
-export default function PostThumbnail({ path, alt, className, objectFit = "contain" }: PostThumbnailProps) {
+export default function PostThumbnail({ path, alt, className, objectFit = "contain", sizes }: PostThumbnailProps) {
   const [src, setSrc] = useState(path ?? fallbackPath);
 
   const onError = () => {
@@ -21,7 +22,7 @@ export default function PostThumbnail({ path, alt, className, objectFit = "conta
 
   return (
     <div className={`relative ${className}`}>
-      <Image fill src={src} alt={alt} onError={onError} style={{ objectFit }} />
+      <Image fill src={src} alt={alt} onError={onError} style={{ objectFit }} sizes={sizes} />
     </div>
   );
 }

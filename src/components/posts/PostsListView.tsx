@@ -13,7 +13,7 @@ import { categoryOptions } from "@/services/category/options";
 import { useSearchParams } from "next/navigation";
 import { PostsOrderType } from "@/services/post/interface";
 import { dateFormat } from "@/consts/common";
-import { Eye, MessageSquare, ScrollText } from "lucide-react";
+import { Clock, Eye, MessageSquare } from "lucide-react";
 import NoData from "../common/NoData";
 import { POST_PER_PAGE } from "@/consts/post";
 
@@ -60,7 +60,7 @@ export default function PostsListView() {
                       {post.commentCount}
                     </span>
                     <span className="flex items-center gap-1">
-                      <ScrollText className="h-3.5 w-3.5" />
+                      <Clock className="h-3.5 w-3.5" />
                       {`${post.readTime}분`}
                     </span>
                   </div>
